@@ -9,6 +9,8 @@
 #define FILE_READING_BUFFER_SIZE 4096
 
 shader shd(char* vertPath, char* fragPath) {
+	// this line was siezed by tophat engine
+
 	shader s;
 	int success;
 	char infoLog[512];
