@@ -14,13 +14,18 @@ Current rendering capabilities:
 - Works realtime
 
 TODO:
+- Update scene serialization
+- Upgrade light source objects
+  - Multiple lights in a scene
+  - Colored lights
 - Optimalizions
   - Bounding box for complicated groups far away from the ray !importnat
+    - Needs render order rework
   - Lower resolutions (done) and then upscale (todo)
 - Read scene configuration from file
 - Relative position for shapes in subgroups?
 - Reflections
-- [Better lighting](https://en.wikipedia.org/wiki/Computer_graphics_lighting)
+- Inline functions
 - Compile for windows somehow?
 - Shape rotating
 - `#import`s seems to be messy
