@@ -8,20 +8,17 @@ const int PIXEL_GAP = 0; // 0 = no gap; 10 = render only every 10th pixel
 // 3D checkerboard pattern for coloring object. RN accesible only if hardcoded (like floor in mapWorld())
 vec3 checkerboard(in vec3 pos) {
 	pos += vec3(4.0); // there is a off by one error around y=0 || x=0, so i just move these outside the shape
-	if (((int(pos.x) + int(pos.y) + int(pos.z)) % 2) == 0.0) { return vec3(0.5);
-	} else { return vec3(0.7); }
+	if (((int(pos.x) + int(pos.y) + int(pos.z)) % 2) == 0.0) { return vec3(0.5); }
+	else { return vec3(0.7); }
 }
 
 // distance to nearest object
 // returns xyz as a color of the surface and w as the distance to it
 vec4 mapWorld(in vec3 pos) {
-	float localDist = 200.0;
-	vec3  localClr = vec3(0.0);
-
 	for (int i = 0; i < groupNum; i++) { d2Group(pos, i); }
 
-	localClr = d2Groups[groupNum - 1].xyz;
-	localDist = d2Groups[groupNum - 1].w;
+	vec3 localClr = d2Groups[groupNum - 1].xyz;
+	float localDist = d2Groups[groupNum - 1].w;
 
 	// Check floor
 	float dist = d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0);

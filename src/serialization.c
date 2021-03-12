@@ -122,11 +122,11 @@ void ccone2floats(float* f, CCone*s) {
 void groups2floats(float* f, int num, ShapeGroup* groups) {
 	for (int i = 0; i < num; i++) {
 		f[i * groupSize + 0] = (float) groups[i].ta;
-		f[i * groupSize + 0] = (float) groups[i].a;
-		f[i * groupSize + 1] = (float) groups[i].tb;
-		f[i * groupSize + 0] = (float) groups[i].a;
-		f[i * groupSize + 2] = (float) groups[i].op;
-		f[i * groupSize + 3] = (float) groups[i].k;
+		f[i * groupSize + 1] = (float) groups[i].a;
+		f[i * groupSize + 2] = (float) groups[i].tb;
+		f[i * groupSize + 3] = (float) groups[i].b;
+		f[i * groupSize + 4] = (float) groups[i].op;
+		f[i * groupSize + 5] = (float) groups[i].k;
 	}
 }
 
