@@ -14,7 +14,6 @@ Current rendering capabilities:
 - Works realtime
 
 TODO:
-- Update scene serialization
 - Upgrade light source objects
   - Multiple lights in a scene
   - Colored lights

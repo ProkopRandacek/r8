@@ -1,5 +1,5 @@
 // vim: filetype=c
-typedef struct Vector3s {
+typedef struct Vector3 {
 	float x, y, z;
 } Vector3;
 
