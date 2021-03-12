@@ -4,9 +4,8 @@
 #include "shapes.h"
 
 
-const int shapeSize = 15; // max number of floats per shape
-// group  = 2 shapes + 2 shapeTypes + operationType + k
-const int groupSize = (shapeSize * 2) + 2 + 1 + 1;
+const int shapeSize = 15;
+const int groupSize = 6;
 
 Sphere* sph(Vector3 pos, Vector3 clr, float radius) {
 	Sphere* s = malloc(sizeof(Sphere));
