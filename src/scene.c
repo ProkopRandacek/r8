@@ -78,6 +78,12 @@ void createObjects() {
 	shdSetFloatArray(gl->s, "rawGroups", groupSize * groupNum, g);
 
 
+	shdSetInt(gl->s, "shapeNum", shapeNum);
+	shdSetInt(gl->s, "shapeSize", shapeSize);
+	shdSetInt(gl->s, "groupNum", groupNum);
+	shdSetInt(gl->s, "groupSize", groupSize);
+
+
 	// cleanup
 	free(head.shape);
 	free(ring.shape);

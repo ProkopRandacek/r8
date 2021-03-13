@@ -24,7 +24,10 @@ shader shd() {
 		printf("Error while compiling vertex shader\n%s\n", infoLog);
 		exit(1);
 	}
-	dprint("GL - SHADER - fragment shader compiled");
+
+	char l[61];
+	sprintf(l, "GL - SHADER - vertex shader compiled (%ld)", strlen(vertShdSource));
+	dprint(l);
 
 	const char* fragShdSource = fragFull_glsl;
 	unsigned int fragShd = glCreateShader(GL_FRAGMENT_SHADER);
@@ -36,7 +39,9 @@ shader shd() {
 		printf("Error while compiling fragment shader\n%s\n", infoLog);
 		exit(1);
 	}
-	dprint("GL - SHADER - vertex shader compiled");
+
+	sprintf(l, "GL - SHADER - fragment shader compiled (%ld)", strlen(fragShdSource));
+	dprint(l);
 
 	s.ID = glCreateProgram();
 	glAttachShader(s.ID, vertShd);
