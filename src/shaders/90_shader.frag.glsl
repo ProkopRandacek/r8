@@ -2,7 +2,7 @@ const int STEPSNUM = 1024;
 const float COLLISION_THRESHOLD = 0.00001;
 const float MAX_TRACE_DIST = 100.0;
 
-const float SUN_SIZE = 0.2;
+const float SUN_SIZE = 1.0;
 const int PIXEL_GAP = 0; // 0 = no gap; 10 = render only every 10th pixel
 
 // 3D checkerboard pattern for coloring object. RN accesible only if hardcoded (like floor in mapWorld())
