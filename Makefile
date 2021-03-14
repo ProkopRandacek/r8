@@ -4,6 +4,7 @@ GCC_LIB = -L/usr/lib/libGLEW.so -lglfw -lGL -lm -lGLEW
 
 build: clean shaders
 	mkdir build -p
+	cp src/*.scene build/
 	gcc src/*.c -o build/rendering $(GCC_FLAGS) $(GCC_LIB)
 
 run: clean build

@@ -7,6 +7,7 @@
 
 #include "debug.h"
 #include "main.h"
+#include "sceneio.h"
 
 
 extern GL* gl;
@@ -34,6 +35,9 @@ int main() {
 
 	dprint("starting main loop");
 
+	/*readScene();
+	stop();*/
+
 	while (!glfwWindowShouldClose(gl->window)) {
 		updateInput();
 		updateScene();
@@ -54,7 +58,7 @@ void die() { exit(1); }
 
 // Callback funcs
 void onError(int error, const char* description) {
-	printf("Error %d: %s\n", error, description);
+	printf("Glfw error %d: %s\n", error, description);
 }
 
 void resize(GLFWwindow* window, int width, int height) {
