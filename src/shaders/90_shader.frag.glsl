@@ -1,6 +1,7 @@
 const int STEPSNUM = 1024;
 const float COLLISION_THRESHOLD = 0.00001;
 const float MAX_TRACE_DIST = 100.0;
+const int BOUNCES = 1;
 
 const float SUN_SIZE = 1.0;
 const int PIXEL_GAP = 0; // 0 = no gap; 10 = render only every 10th pixel
@@ -14,7 +15,7 @@ vec3 checkerboard(in vec3 pos) {
 
 // distance to nearest object
 // returns xyz as a color of the surface and w as the distance to it
-vec4 mapWorld(in vec3 pos) {
+vec4 mapWorld(vec3 pos) {
 	for (int i = 0; i < groupNum; i++) { d2Group(pos, i); }
 
 	vec3 localClr = d2Groups[groupNum - 1].xyz;
@@ -30,7 +31,7 @@ vec4 mapWorld(in vec3 pos) {
 }
 
 // calculate normal from given point on a surface
-vec3 calculateNormal(in vec3 p) {
+vec3 calculateNormal(vec3 p) {
 	const vec3 smol = vec3(0.00001, 0.0, 0.0);
 	float x = mapWorld(p + smol.xyy).w - mapWorld(p - smol.xyy).w;
 	float y = mapWorld(p + smol.yxy).w - mapWorld(p - smol.yxy).w;
@@ -39,7 +40,7 @@ vec3 calculateNormal(in vec3 p) {
 }
 
 // casts a ray
-rayHit rayMarch(in vec3 rayOrigin, in vec3 rayDir) {
+rayHit rayMarch(vec3 rayOrigin, vec3 rayDir) {
 	float distTraveled = 0.0;
 	float shadow = 1.0;
 
@@ -76,32 +77,30 @@ void main() {
 	vec3 lPoint = mix(cam[4], cam[2], uv.y);
 	vec3 rPoint = mix(cam[3], cam[1], uv.y);
 	vec3 point  = mix(rPoint, lPoint, uv.x);
-	if (false) { // isometric camera TODO
-		vec3 lMid = mix(cam[4], cam[2], 0.5);
-		vec3 rMid = mix(cam[3], cam[1], 0.5);
-		vec3 mid  = mix(rPoint, lPoint, 0.5);
-		dir = normalize(mid);
-		startPos = point - mid;
-	} else {
-		dir = normalize(point - cam[0]);
-		startPos = cam[0];
-	}
+	dir = normalize(point - cam[0]);
+	startPos = cam[0];
 
 	// cast main ray
-	vec3 finalClr;
-	rayHit hit = rayMarch(startPos, dir);
-	finalClr = hit.surfaceClr;
+	vec3 finalClr = vec3(0.0);
 
-	if (hit.hit) { // only calculate shadows if hit a surface
-		// cast shadow ray
-		vec3 smolNormal = calculateNormal(hit.hitPos) * COLLISION_THRESHOLD * 100; // use 0.0001 for cool glitch
-		// move outside collision threshold
-		vec3 moved = hit.hitPos + smolNormal;
-		vec3 dir2ls = normalize(lightPos - moved);
+	vec3 pos = startPos;
 
-		rayHit shadow = rayMarch(moved, dir2ls);
+	for (int i = 0; i < BOUNCES + 1; i++) {
+		rayHit hit = rayMarch(pos, dir);
 
-		finalClr *= vec3(shadow.shadow);
+		if (i == 0) { finalClr = hit.surfaceClr; }
+		else        { finalClr = finalClr * 0.5 + hit.surfaceClr * 0.5; }
+
+		if (!hit.hit) break; // only reflect and shadown when hit a surface
+
+		vec3 normal = calculateNormal(hit.hitPos);
+		vec3 smolNormal = normal * COLLISION_THRESHOLD * 100;
+
+		pos = hit.hitPos + smolNormal;
+		dir = reflect(dir, normal);
+
+		rayHit shd = rayMarch(pos, normalize(lightPos - pos));
+		finalClr *= vec3(shd.shadow);
 	}
 
 	// output color

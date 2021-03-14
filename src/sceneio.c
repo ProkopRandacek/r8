@@ -3,15 +3,18 @@
 #include <string.h>
 #include <regex.h>
 
+#include "sceneio.h"
+#include "debug.h"
+
 regex_t floatRegex;
 regex_t intRegex;
 int regexStatus;
 char msgbuf[100];
 
-/*int isShape(const char* word) {
-	return (word == "SPHERE" ||
-		word == "TORUS" ||
-		word == "CCONE");
+int isShape(const char* word) {
+	return (strcmp(word, "SPHERE") ||
+		strcmp(word, "TORUS") ||
+		strcmp(word, "CCONE") );
 }
 
 void readScene() {
@@ -38,31 +41,55 @@ void readScene() {
 
 	const unsigned int wmaxlen = 30;
 	char word[wmaxlen];
+	memset(word, 0, wmaxlen);
 	char c;
 	unsigned int wlen = 0;
 	char activeKey = ' ';
+	char* sTypes;
+	int a = -1;
+	int b = -1;
+	float* shapes;
 
-	while ((c = fgetc(fp)) != EOF) { // read file byte by byte until EOF
-		if (wlen >= wmaxlen) { printf("error parsing file \"%s\"\n the word \"%s...\" is too long\n", filename, word); exit(1); }
+	int prmvNum = -1;
+
+	dprint("scene file parsing start");
+
+	while ((c = (char)fgetc(fp)) != EOF) { // read file byte by byte until EOF
+		if (wlen >= wmaxlen) {
+			char l[103];
+			sprintf(l, "error parsing file \"%s\"\n the word \"%s...\" is too long (max is %d)\n", filename, word, wmaxlen);
+			eprint(l);
+		}
 		if (c == ' ' || c == '\n') {
 			if (wlen != 0) {
 				if (word[0] == '/' && word[1] == '/') { // if word == "//"
-					while ((c = fgetc(fp)) != '\n') { } // skip until end of line
+					while ((c = (char)fgetc(fp)) != '\n') { } // skip until end of line
 				} else {
 					int floatR = regexec(&floatRegex, word, 0, NULL, 0);
 					int intR = regexec(&intRegex, word, 0, NULL, 0);
 
 					if (!floatR) { // its float
-						printf("- %0.2f\n", atof(word));
+						if (activeKey == 'S') {
+							shapes[a * 15 + b] = (float)atof(word);
+							b++;
+						}
 					} else if (!intR) { // its int
-						printf("- %d\n", atoi(word));
+						if (activeKey == 'P') {
+							prmvNum = atoi(word);
+							shapes = malloc(  (long unsigned int)(prmvNum * 15) * sizeof(float));
+							memset(shapes, 0, (long unsigned int)(prmvNum * 15) * sizeof(float));
+						}
 					} else if (floatR == REG_NOMATCH || intR == REG_NOMATCH) { // or keyword
-						printf("%s\n", word);
-						if (word == "#PRIMITIVES") { activeKey = 'P'; }
-						else if (isShape(word))    { activeKey = 'S'; }
+						if (strcmp(word, "#PRIMITIVES") == 0) { activeKey = 'P'; }
+						else {
+							activeKey = 'S';
+							a++;
+							b = 0;
+							if (strcmp(word, "SPHERE") == 0) {}
+						}
 					} else {
 						regerror(regexStatus, &floatRegex, msgbuf, sizeof(msgbuf));
-						fprintf(stderr, "Regex match failed: %s\n", msgbuf);
+						printf("Regex match failed: %s\n", msgbuf);
 						exit(1);
 					}
 				}
@@ -71,13 +98,19 @@ void readScene() {
 			}
 			continue;
 		}
-
 		word[wlen++] = c;
 	}
 
 	regfree(&floatRegex);
-
 	fclose(fp);
-}
+	dprint("scene file parsing done");
 
-//void main() { readScene(); } // */
+	printf("\nprmvNum: %d\n", prmvNum);
+	for (int i = 0; i < prmvNum; i++) {
+		for (int j = 0; j < 15; j++) {
+			printf(" %.1f", shapes[i * 15 + j]);
+		}
+		printf("\n");
+	}
+	printf("\n");
+}
