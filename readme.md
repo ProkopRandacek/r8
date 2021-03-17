@@ -7,6 +7,7 @@
 Current rendering capabilities:  
 - [Constructive solid geometry](https://en.wikipedia.org/wiki/Constructive_solid_geometry)
 - Soft shadows
+- Reflections
 - Sphere, Cube, Torus, Capped Cone and Cylinder rendering ([many more in testing](./src/shapes.h))
 - Transforming between shapes over time
 - WASD + mouse controls
@@ -14,16 +15,14 @@ Current rendering capabilities:
 - Works realtime
 
 TODO:
+- Relative position for shapes in subgroups?
 - Upgrade light source objects
   - Multiple lights in a scene
   - Colored lights
 - Optimalizions
   - Bounding box for complicated groups far away from the ray !importnat
     - Needs render order rework
-  - Lower resolutions (done) and then upscale (todo)
 - Read scene configuration from file
-- Relative position for shapes in subgroups?
-- Reflections
 - Inline functions
 - Compile for windows somehow?
 - Shape rotating
@@ -50,8 +49,9 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 - Runtime deps
 - make
 - mono (for running the shader minifier)
-- dos2unix tool
-- gcc  
-(Arch: `yay -S gcc dos2unix make mono --needed`)  
-(Fedora: `dnf install make mono-devel gcc`)  
-(Ubuntu: `apt install make mono-runtime gcc`)  
+- gcc
+- pkg-config
+- unzip
+(Arch:        `yay -S gcc make unzip pkgconf    mono --needed`)  
+(Fedora: `dnf install gcc make unzip pkgconf    mono-devel gcc`)  
+(Ubuntu: `apt install gcc make unzip pkg-config mono-runtime gcc`)  
