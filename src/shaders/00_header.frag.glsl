@@ -15,6 +15,8 @@ uniform float rawGroups[groupNum * groupSize];
 
 vec4 d2Groups[groupNum];
 
+out vec4 outColor;
+
 struct rayHit {
 	vec3 hitPos;
 	vec3 surfaceClr;

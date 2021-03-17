@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include <unistd.h>
-#include <signal.h>
+#include <time.h>
 
 #include "debug.h"
 #include "main.h"
@@ -16,6 +16,12 @@ float deltaTime = 0.0f;
 
 int main() {
 	printf("\n\n====================================\n\n\n");
+
+	printf("Compiled against GLFW %i.%i.%i\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
+	int major, minor, revision;
+	glfwGetVersion(&major, &minor, &revision);
+	printf("Running against GLFW %i.%i.%i\n", major, minor, revision);
+
 	startTime(); // debug init
 
 	initOGL();
@@ -38,13 +44,31 @@ int main() {
 	/*readScene();
 	stop();*/
 
+	float frameTime = 0.0f;
+	unsigned int frameCount = 0;
+
 	while (!glfwWindowShouldClose(gl->window)) {
+		frameCount++;
+
 		updateInput();
 		updateScene();
 		renderOGL();
 
 		deltaTime = (float)glfwGetTime() - lastTime;
 		lastTime = (float)glfwGetTime();
+
+		frameTime += deltaTime;
+
+
+		if (frameTime > 1.0f) {
+			if (frameCount < 60) { // This optimalization has no effect on the fps :(
+				char msg[149];
+				sprintf(msg, "Low fps: %d", frameCount);
+				dprint(msg);
+			}
+			frameCount = 0;
+			frameTime = 0.0f;
+		}
 	}
 
 	dprint("exiting GL");

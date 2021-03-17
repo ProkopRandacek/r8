@@ -1,18 +1,18 @@
-vec4 Blend(in float a, in float b, in vec3 colA, in vec3 colB, in float k) {
+vec4 Blend(float a, float b, vec3 colA, vec3 colB, float k) {
 	float h = clamp(0.5 + 0.5 * (b - a) / k, 0.0, 1.0);
 	float blendDst = mix(b, a, h) - k * h * (1.0 - h);
 	vec3 blendCol = mix(colB, colA, h);
 	return vec4(blendCol, blendDst);
 }
 
-vec4 Average(in float a, in float b, in vec3 colA, in vec3 colB, in float k) {
+vec4 Average(float a, float b, vec3 colA, vec3 colB, float k) {
 	float i = 1.0 - k;
 	float c = (a * i) + (b * k);
 	vec3 colC = colA * i + colB * k;
 	return vec4(colC, c);
 }
 
-vec4 Combine(in float dstA, in float dstB, in vec3 colorA, in vec3 colorB, in int operation, in float k) {
+vec4 Combine(float dstA, float dstB, vec3 colorA, vec3 colorB, int operation, float k) {
 	float dst = dstA;
 	vec3 color = colorA;
 

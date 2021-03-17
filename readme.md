@@ -42,10 +42,9 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 
 ### Runtime deps:
 - glfw3
-- glew  
-(Arch `yay -S glew glfw-x11 --needed`)  
-(Fedora: `dnf install glew-devel glfw-devel`)  
-(Ubuntu: `apt install libglew-dev libglfw3`)  
+(Arch `yay -S glfw-x11 --needed`)  
+(Fedora: `dnf install glfw-devel`)  
+(Ubuntu: `apt install libglfw3`)  
 
 ### Build deps:
 - Runtime deps
