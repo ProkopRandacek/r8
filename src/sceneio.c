@@ -1,3 +1,4 @@
+/*
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -45,7 +46,7 @@ void readScene() {
 	char c;
 	unsigned int wlen = 0;
 	char activeKey = ' ';
-	char* sTypes;
+	//char* sTypes; // types of shapes in array TODO
 	int a = -1;
 	int b = -1;
 	float* shapes;
@@ -114,3 +115,4 @@ void readScene() {
 	}
 	printf("\n");
 }
+*/
