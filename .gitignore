@@ -1,4 +1,5 @@
 build
-.idea
 src/frag.h
 src/vert.h
+src/gl.c
+include
