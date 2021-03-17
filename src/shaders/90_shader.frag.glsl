@@ -3,8 +3,7 @@ const float COLLISION_THRESHOLD = 0.00001;
 const float MAX_TRACE_DIST = 100.0;
 const int BOUNCES = 1;
 
-const float SUN_SIZE = 1.0;
-const int PIXEL_GAP = 0; // 0 = no gap; 10 = render only every 10th pixel
+const float SUN_SIZE = 0.3;
 
 // 3D checkerboard pattern for coloring object. RN accesible only if hardcoded (like floor in mapWorld())
 vec3 checkerboard(in vec3 pos) {
@@ -64,12 +63,6 @@ rayHit rayMarch(vec3 rayOrigin, vec3 rayDir) {
 }
 
 void main() {
-	// skiping pixels (if enabled)
-	if ((int(gl_FragCoord.x) + int(gl_FragCoord.y)) % (PIXEL_GAP + 1) != 0) {
-		outColor = vec4(0.0);
-		return;
-	}
-
 	// calculate ray direction
 	vec2 uv = gl_FragCoord.xy / resolution.xy;
 

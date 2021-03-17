@@ -37,15 +37,23 @@ void initOGL() {
 
 	dprint("GL - window init");
 
+	glfwMakeContextCurrent(gl->window);
+
+	int version = gladLoadGL(glfwGetProcAddress);
+	if (version == 0) {
+		dprint("Failed to initialize OpenGL context");
+		exit(1);
+	}
+	char n[33];
+	sprintf(n, "GL - Loaded OpenGL %d.%d", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
+	dprint(n);
+
 	glViewport(10, 10, w, h);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	glfwMakeContextCurrent(gl->window);
+	glfwSwapInterval(0);
 
 	dprint("GL - window setup");
-
-	glewExperimental = GL_TRUE;
-	glewInit();
 
 	// triangles
 	float vertices[] = {
@@ -95,6 +103,7 @@ void renderOGL() {
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	// swap buffers
+	//glClear(GL_COLOR_BUFFER_BIT);
 	glfwSwapBuffers(gl->window);
 	glfwPollEvents();
 }
