@@ -4,7 +4,7 @@
 #include "shapes.h"
 
 
-const int shapeSize = 15;
+const int shapeSize = 16;
 const int groupSize = 6;
 
 Sphere* sph(Vector3 pos, Vector3 clr, float radius) {
