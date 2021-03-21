@@ -5,7 +5,7 @@ GCC_LIB = $(shell pkg-config --libs $(LIBS)) -lm -ldl
 GCC_INCLUDES = -Iinclude/
 GLFW_WIN_INCLUDE = -Iglfw/include/
 GLFW_DLL = -L./glfw/lib-vc2015/glfw3.dll -lopengl32
-D = --no-renaming
+#D = --no-renaming
 
 build: clean shaders glad
 	mkdir build -p
