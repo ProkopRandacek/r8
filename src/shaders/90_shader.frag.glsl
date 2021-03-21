@@ -18,8 +18,7 @@ map mapWorld(vec3 pos) {
 
 	vec4 localClr = d2Groups[groupNum - 1].clr;
 	float localDist = d2Groups[groupNum - 1].d;
-
-	// Check floor
+// Check floor
 	float dist = d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0);
 	map combined = Combine(localDist, dist, localClr, checkerboard(pos), 0, 0.0);
 	localClr = combined.clr;
@@ -85,8 +84,9 @@ void main() {
 		if (i == 0) {
 			finalClr = hit.surfaceClr.rgb;
 		} else {
-			finalClr = finalClr * (1-lastR) + hit.surfaceClr.rgb * lastR;
+			finalClr = finalClr * (1 - lastR) + hit.surfaceClr.rgb * lastR;
 		}
+
 		lastR = r;
 
 		if (!hit.hit) break; // only reflect and shadown when hit a surface
@@ -97,10 +97,11 @@ void main() {
 		pos = hit.hitPos + smolNormal;
 		dir = reflect(dir, normal);
 
-		rayHit shd = rayMarch(pos, normalize(lightPos - pos));
-		finalClr *= vec3(shd.shadow);
-
-		if (r == 0.0) break;
+		if (r == 0.0) { // shadow only 100% non reflective surfaces. shadows on reflective surfaces looks weird.
+			rayHit shd = rayMarch(pos, normalize(lightPos - pos));
+			finalClr *= vec3(shd.shadow);
+			break;
+		}
 	}
 
 	// output color
