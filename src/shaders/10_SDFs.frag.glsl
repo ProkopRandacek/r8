@@ -3,7 +3,6 @@
 
 // Source of the following functions: http://iquilezles.org/www/articles/distfunctions/distfunctions.htm
 // =====================================================================================================
-// See the source for readable versions. I need to fit into a nice number of lines (see end of file)
 
 float dot2(vec2 v) { return dot(v,v); } float dot2(vec3 v) { return dot(v,v); } float ndot(vec2 a, vec2 b) { return a.x*b.x-a.y*b.y; }
 

@@ -7,20 +7,27 @@ uniform vec3 cam[5];
 const int shapeNum = 4;
 const int groupNum = 3;
 
-const int shapeSize = 15;
+const int shapeSize = 16;
 const int groupSize = 6;
 
 uniform float rawShapes[shapeSize * shapeNum];
 uniform float rawGroups[groupNum * groupSize];
 
-vec4 d2Groups[groupNum];
+int ignore = -1;
 
 out vec4 outColor;
 
 struct rayHit {
 	vec3 hitPos;
-	vec3 surfaceClr;
+	vec4 surfaceClr;
 	int steps;
 	bool hit;
 	float shadow;
 };
+
+struct map {
+	vec4 clr;
+	float d;
+};
+
+map d2Groups[groupNum];

@@ -12,15 +12,18 @@ float gK (int i) { return     gF(i, 5) ; } // group operation modifier
 float sF(int i, int o) { return rawShapes[shapeSize * i + o]; } // return float on position `o` from shape on index `i`
 vec3  sV(int i, int o) { return vec3(sF(i, o + 0), sF(i, o + 1), sF(i, o + 2)); } //vector from 3 floats on position from o to o + 2 from shape on index `i`
 
-float sR (int i) { return sF(i, 9); } // radius
-vec3  sP (int i) { return sV(i, 0); } // position
-vec3  sC (int i) { return sV(i, 3); } // color
-vec3  sS (int i) { return sV(i, 6); } // scale
+float sR (int i) { return sF(i, 9 ); } // radius
+float sRs(int i) { return sF(i, 15); } // refletiveness
+vec3  sP (int i) { return sV(i, 0 ); } // position
+vec3  sS (int i) { return sV(i, 6 ); } // scale
+vec4  sC (int i) { return vec4(sV(i, 3 ), sRs(i)); } // color
 vec2  sRV(int i) { return vec2(sF(i, 9), sF(i, 10)); } // radius vector
 
 // distance to a shape. st = shape type; i = shape index
 // some shapes are commented since they are not yes used and just take up space in the binary
 float d2Shape(vec3 pos, int st, int i) {
+	if (i == ignore) { return -1.0f; }
+
 	float dist;
 	     if (st == 1 ) { dist = d2Cube    (pos, sP(i), sS(i)   , sR(i)             ); } // cube
 	else if (st == 2 ) { dist = d2Sphere  (pos, sP(i), sR(i)                       ); } // sphere
@@ -42,22 +45,22 @@ float d2Shape(vec3 pos, int st, int i) {
 // If A or B is a subgroup, this function needs to be called for both subgroups before calling it for this group.
 void d2Group(vec3 pos, int i) {
 	float aDist, bDist;
-	vec3 aClr, bClr;
+	vec4 aClr, bClr;
 
 	int aType = gAT(i);
 	int bType = gBT(i);
 
 	if (aType == 0) {
-		vec4 s = d2Groups[gA(i)];
-		aDist = s.w; aClr = s.rgb;
+		map s = d2Groups[gA(i)];
+		aDist = s.d; aClr = s.clr;
 	} else {
 		aClr = sC(gA(i));
 		aDist = d2Shape(pos, aType, gA(i));
 	}
 
 	if (bType == 0) {
-		vec4 s = d2Groups[gB(i)];
-		bDist = s.w; bClr = s.rgb;
+		map s = d2Groups[gB(i)];
+		bDist = s.d; bClr = s.clr;
 	} else {
 		bClr = sC(gB(i));
 		bDist = d2Shape(pos, bType, gB(i));
