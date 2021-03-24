@@ -22,7 +22,7 @@ vec2  sRV(int i) { return vec2(sF(i, 9), sF(i, 10)); } // radius vector
 // distance to a shape. st = shape type; i = shape index
 // some shapes are commented since they are not yes used and just take up space in the binary
 float d2Shape(vec3 pos, int st, int i) {
-	if (i == ignore) { return -1.0f; }
+	if (i == ignore) { return 9999.0f; }
 
 	float dist;
 	     if (st == 1 ) { dist = d2Cube    (pos, sP(i), sS(i)   , sR(i)             ); } // cube

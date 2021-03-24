@@ -16,7 +16,7 @@ void sphere2floats(float* f, Sphere* s) {
 	f[6 ] = 0.0f;      f[7 ] = 0.0f;     f[8 ] = 0.0f;
 	f[9 ] = s->radius; f[10] = 0.0f;     f[11] = 0.0f;
 	f[12] = 0.0f;      f[13] = 0.0f;     f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void cube2floats(float* f, Cube* s) {
@@ -25,7 +25,7 @@ void cube2floats(float* f, Cube* s) {
 	f[6 ] = s->scale.x;   f[7 ] = s->scale.y; f[8 ] = s->scale.z;
 	f[9 ] = s->roundEdge; f[10] = 0.0f;       f[11] = 0.0f;
 	f[12] = 0.0f;         f[13] = 0.0f;       f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void boxFrame2floats(float* f, BoxFrame* s) {
@@ -34,7 +34,7 @@ void boxFrame2floats(float* f, BoxFrame* s) {
 	f[6 ] = s->scale.x; f[7 ] = s->scale.y; f[8 ] = s->scale.z;
 	f[9 ] = s->width;   f[10] = 0.0f;       f[11] = 0.0f;
 	f[12] = 0.0f;       f[13] = 0.0f;       f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void torus2floats(float* f, Torus* s) {
@@ -43,7 +43,7 @@ void torus2floats(float* f, Torus* s) {
 	f[6 ] = 0.0f;      f[7 ] = 0.0f;       f[8 ] = 0.0f;
 	f[9 ] = s->radius; f[10] = s->fatness; f[11] = 0.0f;
 	f[12] = 0.0f;      f[13] = 0.0f;       f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void ctorus2floats(float* f, CTorus* s) {
@@ -52,7 +52,7 @@ void ctorus2floats(float* f, CTorus* s) {
 	f[6 ] = 0.0f;     f[7 ] = 0.0f;     f[8 ] = 0.0f;
 	f[9 ] = s->scX;   f[10] = s->scY;   f[11] = s->ra;
 	f[12] = s->rb;    f[13] = 0.0f;     f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void link2floats(float* f, Link* s) {
@@ -61,7 +61,7 @@ void link2floats(float* f, Link* s) {
 	f[6 ] = 0.0f;      f[7 ] = 0.0f;      f[8 ] = 0.0f;
 	f[9 ] = s->innerR; f[10] = s->outerR; f[11] = s->length;
 	f[12] = 0.0f;      f[13] = 0.0f;      f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void plane2floats(float* f, Plane* s) {
@@ -70,7 +70,7 @@ void plane2floats(float* f, Plane* s) {
 	f[6 ] = s->n.x;   f[7 ] = s->n.y;   f[8 ] = s->n.z;
 	f[9 ] = s->h;     f[10] = 0.0f;     f[11] = 0.0f;
 	f[12] = 0.0f;     f[13] = 0.0f;     f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void hexprism2floats(float* f, HexPrism* s) {
@@ -79,7 +79,7 @@ void hexprism2floats(float* f, HexPrism* s) {
 	f[6 ] = 0.0f;      f[7 ] = 0.0f;      f[8 ] = 0.0f;
 	f[9 ] = s->height; f[10] = s->radius; f[11] = 0.0f;
 	f[12] = 0.0f;      f[13] = 0.0f;      f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void triprism2floats(float* f, TriPrism* s) {
@@ -88,7 +88,7 @@ void triprism2floats(float* f, TriPrism* s) {
 	f[6 ] = 0.0f;      f[7 ] = 0.0f;      f[8 ] = 0.0f;
 	f[9 ] = s->height; f[10] = s->radius; f[11] = 0.0f;
 	f[12] = 0.0f;      f[13] = 0.0f;      f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void caps2floats(float* f, Capsule* s) {
@@ -97,7 +97,7 @@ void caps2floats(float* f, Capsule* s) {
 	f[6 ] = s->end.x;   f[7 ] = s->end.y;   f[8 ] = s->end.z;
 	f[9 ] = s->radius;  f[10] = 0.0f;       f[11] = 0.0f;
 	f[12] = 0.0f;       f[13] = 0.0f;       f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void cyl2floats(float* f, Cylinder* s) {
@@ -106,7 +106,7 @@ void cyl2floats(float* f, Cylinder* s) {
 	f[6 ] = s->end.x;   f[7 ] = s->end.y;   f[8 ] = s->end.z;
 	f[9 ] = s->radius;  f[10] = 0.0f;       f[11] = 0.0f;
 	f[12] = 0.0f;       f[13] = 0.0f;       f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 void ccone2floats(float* f, CCone*s) {
@@ -115,7 +115,7 @@ void ccone2floats(float* f, CCone*s) {
 	f[6 ] = s->end.x;   f[7 ] = s->end.y;   f[8 ] = s->end.z;
 	f[9 ] = s->startR;  f[10] = s->endR;    f[11] = 0.0f;
 	f[12] = 0.0f;       f[13] = 0.0f;       f[14] = 0.0f;
-	f[15] = 0.0f;
+	f[15] = s->rv;
 }
 
 

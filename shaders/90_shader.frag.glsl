@@ -18,7 +18,7 @@ map mapWorld(vec3 pos) {
 
 	vec4 localClr = d2Groups[groupNum - 1].clr;
 	float localDist = d2Groups[groupNum - 1].d;
-// Check floor
+	// Check floor
 	float dist = d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0);
 	map combined = Combine(localDist, dist, localClr, checkerboard(pos), 0, 0.0);
 	localClr = combined.clr;
@@ -29,7 +29,7 @@ map mapWorld(vec3 pos) {
 
 // calculate normal from given point on a surface
 vec3 calculateNormal(vec3 p) {
-	const vec3 smol = vec3(0.00001, 0.0, 0.0);
+	const vec3 smol = vec3(0.002, 0.0, 0.0);
 	float x = mapWorld(p + smol.xyy).d - mapWorld(p - smol.xyy).d;
 	float y = mapWorld(p + smol.yxy).d - mapWorld(p - smol.yxy).d;
 	float z = mapWorld(p + smol.yyx).d - mapWorld(p - smol.yyx).d;
