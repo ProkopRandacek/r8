@@ -15,15 +15,16 @@ Current rendering capabilities:
 - Works realtime
 
 TODO:
-- Relative position for shapes in subgroups?
+- Inline functions
 - Upgrade light source objects
   - Multiple lights in a scene
   - Colored lights
 - Optimalizions
-  - Bounding box for complicated groups far away from the ray !importnat
+  - Bounding box for complicated groups far away from the ray
     - Needs render order rework
 - Read scene configuration from file
-- Inline functions
+  - Relative position for shapes in subgroups?
+- Umka scripting
 - Compile for windows somehow?
 - Shape rotating
 - `#import`s seems to be messy
