@@ -21,18 +21,16 @@ wbuild: clean shaders glfw
 run: clean build
 	cd build/; ./rendering
 
-shaders:
-	cat $(wildcard src/shaders/*frag.glsl) > fragFull.glsl
-	cat $(wildcard src/shaders/*vert.glsl) > vertFull.glsl
-	mono shader_minifier.exe fragFull.glsl --preserve-externals ${D} -o src/frag.h
-	mono shader_minifier.exe vertFull.glsl --preserve-externals ${D} -o src/vert.h
+shaders: clean
+	cat $(wildcard shaders/*frag.glsl) > fragFull.glsl
+	cat $(wildcard shaders/*vert.glsl) > vertFull.glsl
+	mono glsl_minify.exe fragFull.glsl --preserve-externals ${D} -o src/frag.h
+	mono glsl_minify.exe vertFull.glsl --preserve-externals ${D} -o src/vert.h
 	rm fragFull.glsl vertFull.glsl -f
 
 # I don't want to have 3rd praty source in plan text because github then shows random +20000 lines of code in statistics
 glad:
 	unzip -oq glad.zip
-glfw: glad
-	unzip -oq glfw.zip
 
 clean:
 	rm build/ -rf
