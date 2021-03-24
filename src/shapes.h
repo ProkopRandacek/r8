@@ -143,21 +143,24 @@ typedef struct ShapeGroup {
 	int b;
 } ShapeGroup;
 
-Primitive prmv(ShapeType type, void* shape);
-ShapeGroup group(ShapeType ta, int a, ShapeType tb, int b, OperationType op, float k);
+Primitive* prmv(ShapeType type, void* shape);
+ShapeGroup* group(ShapeType ta, int a, ShapeType tb, int b, OperationType op, float k);
 
+// used:
 Sphere* sph(Vector3 pos, Vector3 clr, float radius, float rv);
 Cube* cube(Vector3 pos, Vector3 clr, Vector3 scale, float roundEdge, float rv);
-BoxFrame* frame(Vector3 pos, Vector3 clr, Vector3 scale, float width, float rv);
 Torus* tor(Vector3 pos, Vector3 clr, float innerR, float outerR, float rv);
+Capsule* caps(Vector3 start, Vector3 end, Vector3 clr, float r, float rv);
+Cylinder* cyl(Vector3 start, Vector3 stop, Vector3 clr, float r, float rv);
+CCone* ccone(Vector3 start, Vector3 end, Vector3 clr, float startR, float endR, float rv);
+
+// not fully implemented yet:
+BoxFrame* frame(Vector3 pos, Vector3 clr, Vector3 scale, float width, float rv);
 CTorus* ctor(Vector3 pos, Vector3 clr, float scX, float scY, float ra, float rb, float rv);
 Link* lik(Vector3 pos, Vector3 clr, float innerR, float outerR, float length, float rv);
 Plane* pln(Vector3 pos, Vector3 clr, Vector3 n, float h, float rv);
 HexPrism* xprism(Vector3 pos, Vector3 clr, float h, float r, float rv);
 TriPrism* tprism(Vector3 pos, Vector3 clr, float h, float r, float rv);
-Capsule* caps(Vector3 start, Vector3 end, Vector3 clr, float r, float rv);
-Cylinder* cyl(Vector3 start, Vector3 stop, Vector3 clr, float r, float rv);
-CCone* ccone(Vector3 start, Vector3 end, Vector3 clr, float startR, float endR, float rv);
 Pyramid* pyr(Vector3 pos, Vector3 clr, float h, float rv);
 Triangle* tri(Vector3 a, Vector3 b, Vector3 c, Vector3 clr, float rv);
 Quad* quad(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 clr, float rv);
