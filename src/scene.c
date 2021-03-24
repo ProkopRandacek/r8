@@ -44,12 +44,12 @@ void createObjects() {
 	// Primitives
 	const int shapeNum = 4;
 	float s[shapeSize * shapeNum];
-	Primitive shapes[shapeNum];
+	Primitive* shapes[shapeNum];
 
-	Primitive head = prmv(SPHERE, (void*) sph  (v3(0.5f, 2.1f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.3f, 0.0f));
-	Primitive ring = prmv(TORUS,  (void*) tor  (v3(0.5f, 1.9f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.25f, 0.09f, 0.0f));
-	Primitive body = prmv(CCONE,  (void*) ccone(v3(0.5f, 2.2f, 0.5f), v3(0.5f, 1.3f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.17f, 0.3f, 0.0f));
-	Primitive base = prmv(CCONE,  (void*) ccone(v3(0.5f, 1.3f, 0.5f), v3(0.5f, 1.0f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.4f, 0.4f, 0.0f));
+	Primitive* head = prmv(SPHERE, (void*) sph  (v3(0.5f, 2.1f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.3f, 0.0f));
+	Primitive* ring = prmv(TORUS,  (void*) tor  (v3(0.5f, 1.9f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.25f, 0.09f, 0.0f));
+	Primitive* body = prmv(CCONE,  (void*) ccone(v3(0.5f, 2.2f, 0.5f), v3(0.5f, 1.3f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.17f, 0.3f, 0.0f));
+	Primitive* base = prmv(CCONE,  (void*) ccone(v3(0.5f, 1.3f, 0.5f), v3(0.5f, 1.0f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.4f, 0.4f, 0.0f));
 
 	shapes[0] = head;
 	shapes[1] = ring;
@@ -63,12 +63,12 @@ void createObjects() {
 	// Groups
 	const int groupNum = 3;
 	float g[groupSize * groupNum];
-	ShapeGroup groups[groupNum];
+	ShapeGroup* groups[groupNum];
 
 	// the top group is a sphere that is on index 0 in shapes array and a torus that is on index 1. operation between then is normal
-	ShapeGroup sgTop    = group(SPHERE, 0, TORUS, 1, NORMAL, 0.0f);
-	ShapeGroup sgBottom = group(CCONE,  2, CCONE, 3, BLEND, 0.2f);
-	ShapeGroup sgROOT   = group(GROUP,  0, GROUP, 1, BLEND, 0.02f);
+	ShapeGroup* sgTop    = group(SPHERE, 0, TORUS, 1, NORMAL, 0.0f);
+	ShapeGroup* sgBottom = group(CCONE,  2, CCONE, 3, BLEND, 0.2f);
+	ShapeGroup* sgROOT   = group(GROUP,  0, GROUP, 1, BLEND, 0.02f);
 
 	groups[0] = sgTop;
 	groups[1] = sgBottom;
@@ -85,9 +85,8 @@ void createObjects() {
 
 
 	// cleanup
-	free(head.shape);
-	free(ring.shape);
-	free(body.shape);
+	for (int i = 0; i < shapeNum; i++) { free(shapes[i]->shape); }
+	for (int i = 0; i < groupNum; i++) { free(groups[i]);        }
 }
 
 void updateScene() {

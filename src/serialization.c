@@ -119,27 +119,27 @@ void ccone2floats(float* f, CCone*s) {
 }
 
 
-void groups2floats(float* f, int num, ShapeGroup* groups) {
+void groups2floats(float* f, int num, ShapeGroup** groups) {
 	for (int i = 0; i < num; i++) {
-		f[i * groupSize + 0] = (float) groups[i].ta;
-		f[i * groupSize + 1] = (float) groups[i].a;
-		f[i * groupSize + 2] = (float) groups[i].tb;
-		f[i * groupSize + 3] = (float) groups[i].b;
-		f[i * groupSize + 4] = (float) groups[i].op;
-		f[i * groupSize + 5] = (float) groups[i].k;
+		f[i * groupSize + 0] = (float) groups[i]->ta;
+		f[i * groupSize + 1] = (float) groups[i]->a;
+		f[i * groupSize + 2] = (float) groups[i]->tb;
+		f[i * groupSize + 3] = (float) groups[i]->b;
+		f[i * groupSize + 4] = (float) groups[i]->op;
+		f[i * groupSize + 5] = (float) groups[i]->k;
 	}
 }
 
-void shapes2floats(float *f, int num, Primitive* prmv) {
+void shapes2floats(float *f, int num, Primitive** prmv) {
 	for (int i = 0; i < num; i++) {
-		if      (prmv[i].type == CUBE)     {   cube2floats(&f[i * shapeSize],     (Cube*) prmv[i].shape); }
-		else if (prmv[i].type == SPHERE)   { sphere2floats(&f[i * shapeSize],   (Sphere*) prmv[i].shape); }
-		else if (prmv[i].type == CYLINDER) {    cyl2floats(&f[i * shapeSize], (Cylinder*) prmv[i].shape); }
-		else if (prmv[i].type == TORUS)    {  torus2floats(&f[i * shapeSize],    (Torus*) prmv[i].shape); }
-		else if (prmv[i].type == CCONE)    {  ccone2floats(&f[i * shapeSize],    (CCone*) prmv[i].shape); }
+		if      (prmv[i]->type == CUBE)     {   cube2floats(&f[i * shapeSize],     (Cube*) prmv[i]->shape); }
+		else if (prmv[i]->type == SPHERE)   { sphere2floats(&f[i * shapeSize],   (Sphere*) prmv[i]->shape); }
+		else if (prmv[i]->type == CYLINDER) {    cyl2floats(&f[i * shapeSize], (Cylinder*) prmv[i]->shape); }
+		else if (prmv[i]->type == TORUS)    {  torus2floats(&f[i * shapeSize],    (Torus*) prmv[i]->shape); }
+		else if (prmv[i]->type == CCONE)    {  ccone2floats(&f[i * shapeSize],    (CCone*) prmv[i]->shape); }
 		else {
 			char errMsg[55];
-			sprintf(errMsg, "Unknown shape %d on index %d\nexiting\n", prmv[i].type, num);
+			sprintf(errMsg, "Unknown shape %d on index %d\nexiting\n", prmv[i]->type, num);
 			eprint(errMsg);
 		}
 	}

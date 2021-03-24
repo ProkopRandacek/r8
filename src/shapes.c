@@ -3,11 +3,10 @@
 #include "vector.h"
 #include "shapes.h"
 
-
 const int shapeSize = 16;
 const int groupSize = 6;
 
-Sphere* sph(Vector3 pos, Vector3 clr, float radius, float rv) {
+inline Sphere* sph(Vector3 pos, Vector3 clr, float radius, float rv) {
 	Sphere* s = malloc(sizeof(Sphere));
 	s->pos = pos;
 	s->clr = clr;
@@ -16,7 +15,7 @@ Sphere* sph(Vector3 pos, Vector3 clr, float radius, float rv) {
 	return s;
 }
 
-Cube* cube(Vector3 pos, Vector3 clr, Vector3 scale, float roundEdge, float rv) {
+inline Cube* cube(Vector3 pos, Vector3 clr, Vector3 scale, float roundEdge, float rv) {
 	Cube* c = malloc(sizeof(Cube));
 	c->pos = pos;
 	c->clr = clr;
@@ -35,7 +34,7 @@ Cube* cube(Vector3 pos, Vector3 clr, Vector3 scale, float roundEdge, float rv) {
 	return f;
 }*/
 
-Torus* tor(Vector3 pos, Vector3 clr, float radius, float fatness, float rv) {
+inline Torus* tor(Vector3 pos, Vector3 clr, float radius, float fatness, float rv) {
 	Torus* t = malloc(sizeof(Torus));
 	t->pos = pos;
 	t->clr = clr;
@@ -93,7 +92,7 @@ TriPrism* tprism(Vector3 pos, Vector3 clr, float h, float r) {
 	return t;
 }*/
 
-Capsule* caps(Vector3 start, Vector3 end, Vector3 clr, float r, float rv) {
+inline Capsule* caps(Vector3 start, Vector3 end, Vector3 clr, float r, float rv) {
 	Capsule* c = malloc(sizeof(Capsule));
 	c->start = start;
 	c->end = end;
@@ -103,7 +102,7 @@ Capsule* caps(Vector3 start, Vector3 end, Vector3 clr, float r, float rv) {
 	return c;
 }
 
-Cylinder* cyl(Vector3 start, Vector3 end, Vector3 clr, float r, float rv) {
+inline Cylinder* cyl(Vector3 start, Vector3 end, Vector3 clr, float r, float rv) {
 	Cylinder* c = malloc(sizeof(Cylinder));
 	c->start = start;
 	c->end = end;
@@ -113,7 +112,7 @@ Cylinder* cyl(Vector3 start, Vector3 end, Vector3 clr, float r, float rv) {
 	return c;
 }
 
-CCone* ccone(Vector3 start, Vector3 end, Vector3 clr, float startR, float endR, float rv) {
+inline CCone* ccone(Vector3 start, Vector3 end, Vector3 clr, float startR, float endR, float rv) {
 	CCone* r = malloc(sizeof(CCone));
 	r->start = start;
 	r->end = end;
@@ -152,20 +151,20 @@ Quad* quad(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 clr) {
 }*/
 
 
-Primitive prmv(ShapeType type, void* shape) {
-	Primitive p;
-	p.type = type;
-	p.shape = shape;
+inline Primitive* prmv(ShapeType type, void* shape) {
+	Primitive* p = malloc(sizeof(Primitive));
+	p->type = type;
+	p->shape = shape;
 	return p;
 }
 
-ShapeGroup group(ShapeType ta, int a, ShapeType tb, int b, OperationType op, float k) {
-	ShapeGroup sg;
-	sg.a = a;
-	sg.b = b;
-	sg.ta = ta;
-	sg.tb = tb;
-	sg.op = op;
-	sg.k = k;
+inline ShapeGroup* group(ShapeType ta, int a, ShapeType tb, int b, OperationType op, float k) {
+	ShapeGroup* sg = malloc(sizeof(ShapeGroup));
+	sg->a = a;
+	sg->b = b;
+	sg->ta = ta;
+	sg->tb = tb;
+	sg->op = op;
+	sg->k = k;
 	return sg;
 }
