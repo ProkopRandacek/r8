@@ -6,10 +6,8 @@
 
 #include "shader.h"
 #include "debug.h"
-
 #include "vert.h" // generated on build. contain the shader source code string.
 #include "frag.h" // -//-
-
 
 shader shd() {
 	shader s;
@@ -26,9 +24,7 @@ shader shd() {
 		exit(1);
 	}
 
-	char l[61];
-	sprintf(l, "GL - SHADER - vertex shader compiled (%ld)", strlen(vertShdSource));
-	dprint(l);
+	char l[61]; sprintf(l, "GL - SHADER - vertex shader compiled (%ld)", strlen(vertShdSource)); dprint(l);
 
 	const char* fragShdSource = fragFull_glsl;
 	unsigned int fragShd = glCreateShader(GL_FRAGMENT_SHADER);
@@ -41,8 +37,7 @@ shader shd() {
 		exit(1);
 	}
 
-	sprintf(l, "GL - SHADER - fragment shader compiled (%ld)", strlen(fragShdSource));
-	dprint(l);
+	sprintf(l, "GL - SHADER - fragment shader compiled (%ld)", strlen(fragShdSource)); dprint(l);
 
 	s.ID = glCreateProgram();
 	glAttachShader(s.ID, vertShd);
@@ -61,13 +56,11 @@ shader shd() {
 	return s;
 }
 
-void shdUse(shader* s) {
-	glUseProgram(s->ID);
-}
+void shdUse(shader* s) { glUseProgram(s->ID); }
 
 // single values
-void shdSetInt(shader s, const char* name, int value) { glUniform1i(glGetUniformLocation(s.ID, name), value); }
-void shdSetFloat(shader s, const char* name, float value) { glUniform1f(glGetUniformLocation(s.ID, name), value); }
+void shdSetInt  (shader s, const char* name, int value)    { glUniform1i(glGetUniformLocation(s.ID, name), value); }
+void shdSetFloat(shader s, const char* name, float value)  { glUniform1f(glGetUniformLocation(s.ID, name), value); }
 void shdSetIVec2(shader s, const char* name, int x, int y) { glUniform2i(glGetUniformLocation(s.ID, name), x, y); }
 
 // arrays

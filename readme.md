@@ -40,7 +40,7 @@ see [`archtecture.md`](architecture.md) for explanation what every file does.
 Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum) (you still need glfw3 and glew)
 
 ### Runtime deps:
-- glfw3
+- glfw3  
 (Arch `yay -S glfw-x11 --needed`)  
 (Fedora: `dnf install glfw-devel`)  
 (Ubuntu: `apt install libglfw3`)  
@@ -51,7 +51,7 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 - mono (for running the shader minifier)
 - gcc
 - pkg-config
-- unzip
+- unzip  
 (Arch:        `yay -S gcc make unzip pkgconf    mono --needed`)  
 (Fedora: `dnf install gcc make unzip pkgconf    mono-devel gcc`)  
 (Ubuntu: `apt install gcc make unzip pkg-config mono-runtime gcc`)  

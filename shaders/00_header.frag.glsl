@@ -10,10 +10,10 @@ const int groupNum = 3;
 const int shapeSize = 16;
 const int groupSize = 6;
 
+int ignore = -1;
+
 uniform float rawShapes[shapeSize * shapeNum];
 uniform float rawGroups[groupNum * groupSize];
-
-int ignore = -1;
 
 out vec4 outColor;
 
