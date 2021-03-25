@@ -40,10 +40,12 @@ vec3 calculateNormal(vec3 p) {
 rayHit rayMarch(vec3 rayOrigin, vec3 rayDir) {
 	float distTraveled = 0.0;
 	float shadow = 1.0;
+	vec3 currentPos;
+	map hit;
 
 	for (int i = 0; i < STEPSNUM; ++i) {
-		vec3 currentPos = rayOrigin + (distTraveled * rayDir);
-		map hit = mapWorld(currentPos);
+		currentPos = rayOrigin + (distTraveled * rayDir);
+		hit = mapWorld(currentPos);
 
 		float safeDist = hit.d;
 		shadow = min(shadow, safeDist/(distTraveled * SUN_SIZE));
