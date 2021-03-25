@@ -9,3 +9,4 @@ void sendCamera(void);
 void createLight(void);
 void createObjects(void);
 void sendObjects(void);
+void freeObjects(void);
