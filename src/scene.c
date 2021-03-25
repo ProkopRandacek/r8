@@ -6,16 +6,16 @@
 #include "opengl.h"
 #include "scene.h"
 #include "serialization.h"
+#include "settings.h"
 
 
 extern GL* gl;
 extern const unsigned int groupSize, shapeSize;
 
-#define shapeNum 4
 #define groupNum 3
 
-Primitive*  shapes[shapeNum];
-ShapeGroup* groups[groupNum];
+Primitive*  shapes[SHAPE_NUM];
+ShapeGroup* groups[GROUP_NUM];
 
 // these are global so other object can be created relative to them
 Camera cam;
@@ -71,25 +71,20 @@ void createObjects() {
 
 	sendObjects();
 
-	/*shdSetInt(gl->s, "shapeNum", shapeNum);
-	shdSetInt(gl->s, "shapeSize", shapeSize);
-	shdSetInt(gl->s, "groupNum", groupNum);
-	shdSetInt(gl->s, "groupSize", groupSize);*/
-
 	// cleanup
-	for (unsigned int i = 0; i < shapeNum; i++) { free(shapes[i]->shape); free(shapes[i]); }
-	for (unsigned int i = 0; i < groupNum; i++) { free(groups[i]); }
+	for (unsigned int i = 0; i < SHAPE_NUM; i++) { free(shapes[i]->shape); free(shapes[i]); }
+	for (unsigned int i = 0; i < GROUP_NUM; i++) { free(groups[i]); }
 }
 
 void sendObjects() {
-	float g[groupSize * groupNum];
-	float s[shapeSize * shapeNum];
+	float g[GROUP_SIZE * GROUP_NUM];
+	float s[SHAPE_SIZE * SHAPE_NUM];
 
-	shapes2floats(s, shapeNum, shapes);
-	shdSetFloatArray(gl->s, "rawShapes", (int)(shapeSize * shapeNum), s);
+	shapes2floats(s, SHAPE_NUM, shapes);
+	shdSetFloatArray(gl->s, "rawShapes", (int)(SHAPE_SIZE * SHAPE_NUM), s);
 
-	groups2floats(g, groupNum, groups);
-	shdSetFloatArray(gl->s, "rawGroups", (int)(groupSize * groupNum), g);
+	groups2floats(g, GROUP_NUM, groups);
+	shdSetFloatArray(gl->s, "rawGroups", (int)(GROUP_SIZE * GROUP_NUM), g);
 }
 
 void updateScene() {
