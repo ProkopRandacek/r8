@@ -12,7 +12,7 @@
 
 extern GL* gl;
 
-Primitive*  shapes[SHAPE_NUM];
+Shape*      shapes[SHAPE_NUM];
 ShapeGroup* groups[GROUP_NUM];
 
 // these are global so other object can be created relative to them
@@ -46,10 +46,10 @@ void createLight() {
 void createObjects() {
 	// Primitives
 
-	Primitive* head = prmv(SPHERE, (void*) sph  (v3(0.5f, 2.1f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.3f, 0.0f));
-	Primitive* ring = prmv(TORUS,  (void*) tor  (v3(0.5f, 1.9f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.25f, 0.09f, 0.0f));
-	Primitive* body = prmv(CCONE,  (void*) ccone(v3(0.5f, 2.2f, 0.5f), v3(0.5f, 1.3f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.17f, 0.3f, 0.0f));
-	Primitive* base = prmv(CCONE,  (void*) ccone(v3(0.5f, 1.3f, 0.5f), v3(0.5f, 1.0f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.4f, 0.4f, 0.0f));
+	Shape* head = sph  (v3(0.5f, 2.1f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.3f, 0.0f);
+	Shape* ring = tor  (v3(0.5f, 1.9f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.25f, 0.09f, 0.0f);
+	Shape* body = ccone(v3(0.5f, 2.2f, 0.5f), v3(0.5f, 1.3f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.17f, 0.3f, 0.0f);
+	Shape* base = ccone(v3(0.5f, 1.3f, 0.5f), v3(0.5f, 1.0f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.4f, 0.4f, 0.0f);
 
 	shapes[0] = head;
 	shapes[1] = ring;
