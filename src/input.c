@@ -6,6 +6,7 @@
 #include "camera.h"
 #include "opengl.h"
 #include "time.h"
+#include "settings.h"
 
 
 extern GL* gl;
@@ -19,8 +20,6 @@ char sDown = 0;
 char dDown = 0;
 char shiftDown = 0;
 char spaceDown = 0;
-const float moveSpeed = 5.0f;
-const float mouseSens = 0.12f;
 
 void updateInput() {
 	double xpos, ypos;
@@ -34,14 +33,14 @@ void updateInput() {
 	if (spaceDown) moveDir.y = 1.0f;
 	if (shiftDown) moveDir.y = -1.0f;
 	if (vMag(moveDir) > 0.0f) {
-		moveDir = vMultf(vNorm(moveDir), moveSpeed * deltaTime);
+		moveDir = vMultf(vNorm(moveDir), MOVE_SPEED * deltaTime);
 		updateCamPos(&cam, moveDir);
 	}
 
 	// mouse
 	glfwGetCursorPos(gl->window, &xpos, &ypos);
-	float x = ((2.0f * (float)xpos) / (float)w - 1.0f) * -mouseSens;
-	float y = (1.0f - (2.0f *(float) ypos) /(float) h) * mouseSens;
+	float x = ((2.0f * (float)xpos) / (float)w - 1.0f) * -MOUSE_SENS;
+	float y = (1.0f - (2.0f *(float) ypos) /(float) h) * MOUSE_SENS;
 
 	vec3 dir = vNorm(v3(
 		cosf(y) * sinf(x),
