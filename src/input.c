@@ -26,7 +26,7 @@ void updateInput() {
 	double xpos, ypos;
 
 	// wasd
-	Vector3 moveDir = v3(0.0f, 0.0f, 0.0f);
+	vec3 moveDir = v3(0.0f, 0.0f, 0.0f);
 	if (wDown) moveDir.z = 1.0f;
 	if (sDown) moveDir.z = -1.0f;
 	if (aDown) moveDir.x = 1.0f;
@@ -43,7 +43,7 @@ void updateInput() {
 	float x = ((2.0f * (float)xpos) / (float)w - 1.0f) * -mouseSens;
 	float y = (1.0f - (2.0f *(float) ypos) /(float) h) * mouseSens;
 
-	Vector3 dir = vNorm(v3(
+	vec3 dir = vNorm(v3(
 		cosf(y) * sinf(x),
 		sinf(y),
 		cosf(y) * cosf(x)

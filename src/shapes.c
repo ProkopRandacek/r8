@@ -3,10 +3,10 @@
 #include "vector.h"
 #include "shapes.h"
 
-const int shapeSize = 16;
-const int groupSize = 6;
+const unsigned int shapeSize = 16;
+const unsigned int groupSize = 6;
 
-inline Sphere* sph(Vector3 pos, Vector3 clr, float radius, float rv) {
+inline Sphere* sph(vec3 pos, vec3 clr, float radius, float rv) {
 	Sphere* s = malloc(sizeof(Sphere));
 	s->pos = pos;
 	s->clr = clr;
@@ -15,7 +15,7 @@ inline Sphere* sph(Vector3 pos, Vector3 clr, float radius, float rv) {
 	return s;
 }
 
-inline Cube* cube(Vector3 pos, Vector3 clr, Vector3 scale, float roundEdge, float rv) {
+inline Cube* cube(vec3 pos, vec3 clr, vec3 scale, float roundEdge, float rv) {
 	Cube* c = malloc(sizeof(Cube));
 	c->pos = pos;
 	c->clr = clr;
@@ -25,7 +25,7 @@ inline Cube* cube(Vector3 pos, Vector3 clr, Vector3 scale, float roundEdge, floa
 	return c;
 }
 
-/*BoxFrame* frame(Vector3 pos, Vector3 clr, Vector3 scale, float width) {
+/*BoxFrame* frame(vec3 pos, vec3 clr, vec3 scale, float width) {
 	BoxFrame* f = malloc(sizeof(BoxFrame));
 	f->pos = pos;
 	f->clr = clr;
@@ -34,7 +34,7 @@ inline Cube* cube(Vector3 pos, Vector3 clr, Vector3 scale, float roundEdge, floa
 	return f;
 }*/
 
-inline Torus* tor(Vector3 pos, Vector3 clr, float radius, float fatness, float rv) {
+inline Torus* tor(vec3 pos, vec3 clr, float radius, float fatness, float rv) {
 	Torus* t = malloc(sizeof(Torus));
 	t->pos = pos;
 	t->clr = clr;
@@ -44,7 +44,7 @@ inline Torus* tor(Vector3 pos, Vector3 clr, float radius, float fatness, float r
 	return t;
 }
 
-/*CTorus* ctor(Vector3 pos, Vector3 clr, float scX, float scY, float ra, float rb) {
+/*CTorus* ctor(vec3 pos, vec3 clr, float scX, float scY, float ra, float rb) {
 	CTorus* t = malloc(sizeof(CTorus));
 	t->pos = pos;
 	t->clr = clr;
@@ -55,7 +55,7 @@ inline Torus* tor(Vector3 pos, Vector3 clr, float radius, float fatness, float r
 	return t;
 }
 
-Link* lik(Vector3 pos, Vector3 clr, float innerR, float outerR, float length) {
+Link* lik(vec3 pos, vec3 clr, float innerR, float outerR, float length) {
 	Link* l = malloc(sizeof(Link));
 	l->pos = pos;
 	l->clr = clr;
@@ -65,7 +65,7 @@ Link* lik(Vector3 pos, Vector3 clr, float innerR, float outerR, float length) {
 	return l;
 }
 
-Plane* pln(Vector3 pos, Vector3 clr, Vector3 n, float h) {
+Plane* pln(vec3 pos, vec3 clr, vec3 n, float h) {
 	Plane* p = malloc(sizeof(Plane));
 	p->pos = pos;
 	p->clr = clr;
@@ -74,7 +74,7 @@ Plane* pln(Vector3 pos, Vector3 clr, Vector3 n, float h) {
 	return p;
 }
 
-HexPrism* xprism(Vector3 pos, Vector3 clr, float h, float r) {
+HexPrism* xprism(vec3 pos, vec3 clr, float h, float r) {
 	HexPrism* x = malloc(sizeof(HexPrism));
 	x->pos = pos;
 	x->clr = clr;
@@ -83,7 +83,7 @@ HexPrism* xprism(Vector3 pos, Vector3 clr, float h, float r) {
 	return x;
 }
 
-TriPrism* tprism(Vector3 pos, Vector3 clr, float h, float r) {
+TriPrism* tprism(vec3 pos, vec3 clr, float h, float r) {
 	TriPrism* t = malloc(sizeof(TriPrism));
 	t->pos = pos;
 	t->clr = clr;
@@ -92,7 +92,7 @@ TriPrism* tprism(Vector3 pos, Vector3 clr, float h, float r) {
 	return t;
 }*/
 
-inline Capsule* caps(Vector3 start, Vector3 end, Vector3 clr, float r, float rv) {
+inline Capsule* caps(vec3 start, vec3 end, vec3 clr, float r, float rv) {
 	Capsule* c = malloc(sizeof(Capsule));
 	c->start = start;
 	c->end = end;
@@ -102,7 +102,7 @@ inline Capsule* caps(Vector3 start, Vector3 end, Vector3 clr, float r, float rv)
 	return c;
 }
 
-inline Cylinder* cyl(Vector3 start, Vector3 end, Vector3 clr, float r, float rv) {
+inline Cylinder* cyl(vec3 start, vec3 end, vec3 clr, float r, float rv) {
 	Cylinder* c = malloc(sizeof(Cylinder));
 	c->start = start;
 	c->end = end;
@@ -112,7 +112,7 @@ inline Cylinder* cyl(Vector3 start, Vector3 end, Vector3 clr, float r, float rv)
 	return c;
 }
 
-inline CCone* ccone(Vector3 start, Vector3 end, Vector3 clr, float startR, float endR, float rv) {
+inline CCone* ccone(vec3 start, vec3 end, vec3 clr, float startR, float endR, float rv) {
 	CCone* r = malloc(sizeof(CCone));
 	r->start = start;
 	r->end = end;
@@ -123,7 +123,7 @@ inline CCone* ccone(Vector3 start, Vector3 end, Vector3 clr, float startR, float
 	return r;
 }
 
-/*Pyramid* pyr(Vector3 pos, Vector3 clr, float h) {
+/*Pyramid* pyr(vec3 pos, vec3 clr, float h) {
 	Pyramid* r = malloc(sizeof(Pyramid));
 	r->pos = pos;
 	r->clr = clr;
@@ -131,7 +131,7 @@ inline CCone* ccone(Vector3 start, Vector3 end, Vector3 clr, float startR, float
 	return r;
 }
 
-Triangle* tri(Vector3 a, Vector3 b, Vector3 c, Vector3 clr) {
+Triangle* tri(vec3 a, vec3 b, vec3 c, vec3 clr) {
 	Triangle* t = malloc(sizeof(Triangle));
 	t->a = a;
 	t->b = b;
@@ -140,7 +140,7 @@ Triangle* tri(Vector3 a, Vector3 b, Vector3 c, Vector3 clr) {
 	return t;
 }
 
-Quad* quad(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Vector3 clr) {
+Quad* quad(vec3 a, vec3 b, vec3 c, vec3 d, vec3 clr) {
 	Quad* q = malloc(sizeof(Quad));
 	q->a = a;
 	q->b = b;

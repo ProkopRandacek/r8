@@ -9,8 +9,13 @@
 
 
 extern GL* gl;
+extern const unsigned int groupSize, shapeSize;
 
-extern const int groupSize, shapeSize;
+#define shapeNum 4
+#define groupNum 3
+
+Primitive*  shapes[shapeNum];
+ShapeGroup* groups[groupNum];
 
 // these are global so other object can be created relative to them
 Camera cam;
@@ -23,7 +28,7 @@ void createScene() {
 }
 
 void createCamera() {
-	Vector3 campos = v3(0.0f, 5.0f, -10.0f);
+	vec3 campos = v3(0.0f, 5.0f, -10.0f);
 	cam = cmr(campos, vNorm(vDir(campos, v3(0.0f, 5.0f, 0.0f))), 0.0f, 0.01f, 0.01f);
 }
 
@@ -42,9 +47,6 @@ void createLight() {
 
 void createObjects() {
 	// Primitives
-	const int shapeNum = 4;
-	float s[shapeSize * shapeNum];
-	Primitive* shapes[shapeNum];
 
 	Primitive* head = prmv(SPHERE, (void*) sph  (v3(0.5f, 2.1f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.3f, 0.0f));
 	Primitive* ring = prmv(TORUS,  (void*) tor  (v3(0.5f, 1.9f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.25f, 0.09f, 0.0f));
@@ -56,15 +58,8 @@ void createObjects() {
 	shapes[2] = body;
 	shapes[3] = base;
 
-	shapes2floats(s, shapeNum, shapes);
-	shdSetFloatArray(gl->s, "rawShapes", shapeSize * shapeNum, s);
-
 
 	// Groups
-	const int groupNum = 3;
-	float g[groupSize * groupNum];
-	ShapeGroup* groups[groupNum];
-
 	// the top group is a sphere that is on index 0 in shapes array and a torus that is on index 1. operation between then is normal
 	ShapeGroup* sgTop    = group(SPHERE, 0, TORUS, 1, NORMAL, 0.0f);
 	ShapeGroup* sgBottom = group(CCONE,  2, CCONE, 3, BLEND, 0.2f);
@@ -74,23 +69,30 @@ void createObjects() {
 	groups[1] = sgBottom;
 	groups[2] = sgROOT;
 
-	groups2floats(g, groupNum, groups);
-	shdSetFloatArray(gl->s, "rawGroups", groupSize * groupNum, g);
+	sendObjects();
 
-
-	shdSetInt(gl->s, "shapeNum", shapeNum);
+	/*shdSetInt(gl->s, "shapeNum", shapeNum);
 	shdSetInt(gl->s, "shapeSize", shapeSize);
 	shdSetInt(gl->s, "groupNum", groupNum);
-	shdSetInt(gl->s, "groupSize", groupSize);
-
+	shdSetInt(gl->s, "groupSize", groupSize);*/
 
 	// cleanup
-	for (int i = 0; i < shapeNum; i++) { free(shapes[i]->shape); }
-	for (int i = 0; i < groupNum; i++) { free(groups[i]);        }
+	for (unsigned int i = 0; i < shapeNum; i++) { free(shapes[i]->shape); free(shapes[i]); }
+	for (unsigned int i = 0; i < groupNum; i++) { free(groups[i]); }
+}
+
+void sendObjects() {
+	float g[groupSize * groupNum];
+	float s[shapeSize * shapeNum];
+
+	shapes2floats(s, shapeNum, shapes);
+	shdSetFloatArray(gl->s, "rawShapes", (int)(shapeSize * shapeNum), s);
+
+	groups2floats(g, groupNum, groups);
+	shdSetFloatArray(gl->s, "rawGroups", (int)(groupSize * groupNum), g);
 }
 
 void updateScene() {
 	// recreate all object that are supposed to be moving
 	sendCamera();
-	createLight();
 }
