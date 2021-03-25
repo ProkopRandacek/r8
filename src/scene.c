@@ -45,21 +45,15 @@ void createLight() {
 
 void createObjects() {
 	// Primitives
-
 	int head = createSphere(v3(0.5f, 2.1f, 0.5f), v3f(0.7f), 0.0f, 0.3f);
 	int ring = createTorus (v3(0.5f, 1.9f, 0.5f), v3f(0.7f), 0.0f, 0.25f, 0.09f);
 	int body = createCCone (v3(0.5f, 2.2f, 0.5f), v3f(0.7f), 0.0f, v3(0.5f, 1.3f, 0.5f), 0.17f, 0.3f);
 	int base = createCCone (v3(0.5f, 1.3f, 0.5f), v3f(0.7f), 0.0f, v3(0.5f, 1.0f, 0.5f), 0.4f, 0.4f);
 
 	// Groups
-	// the top group is a sphere that is on index 0 in shapes array and a torus that is on index 1. operation between then is normal
-	ShapeGroup* sgTop    = group(SPHERE, head, TORUS, ring, NORMAL, 0.0f);
-	ShapeGroup* sgBottom = group(CCONE,  body, CCONE, base, BLEND, 0.2f);
-	ShapeGroup* sgROOT   = group(GROUP,  0, GROUP, 1, BLEND, 0.02f);
-
-	groups[0] = sgTop;
-	groups[1] = sgBottom;
-	groups[2] = sgROOT;
+	int top    = createGroup(head, ring,  NORMAL, 0.0f );
+	int bottom = createGroup(body, base,  BLEND,  0.2f );
+	int root   = createGroup(top, bottom, BLEND,  0.02f);
 
 	sendObjects();
 }
