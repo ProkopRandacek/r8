@@ -7,12 +7,10 @@
 #include "scene.h"
 #include "serialization.h"
 #include "settings.h"
+#include "sceneapi.h"
 
 
 extern GL* gl;
-extern const unsigned int groupSize, shapeSize;
-
-#define groupNum 3
 
 Primitive*  shapes[SHAPE_NUM];
 ShapeGroup* groups[GROUP_NUM];
@@ -70,8 +68,9 @@ void createObjects() {
 	groups[2] = sgROOT;
 
 	sendObjects();
+}
 
-	// cleanup
+void freeObjects() {
 	for (unsigned int i = 0; i < SHAPE_NUM; i++) { free(shapes[i]->shape); free(shapes[i]); }
 	for (unsigned int i = 0; i < GROUP_NUM; i++) { free(groups[i]); }
 }
@@ -90,4 +89,8 @@ void sendObjects() {
 void updateScene() {
 	// recreate all object that are supposed to be moving
 	sendCamera();
+
+	setShapeClr(0, v3f(sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f));
+
+	sendObjects();
 }
