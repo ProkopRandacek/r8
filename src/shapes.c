@@ -3,9 +3,6 @@
 #include "vector.h"
 #include "shapes.h"
 
-const unsigned int shapeSize = 16;
-const unsigned int groupSize = 6;
-
 inline Sphere* sph(vec3 pos, vec3 clr, float radius, float rv) {
 	Sphere* s = malloc(sizeof(Sphere));
 	s->pos = pos;

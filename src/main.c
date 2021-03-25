@@ -8,6 +8,7 @@
 #include "debug.h"
 #include "main.h"
 #include "sceneio.h"
+#include "settings.h"
 
 
 extern GL* gl;
@@ -61,7 +62,7 @@ int main() {
 
 
 		if (frameTime > 1.0f) {
-			if (frameCount < 60) { // This optimalization has no effect on the fps :(
+			if (frameCount < WANTED_FPS) { // This optimalization has no effect on the fps :(
 				char msg[149];
 				sprintf(msg, "Low fps: %d", frameCount);
 				dprint(msg);

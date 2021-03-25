@@ -6,9 +6,9 @@
 #include "serialization.h"
 #include "debug.h"
 #include "opengl.h"
+#include "settings.h"
 
 extern GL gl;
-extern int groupSize, shapeSize;
 
 void sphere2floats(float* f, Sphere* s) {
 	f[0 ] = s->pos.x;  f[1 ] = s->pos.y; f[2 ] = s->pos.z;
@@ -121,22 +121,22 @@ void ccone2floats(float* f, CCone*s) {
 
 void groups2floats(float* f, int num, ShapeGroup** groups) {
 	for (int i = 0; i < num; i++) {
-		f[i * groupSize + 0] = (float) groups[i]->ta;
-		f[i * groupSize + 1] = (float) groups[i]->a;
-		f[i * groupSize + 2] = (float) groups[i]->tb;
-		f[i * groupSize + 3] = (float) groups[i]->b;
-		f[i * groupSize + 4] = (float) groups[i]->op;
-		f[i * groupSize + 5] = (float) groups[i]->k;
+		f[i * GROUP_SIZE + 0] = (float) groups[i]->ta;
+		f[i * GROUP_SIZE + 1] = (float) groups[i]->a;
+		f[i * GROUP_SIZE + 2] = (float) groups[i]->tb;
+		f[i * GROUP_SIZE + 3] = (float) groups[i]->b;
+		f[i * GROUP_SIZE + 4] = (float) groups[i]->op;
+		f[i * GROUP_SIZE + 5] = (float) groups[i]->k;
 	}
 }
 
 void shapes2floats(float *f, int num, Primitive** prmv) {
 	for (int i = 0; i < num; i++) {
-		if      (prmv[i]->type == CUBE)     {   cube2floats(&f[i * shapeSize],     (Cube*) prmv[i]->shape); }
-		else if (prmv[i]->type == SPHERE)   { sphere2floats(&f[i * shapeSize],   (Sphere*) prmv[i]->shape); }
-		else if (prmv[i]->type == CYLINDER) {    cyl2floats(&f[i * shapeSize], (Cylinder*) prmv[i]->shape); }
-		else if (prmv[i]->type == TORUS)    {  torus2floats(&f[i * shapeSize],    (Torus*) prmv[i]->shape); }
-		else if (prmv[i]->type == CCONE)    {  ccone2floats(&f[i * shapeSize],    (CCone*) prmv[i]->shape); }
+		if      (prmv[i]->type == CUBE)     {   cube2floats(&f[i * SHAPE_SIZE],     (Cube*) prmv[i]->shape); }
+		else if (prmv[i]->type == SPHERE)   { sphere2floats(&f[i * SHAPE_SIZE],   (Sphere*) prmv[i]->shape); }
+		else if (prmv[i]->type == CYLINDER) {    cyl2floats(&f[i * SHAPE_SIZE], (Cylinder*) prmv[i]->shape); }
+		else if (prmv[i]->type == TORUS)    {  torus2floats(&f[i * SHAPE_SIZE],    (Torus*) prmv[i]->shape); }
+		else if (prmv[i]->type == CCONE)    {  ccone2floats(&f[i * SHAPE_SIZE],    (CCone*) prmv[i]->shape); }
 		else {
 			char errMsg[55];
 			sprintf(errMsg, "Unknown shape %d on index %d\nexiting\n", prmv[i]->type, num);

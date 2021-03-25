@@ -5,7 +5,7 @@
 #include "shader.h"
 #include "fileio.h"
 
-typedef struct GLs {
+typedef struct GL {
 	unsigned int VBO;
 	unsigned int VAO;
 	unsigned int EBO;
