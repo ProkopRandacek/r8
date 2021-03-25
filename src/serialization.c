@@ -2,7 +2,6 @@
 #include <stdio.h>
 
 #include "camera.h"
-#include "shapes.h"
 #include "serialization.h"
 #include "debug.h"
 #include "opengl.h"
@@ -119,7 +118,7 @@ void ccone2floats(float* f, CCone*s) {
 }
 
 
-void groups2floats(float* f, int num, ShapeGroup** groups) {
+void groups2floats(float* f, int num, ShapeGroup* groups[num]) {
 	for (int i = 0; i < num; i++) {
 		f[i * GROUP_SIZE + 0] = (float) groups[i]->ta;
 		f[i * GROUP_SIZE + 1] = (float) groups[i]->a;
@@ -130,7 +129,7 @@ void groups2floats(float* f, int num, ShapeGroup** groups) {
 	}
 }
 
-void shapes2floats(float *f, int num, Primitive** prmv) {
+void shapes2floats(float *f, int num, Primitive* prmv[num]) {
 	for (int i = 0; i < num; i++) {
 		if      (prmv[i]->type == CUBE)     {   cube2floats(&f[i * SHAPE_SIZE],     (Cube*) prmv[i]->shape); }
 		else if (prmv[i]->type == SPHERE)   { sphere2floats(&f[i * SHAPE_SIZE],   (Sphere*) prmv[i]->shape); }
@@ -138,8 +137,8 @@ void shapes2floats(float *f, int num, Primitive** prmv) {
 		else if (prmv[i]->type == TORUS)    {  torus2floats(&f[i * SHAPE_SIZE],    (Torus*) prmv[i]->shape); }
 		else if (prmv[i]->type == CCONE)    {  ccone2floats(&f[i * SHAPE_SIZE],    (CCone*) prmv[i]->shape); }
 		else {
-			char errMsg[55];
-			sprintf(errMsg, "Unknown shape %d on index %d\nexiting\n", prmv[i]->type, num);
+			char errMsg[62];
+			sprintf(errMsg, "Unknown shape %d on index %d (shapes2floats)", prmv[i]->type, i);
 			eprint(errMsg);
 		}
 	}
