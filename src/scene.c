@@ -46,21 +46,15 @@ void createLight() {
 void createObjects() {
 	// Primitives
 
-	Shape* head = sph  (v3(0.5f, 2.1f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.3f, 0.0f);
-	Shape* ring = tor  (v3(0.5f, 1.9f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.25f, 0.09f, 0.0f);
-	Shape* body = ccone(v3(0.5f, 2.2f, 0.5f), v3(0.5f, 1.3f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.17f, 0.3f, 0.0f);
-	Shape* base = ccone(v3(0.5f, 1.3f, 0.5f), v3(0.5f, 1.0f, 0.5f), v3(0.9f, 0.0f, 0.9f), 0.4f, 0.4f, 0.0f);
-
-	shapes[0] = head;
-	shapes[1] = ring;
-	shapes[2] = body;
-	shapes[3] = base;
-
+	int head = createSphere(v3(0.5f, 2.1f, 0.5f), v3f(0.7f), 0.0f, 0.3f);
+	int ring = createTorus (v3(0.5f, 1.9f, 0.5f), v3f(0.7f), 0.0f, 0.25f, 0.09f);
+	int body = createCCone (v3(0.5f, 2.2f, 0.5f), v3f(0.7f), 0.0f, v3(0.5f, 1.3f, 0.5f), 0.17f, 0.3f);
+	int base = createCCone (v3(0.5f, 1.3f, 0.5f), v3f(0.7f), 0.0f, v3(0.5f, 1.0f, 0.5f), 0.4f, 0.4f);
 
 	// Groups
 	// the top group is a sphere that is on index 0 in shapes array and a torus that is on index 1. operation between then is normal
-	ShapeGroup* sgTop    = group(SPHERE, 0, TORUS, 1, NORMAL, 0.0f);
-	ShapeGroup* sgBottom = group(CCONE,  2, CCONE, 3, BLEND, 0.2f);
+	ShapeGroup* sgTop    = group(SPHERE, head, TORUS, ring, NORMAL, 0.0f);
+	ShapeGroup* sgBottom = group(CCONE,  body, CCONE, base, BLEND, 0.2f);
 	ShapeGroup* sgROOT   = group(GROUP,  0, GROUP, 1, BLEND, 0.02f);
 
 	groups[0] = sgTop;
@@ -90,9 +84,9 @@ void updateScene() {
 	// recreate all object that are supposed to be moving
 	sendCamera();
 
-	setShapeClr(0, v3f(sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f));
+	/*setShapeClr(0, v3f(sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f));
 	setShapePos(1, v3f(sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f));
-	setShapeRv (3, sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f);
+	setShapeRv (3, sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f);*/
 
 	sendObjects();
 }
