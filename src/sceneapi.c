@@ -31,6 +31,7 @@ int nextGrpIndex() {
 	}
 }
 
+inline ShapeType getShapeType(int i) { return shapes[i]->type; }
 
 /// ===== PUBLIC =====
 
@@ -77,3 +78,21 @@ int createCCone(vec3 start, vec3 clr, float rv, vec3 end, float startR, float en
 	if (i >= 0 ) { shapes[i] = ccone(start, end, clr, startR, endR, rv); }
 	return i;
 }
+
+int createGroup(int a, int b, OperationType op, float k) {
+	int i = nextGrpIndex();
+	if (i == -1) { return -1; }
+	else {
+		// recognize if a and b are shapes or groups
+		ShapeType at, bt;
+		if (a >= GROUP_ID_OFFSET) { at = GROUP; a -= GROUP_ID_OFFSET; } // if it is a group, set the type and remove external group offset
+		else { at = shapes[a]->type; } // otherwise act normally
+		if (b >= GROUP_ID_OFFSET) { bt = GROUP; b -= GROUP_ID_OFFSET; }
+		else { bt = shapes[b]->type; }
+
+		groups[i] = group(at, a, bt, b, op, k);
+
+		return i + GROUP_ID_OFFSET; // external group ids start on GROUP_ID_OFFSET -> if ID is bigger than GROUP_ID_OFFSET is a group, otherwise its a shape
+	}
+}
+
