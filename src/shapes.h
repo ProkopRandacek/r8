@@ -1,5 +1,7 @@
 // vim: filetype=c
 
+#include "vector.h"
+
 typedef enum ShapeType {
 	GROUP, CUBE, SPHERE, CYLINDER, BOXFRAME, TORUS, CTORUS, LINK, PLANE, HEXPRISM, TRIPRISM, CAPSULE, CCONE, PYRAMID, TRIANGLE, QUAD
 } ShapeType;

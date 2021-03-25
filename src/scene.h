@@ -1,6 +1,5 @@
 // vim: filetype=c
 #include "camera.h"
-#include "shapes.h"
 
 
 void createScene(void);

@@ -1,47 +1,53 @@
 // vim: filetype=c
+#ifndef VECTOR
+#define VECTOR
+
+#include <stdio.h>
+#include <math.h>
+
 typedef struct vec3 {
 	float x, y, z;
 } vec3;
 
+static vec3 v3     (float x, float y, float z);
+static vec3 v3f    (float a);
+static void vPrint (vec3 a);
+static float vMag  (vec3 a);
+static float vDot  (vec3 a, vec3 b);
+static float vDist (vec3 a, vec3 b);
+static vec3 vNorm  (vec3 v);
+static vec3 vAdd   (vec3 a, vec3 b);
+static vec3 vMult  (vec3 a, vec3 b);
+static vec3 vMultf (vec3 a, float b);
+static vec3 vDir   (vec3 a, vec3 b);
+static vec3 vLerp  (vec3 a, vec3 b, float t);
+static vec3 vCross (vec3 a, vec3 b);
 
-// Vector constructor
-vec3 v3(float x, float y, float z);
 
-// Create vector from a single float
-vec3 v3f(float a);
+inline vec3 v3(float x, float y, float z) {
+	vec3 v;
+	v.x = x; v.y = y; v.z = z;
+	return v;
+}
 
-// Print vector to console
-void vPrint(vec3 a);
+static inline vec3  v3f    (float a)                 { return v3(a, a, a); }
+static inline void  vPrint (vec3 v)                  { printf("%.2f %.2f %.2f", v.x, v.y, v.z); }
+static inline float vMag   (vec3 a)                  { return sqrtf((a.x * a.x) + (a.y * a.y) + (a.z * a.z)); }
+static inline float vDot   (vec3 a, vec3 b)          { return a.x * b.x + a.y * b.y; }
+static inline float vDist  (vec3 a, vec3 b)          { return vMag(vDir(a, b)); }
+static inline vec3  vNorm  (vec3 a)                  { return vMultf(a, 1 / vMag(a)); }
+static inline vec3  vAdd   (vec3 a, vec3 b)          { return v3(a.x + b.x, a.y + b.y, a.z + b.z); }
+static inline vec3  vMult  (vec3 a, vec3 b)          { return v3(a.x * b.x, a.y * b.y, a.z * b.z); }
+static inline vec3  vMultf (vec3 a,   float b)       { return v3(a.x * b, a.y * b, a.z * b); }
+static inline vec3  vDir   (vec3 a, vec3 b)          { return vAdd(b, vMultf(a, -1.0f)); }
+static inline vec3  vLerp  (vec3 a, vec3 b, float c) { return vAdd(a, vMultf(vDir(a, b), c)); }
 
-// Vector magnitude
-float vMag(vec3 a);
+inline vec3 vCross(vec3 a, vec3 b) {
+	vec3 c;
+	c.x = a.y * b.z - a.z * b.y;
+	c.y = a.z * b.x - a.x * b.z;
+	c.z = a.x * b.y - a.y * b.x;
+	return c;
+}
 
-// Distance between 2 vectors
-float vDist(vec3 a, vec3 b);
-
-// Dot product of 2 vectors
-float vDot(vec3 a, vec3 b);
-
-// Cross product of 2 vectors
-vec3 vCross(vec3 a, vec3 b);
-
-// Normalize vector
-vec3 vNorm(vec3 v);
-
-// Add 2 vectors
-vec3 vAdd(vec3 a, vec3 b);
-
-// Multiply 2 vectors
-vec3 vMult(vec3 a, vec3 b);
-
-// Multiply vector and a float
-vec3 vMultf(vec3 a, float b);
-
-// Return vector pointing from a to b
-vec3 vDir(vec3 a, vec3 b);
-
-// Linear interpolation between a and b.
-vec3 vLerp(vec3 a, vec3 b, float t);
-
-// Rotate on a circle, c is center, t is input for cos/sin, k controls whether to use sins or cosines to specific axis.
-vec3 vRotate(vec3 c, vec3 sinK, vec3 cosK, float t);
+#endif
