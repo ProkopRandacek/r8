@@ -8,6 +8,6 @@
 extern Shape*      shapes[SHAPE_NUM];
 extern ShapeGroup* groups[GROUP_NUM];
 
-inline void setShapeClr(int i, vec3 value) {
-	shapes[i]->clr = value;
-}
+inline void setShapeClr(int i, vec3  value) { shapes[i]->clr = value; }
+inline void setShapePos(int i, vec3  value) { shapes[i]->pos = value; }
+inline void setShapeRv (int i, float value) { shapes[i]->rv  = value; }

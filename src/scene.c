@@ -91,6 +91,8 @@ void updateScene() {
 	sendCamera();
 
 	setShapeClr(0, v3f(sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f));
+	setShapePos(1, v3f(sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f));
+	setShapeRv (3, sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f);
 
 	sendObjects();
 }
