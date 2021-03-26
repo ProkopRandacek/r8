@@ -1,24 +1,22 @@
-# Ray marching rendering
+# Ray marching rendering engine thing
 
-![normal demo](https://randacek.dev/p/demo.png)  
-![blending demo](https://randacek.dev/p/blending.png)  
-![CSG demo](https://randacek.dev/p/csg.png)  
+![2x2 demos](https://randacek.dev/p/demos2x2.png)  
 
-Current rendering capabilities:  
+## Current rendering capabilities:  
 - [Constructive solid geometry](https://en.wikipedia.org/wiki/Constructive_solid_geometry)
 - Soft shadows
 - Reflections
-- Sphere, Cube, Torus, Capped Cone and Cylinder rendering ([many more in testing](./src/shapes.h))
+- Sphere, Cube, Torus, Capped Cone and Cylinder rendering (I will add more as I need them)
 - Transforming between shapes over time
 - WASD + mouse controls
 - Checkerboard floor
 - Works real time
 
-TODO:
+## TODO:
 - Umka scripting
 - Update architecture.md
 - Modifiers for shapes (twist, round edges, displacement, ...)
-- Inline functions
+- Inline functions (there are probably some funcs that should be inlined)
 - Reflectiveness for non integer values looks broken.
 - Upgrade light source objects
   - Multiple lights in a scene
@@ -26,7 +24,7 @@ TODO:
 - Optimalization
   - Bounding box for complicated groups far away from the ray
     - Needs render order rework
-- Read scene configuration from file
+- Read scene configuration from file?
   - Relative position for shapes in subgroups?
 - Compile for windows somehow?
 - Shape rotating
@@ -41,7 +39,7 @@ see [`archtecture.md`](architecture.md) for explanation what every file does.
 ## Build:
 `make` to (re)build the binary or `make run` to (re)build the binary and run it. Shader files are now included in the binary.
   
-Compiled binary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum) (you still need glfw3 and glew)
+Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum) (you still need runtime deps)
 
 ### Runtime deps:
 - glfw3  
