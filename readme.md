@@ -12,16 +12,18 @@ Current rendering capabilities:
 - Transforming between shapes over time
 - WASD + mouse controls
 - Checkerboard floor
-- Works realtime
+- Works real time
 
 TODO:
 - Umka scripting
+- Update architecture.md
 - Modifiers for shapes (twist, round edges, displacement, ...)
 - Inline functions
+- Reflectiveness for non integer values looks broken.
 - Upgrade light source objects
   - Multiple lights in a scene
   - Colored lights
-- Optimalizions
+- Optimalization
   - Bounding box for complicated groups far away from the ray
     - Needs render order rework
 - Read scene configuration from file
@@ -33,13 +35,13 @@ TODO:
 see [`archtecture.md`](architecture.md) for explanation what every file does.  
 
 ## Demos
-[Transform demo](https://randacek.dev/p/transform_demo.mp4) - (Tourus to Cube transition, rendering to file, Multiple object in scene)  
+[Transform demo](https://randacek.dev/p/transform_demo.mp4) - (Torus to Cube transition, rendering to file, Multiple object in scene)  
 [Move demo](https://randacek.dev/p/move_demo.mp4) - (WASD & Mouse movement, Multiple object in scene)  
 
 ## Build:
 `make` to (re)build the binary or `make run` to (re)build the binary and run it. Shader files are now included in the binary.
   
-Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum) (you still need glfw3 and glew)
+Compiled binary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum) (you still need glfw3 and glew)
 
 ### Runtime deps:
 - glfw3  
