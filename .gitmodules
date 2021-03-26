@@ -1,0 +1,3 @@
+[submodule "submodules/umka"]
+	path = submodules/umka
+	url = https://github.com/vtereshkov/umka-lang.git
