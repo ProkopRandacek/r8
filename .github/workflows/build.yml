@@ -8,10 +8,10 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v2
     - name: make
-      run: make
+    - run: |
+        sudo apt-get install gcc make unzip libxrandr-dev pkg-config mono-runtime
+        make all
