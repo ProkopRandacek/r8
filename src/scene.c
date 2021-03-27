@@ -14,8 +14,8 @@ extern GL* gl;
 Shape*      shapes[MAX_SHAPE_NUM];
 ShapeGroup* groups[MAX_GROUP_NUM];
 
-unsigned int shapeNum = 0;
-unsigned int groupNum = 0;
+int shapeNum = 0;
+int groupNum = 0;
 
 Camera cam;
 
@@ -41,16 +41,16 @@ void createLight() {
 }
 
 void freeObjects() {
-	for (unsigned int i = 0; i < shapeNum; i++) { free(shapes[i]->shape); free(shapes[i]); }
-	for (unsigned int i = 0; i < groupNum; i++) { free(groups[i]); }
+	for (int i = 0; i < shapeNum; i++) { free(shapes[i]->shape); free(shapes[i]); }
+	for (int i = 0; i < groupNum; i++) { free(groups[i]); }
 }
 
 void sendObjects() {
 	float g[GROUP_SIZE * groupNum];
 	float s[SHAPE_SIZE * shapeNum];
 
-	shapes2floats(s, shapeNum, shapes);
-	groups2floats(g, groupNum, groups);
+	shapes2floats(s, (unsigned int)shapeNum, shapes);
+	groups2floats(g, (unsigned int)groupNum, groups);
 
 	shdSetFloatArray(gl->s, "rawShapes", (int)(SHAPE_SIZE * shapeNum), s);
 	shdSetFloatArray(gl->s, "rawGroups", (int)(GROUP_SIZE * groupNum), g);
