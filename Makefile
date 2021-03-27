@@ -16,7 +16,7 @@ NAME = r8
 
 .PHONY: umka
 
-build: deps clean shaders glad umka
+build: deps clean shaders glad glfw umka
 	# Build the Linux binary
 	mkdir build/scripts -p
 	cp scripts/* build/scripts/ -r
