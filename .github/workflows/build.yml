@@ -12,6 +12,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: make
-    - run: |
+      run: |
         sudo apt-get install gcc make unzip libxrandr-dev pkg-config mono-runtime
         make all
