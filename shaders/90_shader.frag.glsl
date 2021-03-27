@@ -3,7 +3,7 @@ const float COLLISION_THRESHOLD = 0.00001;
 const float MAX_TRACE_DIST = 100.0;
 const int BOUNCES = 1;
 
-const float SUN_SIZE =1.0;
+const float SUN_SIZE = 1.0;
 
 // 3D checkerboard pattern for coloring object. RN accesible only if hardcoded (like floor in mapWorld())
 vec4 checkerboard(in vec3 pos) {
@@ -14,10 +14,15 @@ vec4 checkerboard(in vec3 pos) {
 // distance to nearest object
 // returns xyz as a color of the surface and w as the distance to it
 map mapWorld(vec3 pos) {
-	for (int i = 0; i < groupNum; i++) { d2Group(pos, i); }
+	vec4 localClr = vec4(1.0, 0.0, 1.0, 1.0);
+	float localDist = 9999.9;
+	if (groupNum > 0) {
+		for (int i = 0; i < groupNum; i++) { d2Group(pos, i); }
 
-	vec4 localClr = d2Groups[groupNum - 1].clr;
-	float localDist = d2Groups[groupNum - 1].d;
+		localClr = d2Groups[groupNum - 1].clr;
+		localDist = d2Groups[groupNum - 1].d;
+	}
+
 	// Check floor
 	float dist = d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0);
 	map combined = Combine(localDist, dist, localClr, checkerboard(pos), 0, 0.0);
