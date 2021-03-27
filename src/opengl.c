@@ -4,6 +4,7 @@
 
 #include "opengl.h"
 #include "debug.h"
+#include "camera.h" // the camera needs to be resized with the window
 
 #include "time.h"
 
@@ -95,6 +96,13 @@ void initOGL() {
 
 	glBindVertexArray(gl->VAO);
 
+	glfwSetErrorCallback(onError);
+	glfwSetKeyCallback(gl->window, onKey);
+	glfwSetFramebufferSizeCallback(gl->window, resize);
+	glfwSetKeyCallback(gl->window, onKey);
+
+	glfwSetInputMode(gl->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 	dprint("GL DONE");
 }
 
@@ -128,4 +136,18 @@ void exitOGL() {
 	glDeleteBuffers(1, &gl->VBO);
 	glDeleteBuffers(1, &gl->EBO);
 	glfwTerminate();
+}
+
+// Callback funcs
+void onError(int error, const char* description) {
+	printf("Glfw error %d: %s\n", error, description);
+}
+
+void resize(GLFWwindow* window, int width, int height) {
+	if (window != gl->window) return;
+
+	glViewport(0, 0, width, height);
+	shdSetIVec2(gl->s, "resolution", width, height);
+	float k = 1000.0f;
+	setWH((float)width / k, (float)height / k);
 }

@@ -24,3 +24,8 @@ void exitOGL(void);
 
 // take a screenshot and write it to bmp file
 void screenshot(void);
+
+// callback functions
+void onError(int error, const char* description);
+void onKey(GLFWwindow* window, int key, int scancode, int action, int mods);
+void resize(GLFWwindow* window, int width, int height);
