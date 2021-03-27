@@ -1,5 +1,6 @@
 // vim: filetype=c
 #include "vector.h"
+#include "shapes.h"
 
 // === private ===
 int nextShpIndex(void);
