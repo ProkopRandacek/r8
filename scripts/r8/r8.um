@@ -1,0 +1,3 @@
+// vim: filetype=umka
+
+fn SetShpClr*(shpID: int32, r, g, b: real)

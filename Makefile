@@ -13,21 +13,20 @@ UMKA_LIB = submodules/umka/build/libumka.a
 
 NAME = r8
 
+.PHONY: build run shaders glad umka clean
+
 build: clean shaders glad umka
-	mkdir build -p
-	cp src/*.scene build/
+	# Build the Linux binary
+	mkdir build/scripts -p
+	cp scripts/* build/scripts/ -r
 	gcc src/*.c ${UMKA_LIB} -o build/${NAME} $(GCC_INCLUDES) $(GCC_FLAGS) $(GCC_LIB)
 
-# build for windows
-wbuild: clean shaders glfw
-	mkdir build -p
-	cp src/*.scene build/
-	x86_64-w64-mingw32-gcc src/*.c -o build/${NAME}.exe -D GLFW_DLL $(GLFW_WIN_INCLUDE) $(GLFW_DLL) $(GCC_INCLUDES) $(GCC_FLAGS)
-
 run: clean build
+	# Run the binary
 	cd build/; ./${NAME}
 
 shaders: clean
+	# Minify shaders
 	cat $(wildcard shaders/*frag.glsl) > fragFull.glsl
 	cat $(wildcard shaders/*vert.glsl) > vertFull.glsl
 	mono glsl_minify.exe fragFull.glsl --preserve-externals ${D} -o src/frag.h
@@ -36,14 +35,16 @@ shaders: clean
 
 # I don't want to have 3rd praty source in plan text because github then shows random +20000 lines of code in statistics
 glad:
+	# Extract glad source
 	unzip -oq glad.zip
 
 umka:
-	cd submodules/umka/; make
+	# Compile umka library
+	cd submodules/umka/ && ${MAKE}
 
 clean:
+	# Remove previous build files
 	rm build/ -rf
 	rm fragFull.glsl vertFull.glsl -f
 	rm src/vert.h src/frag.h src/gl.c -f
 	rm include glfw -rf
-	#rm submodules/umka/build -rf

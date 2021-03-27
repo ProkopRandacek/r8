@@ -1,0 +1,15 @@
+// vim: filetype=umka
+
+import (
+	"r8/r8.um"
+)
+
+fn start() {
+	r8.SetShpClr(0, 1.0, 0.0, 0.0)
+}
+
+fn update() {
+	
+}
+
+fn main() { }

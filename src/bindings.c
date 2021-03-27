@@ -1,11 +1,10 @@
-#include "../submodules/umka/src/umka_api.h"
 
 #include "bindings.h"
 #include "vector.h"
 #include "sceneapi.h"
 
 void umkaBind(void* umka) {
-	umkaAddFunc(umka, "setShapeClr", &umSetShapeClr);
+	umkaAddFunc(umka, "SetShpClr", &umSetShapeClr);
 }
 
 
