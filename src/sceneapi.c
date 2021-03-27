@@ -9,15 +9,17 @@
 int freeShpIndex = 0;
 int freeGrpIndex = 0;
 
-extern Shape*      shapes[SHAPE_NUM];
-extern ShapeGroup* groups[GROUP_NUM];
+extern Shape*      shapes[MAX_SHAPE_NUM];
+extern ShapeGroup* groups[MAX_GROUP_NUM];
 extern GL* gl;
+extern unsigned int shapeNum, groupNum;
 
 // ===== PRIVATE =====
 
 int nextShpIndex() {
-	if (freeShpIndex < SHAPE_NUM) {
+	if (freeShpIndex < MAX_SHAPE_NUM) {
 		freeShpIndex++;
+		shapeNum = freeShpIndex;
 		return freeShpIndex - 1;
 	} else {
 		return -1; // no more space for more shapes
@@ -25,8 +27,11 @@ int nextShpIndex() {
 }
 
 int nextGrpIndex() {
-	if (freeGrpIndex < GROUP_NUM) {
+	if (freeGrpIndex < MAX_GROUP_NUM) {
 		freeGrpIndex++;
+		printf("setting groupnum to %d\n", freeGrpIndex);
+		shdSetInt(gl->s, "groupNum", freeGrpIndex);
+		groupNum = freeGrpIndex;
 		return freeGrpIndex - 1;
 	} else {
 		return -1; // no more space for more shapes

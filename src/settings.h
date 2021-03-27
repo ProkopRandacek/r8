@@ -8,8 +8,8 @@
 #define MOUSE_SENS 0.12f
 #define MOVE_SPEED 5.0f
 
-#define SHAPE_NUM 4
-#define GROUP_NUM 3
+#define MAX_SHAPE_NUM 4
+#define MAX_GROUP_NUM 3
 
 // this does not do anything rn
 #define WANTED_FPS 60

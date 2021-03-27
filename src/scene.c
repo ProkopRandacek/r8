@@ -11,15 +11,17 @@
 
 extern GL* gl;
 
-Shape*      shapes[SHAPE_NUM];
-ShapeGroup* groups[GROUP_NUM];
+Shape*      shapes[MAX_SHAPE_NUM];
+ShapeGroup* groups[MAX_GROUP_NUM];
+
+unsigned int shapeNum = 0;
+unsigned int groupNum = 0;
 
 // these are global so other object can be created relative to them
 Camera cam;
 
 void createScene() {
 	createCamera();
-	sendCamera();
 	createLight();
 	createObjects();
 }
@@ -41,7 +43,7 @@ void createLight() {
 }
 
 void createObjects() {
-	// Primitives
+	/*// Primitives
 	int head = createSphere(v3(0.5f, 2.1f, 0.5f), v3f(0.7f), 0.0f, 0.3f);
 	int ring = createTorus (v3(0.5f, 1.9f, 0.5f), v3f(0.7f), 0.0f, 0.25f, 0.09f);
 	int body = createCCone (v3(0.5f, 2.2f, 0.5f), v3f(0.7f), 0.0f, v3(0.5f, 1.3f, 0.5f), 0.17f, 0.3f);
@@ -52,26 +54,28 @@ void createObjects() {
 	int bottom = createGroup(body, base,  BLEND,  0.2f );
 	int root   = createGroup(top, bottom, BLEND,  0.02f);
 
-	sendObjects();
+	sendObjects();*/
 }
 
 void freeObjects() {
-	for (unsigned int i = 0; i < SHAPE_NUM; i++) { free(shapes[i]->shape); free(shapes[i]); }
-	for (unsigned int i = 0; i < GROUP_NUM; i++) { free(groups[i]); }
+	for (unsigned int i = 0; i < shapeNum; i++) { free(shapes[i]->shape); free(shapes[i]); }
+	for (unsigned int i = 0; i < groupNum; i++) { free(groups[i]); }
 }
 
 void sendObjects() {
-	float g[GROUP_SIZE * GROUP_NUM];
-	float s[SHAPE_SIZE * SHAPE_NUM];
+	float g[GROUP_SIZE * groupNum];
+	float s[SHAPE_SIZE * shapeNum];
+	//printf("%d/%d, %d/%d\n", shapeNum, MAX_SHAPE_NUM, groupNum, MAX_GROUP_NUM);
 
-	shapes2floats(s, SHAPE_NUM, shapes);
-	shdSetFloatArray(gl->s, "rawShapes", (int)(SHAPE_SIZE * SHAPE_NUM), s);
+	shapes2floats(s, shapeNum, shapes);
+	groups2floats(g, groupNum, groups);
 
-	groups2floats(g, GROUP_NUM, groups);
-	shdSetFloatArray(gl->s, "rawGroups", (int)(GROUP_SIZE * GROUP_NUM), g);
+	shdSetFloatArray(gl->s, "rawShapes", (int)(SHAPE_SIZE * shapeNum), s);
+	shdSetFloatArray(gl->s, "rawGroups", (int)(GROUP_SIZE * groupNum), g);
 }
 
 void updateScene() {
 	sendCamera();
 	sendObjects();
 }
+

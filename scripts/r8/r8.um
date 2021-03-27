@@ -1,3 +1,12 @@
 // vim: filetype=umka
 
 fn SetShpClr*(shpID: int32, r, g, b: real)
+
+fn CreateSphere  *(x, y, z, r, g, b, rv, rd:                 real): int32
+fn CreateCube    *(x, y, z, r, g, b, rv, sx, sy, sz:         real): int32
+fn CreateTorus   *(x, y, z, r, g, b, rv, r1, r2:             real): int32
+fn CreateCapsule *(x, y, z, r, g, b, rv, ex, ey, ez, rd:     real): int32
+fn CreateCylinder*(x, y, z, r, g, b, rv, ex, ey, ez, rd:     real): int32
+fn CreateCCone   *(x, y, z, r, g, b, rv, ex, ey, ez, r1, r2: real): int32
+
+fn CreateGroup*(a, b, op: int32, k: real): int32
