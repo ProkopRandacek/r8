@@ -9,56 +9,21 @@
 #include "main.h"
 #include "sceneio.h"
 #include "settings.h"
-#include "bindings.h"
-#include "../submodules/umka/src/umka_api.h"
-
+#include "umka.h"
 
 extern GL* gl;
-void* umka;
-
+extern void* umka;
 float deltaTime = 0.0f;
-
-int umkaStartFunc, umkaUpdateFunc;
+extern int umkaStartFunc, umkaUpdateFunc;
 
 int main() {
 	printf("\n\n====================================\n\n\n");
-	printf("Compiled against GLFW %i.%i.%i\n", GLFW_VERSION_MAJOR, GLFW_VERSION_MINOR, GLFW_VERSION_REVISION);
-	int major, minor, revision;
-	glfwGetVersion(&major, &minor, &revision);
-	printf("Running against GLFW %i.%i.%i\n", major, minor, revision);
+
 
 	startTime(); // debug init
 	initOGL();
+	initUmka();
 	createScene();
-
-	// === umka
-	dprint("UMKA START");
-	umka = umkaAlloc();
-	int umkaOK;
-
-	umkaOK = umkaInit(umka, "scripts/game.um", NULL, 1024 * 1024, 1024 * 1024, 0, NULL);
-	if (!umkaOK) { eprint("umka init failed"); }
-	else         { dprint("UMKA - init successful"); }
-
-	umkaBind(umka);
-	dprint("UMKA - bind done");
-
-	umkaOK = umkaCompile(umka);
-	if (!umkaOK) {
-		UmkaError error;
-		umkaGetError(umka, &error);
-		char msg[1072];
-		sprintf(msg, "Umka compile error %s (%d, %d): %s\n", error.fileName, error.line, error.pos, error.msg);
-		eprint(msg);
-	}
-	dprint("UMKA - compiled successfully");
-
-	umkaStartFunc  = umkaGetFunc(umka, NULL, "start");
-	umkaUpdateFunc = umkaGetFunc(umka, NULL, "update");
-
-	dprint("UMKA DONE");
-
-
 
 	dprint("INIT DONE");
 	dprint("starting main loop");
@@ -73,6 +38,7 @@ int main() {
 		frameCount++;
 
 		updateInput();
+		//umkaCall(umka, umkaUpdateFunc, 0, NULL, NULL);
 		updateScene();
 		renderOGL();
 
@@ -82,16 +48,13 @@ int main() {
 		frameTime += deltaTime;
 
 		if (frameTime > 1.0f) {
-			if (frameCount < WANTED_FPS) {
-				char msg[59];
-				sprintf(msg, "Low fps: %d", frameCount);
-				dprint(msg);
-			}
+			printf("frameCount: %d\n", frameCount);
 			frameCount = 0;
 			frameTime = 0.0f;
 		}
 	}
 
+	umkaFree(umka);
 	dprint("exiting GL");
 	exitOGL();
 	dprint("return 0;");
@@ -99,4 +62,4 @@ int main() {
 }
 
 void stop() { glfwSetWindowShouldClose(gl->window, GL_TRUE); }
-void die() { exit(1); }
+void die()  { exit(1); }

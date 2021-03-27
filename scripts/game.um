@@ -1,11 +1,21 @@
 // vim: filetype=umka
 
+//0       1      2    3     4
+//NORMAL, BLEND, CUT, MASK, AVERAGE
+
 import (
 	"r8/r8.um"
 )
 
 fn start() {
-	r8.SetShpClr(0, 1.0, 0.0, 0.0)
+	head := r8.CreateSphere(0.5, 2.1, 0.5, 0.7, 0.0, 0.7, 0.0, 0.3)
+	ring := r8.CreateTorus (0.5, 1.9, 0.5, 0.7, 0.0, 0.7, 0.0, 0.25, 0.09)
+	body := r8.CreateCCone (0.5, 2.2, 0.5, 0.7, 0.0, 0.7, 0.0, 0.5, 1.3, 0.5, 0.17, 0.3)
+	base := r8.CreateCCone (0.5, 1.3, 0.5, 0.7, 0.0, 0.7, 0.0, 0.5, 1.0, 0.5, 0.40, 0.4)
+
+	top    := r8.CreateGroup(head, ring,  0, 0.0)
+	bottom := r8.CreateGroup(body, base,  1, 0.2)
+	root   := r8.CreateGroup(top, bottom, 1, 0.02)
 }
 
 fn update() {

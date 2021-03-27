@@ -3,17 +3,18 @@ uniform float time;
 uniform vec3 lightPos;
 uniform ivec2 resolution;
 uniform vec3 cam[5];
+uniform int groupNum; // the number of created groups
 
-const int shapeNum = 4;
-const int groupNum = 3;
+const int maxShapeNum = 4;
+const int maxGroupNum = 3;
 
 const int shapeSize = 16;
 const int groupSize = 6;
 
 int ignore = -1;
 
-uniform float rawShapes[shapeSize * shapeNum];
-uniform float rawGroups[groupNum * groupSize];
+uniform float rawShapes[shapeSize * maxShapeNum];
+uniform float rawGroups[groupSize * maxGroupNum];
 
 out vec4 outColor;
 
@@ -30,4 +31,4 @@ struct map {
 	float d;
 };
 
-map d2Groups[groupNum];
+map d2Groups[maxGroupNum];
