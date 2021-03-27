@@ -29,7 +29,6 @@ int nextShpIndex() {
 int nextGrpIndex() {
 	if (freeGrpIndex < MAX_GROUP_NUM) {
 		freeGrpIndex++;
-		printf("setting groupnum to %d\n", freeGrpIndex);
 		shdSetInt(gl->s, "groupNum", freeGrpIndex);
 		groupNum = freeGrpIndex;
 		return freeGrpIndex - 1;

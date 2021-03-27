@@ -19,7 +19,6 @@ extern int umkaStartFunc, umkaUpdateFunc;
 int main() {
 	printf("\n\n====================================\n\n\n");
 
-
 	startTime(); // debug init
 	initOGL();
 	initUmka();
@@ -38,20 +37,20 @@ int main() {
 		frameCount++;
 
 		updateInput();
-		//umkaCall(umka, umkaUpdateFunc, 0, NULL, NULL);
+		umkaCall(umka, umkaUpdateFunc, 0, NULL, NULL);
 		updateScene();
 		renderOGL();
 
 		deltaTime = (float)glfwGetTime() - lastTime;
 		lastTime = (float)glfwGetTime();
 
-		frameTime += deltaTime;
+		/*frameTime += deltaTime;
 
 		if (frameTime > 1.0f) {
 			printf("frameCount: %d\n", frameCount);
 			frameCount = 0;
 			frameTime = 0.0f;
-		}
+		}*/
 	}
 
 	umkaFree(umka);

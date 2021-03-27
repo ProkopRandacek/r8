@@ -16,7 +16,10 @@ Clone with `--recursive`.
 
 ## TODO:
 - Umka scripting
-- Merge sceneapi.c and shapes.c constructors
+  - Shape creating DONE
+  - Shape editing
+  - Player input
+- Merge `sceneapi.c` and `shapes.c` constructors
 - Update architecture.md
 - Modifiers for shapes (twist, round edges, displacement, ...)
 - Inline functions (there are probably some funcs that should be inlined)
