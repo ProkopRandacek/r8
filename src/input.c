@@ -76,4 +76,3 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 	else if (scancode == 33 && action == 1) screenshot();
 }
-#pragma GCC diagnostic ignored "-Wunused-parameter"
