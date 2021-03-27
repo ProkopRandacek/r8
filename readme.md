@@ -40,9 +40,9 @@ see [`archtecture.md`](architecture.md) for explanation what every file does.
 [Move demo](https://randacek.dev/p/move_demo.mp4) - (WASD & Mouse movement, Multiple object in scene)  
 
 ## Build:
-`make` to (re)build the binary or `make run` to (re)build the binary and run it. Shader files are now included in the binary.
+`make` to (re)build the binary or `make run` to (re)build the binary and run it.  
   
-Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum) (you still need runtime deps)
+Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum)
 
 ### Runtime deps:
 - None! Glfw and Umka sources are downloaded, compiled and included in the binary automatically when building ^^
@@ -54,8 +54,10 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 - gcc
 - pkg-config
 - unzip  
-- libx{randr, inerama, xursor, i}
-Arch:            `yay -S gcc make cmake unzip libxrandr       libxinerama       libxcursor       libxi       pkgconf    mono --needed`  
-Fedora: `dnf     install gcc make cmake unzip libxrandr-devel libxinerama-devel libxcursor-devel libxi-devel pkgconf    mono-devel gcc`  
-Ubuntu: `apt-get install gcc make cmake unzip libxrandr-dev   libxinerama-dev   libxcursor-dev   libxi-dev   pkg-config mono-runtime gcc`  
-
+- libx{randr, inerama, cursor, i}  
+Arch:  
+         `yay -S gcc make cmake unzip libxrandr       libxinerama       libxcursor       libxi       mono --needed`  
+Fedora:  
+`dnf     install gcc make cmake unzip libxrandr-devel libxinerama-devel libxcursor-devel libxi-devel mono-core`  
+Ubuntu:  
+`apt-get install gcc make cmake unzip libxrandr-dev   libxinerama-dev   libxcursor-dev   libxi-dev   mono-runtime`  
