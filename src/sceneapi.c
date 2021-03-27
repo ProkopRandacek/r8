@@ -12,7 +12,7 @@ int freeGrpIndex = 0;
 extern Shape*      shapes[MAX_SHAPE_NUM];
 extern ShapeGroup* groups[MAX_GROUP_NUM];
 extern GL* gl;
-extern unsigned int shapeNum, groupNum;
+extern int shapeNum, groupNum;
 
 // ===== PRIVATE =====
 
