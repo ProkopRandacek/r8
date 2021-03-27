@@ -54,7 +54,7 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 - gcc
 - pkg-config
 - unzip  
-(Arch:        `yay -S gcc make cmake unzip pkgconf    mono --needed`)  
-(Fedora: `dnf install gcc make cmake unzip pkgconf    mono-devel gcc`)  
-(Ubuntu: `apt install gcc make cmake unzip pkg-config mono-runtime gcc`)  
+(Arch:            `yay -S gcc make cmake unzip libxrandr       pkgconf    mono --needed`)  
+(Fedora: `dnf     install gcc make cmake unzip libxrandr-devel pkgconf    mono-devel gcc`)  
+(Ubuntu: `apt-get install gcc make cmake unzip libxrandr-dev   pkg-config mono-runtime gcc`)  
 
