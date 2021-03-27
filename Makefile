@@ -14,7 +14,9 @@ GLFW_ARGS = -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS
 
 NAME = r8
 
-.PHONY: umka
+.PHONY: umka all glfw
+
+all: build
 
 build: deps clean shaders glad glfw umka
 	# Build the Linux binary
