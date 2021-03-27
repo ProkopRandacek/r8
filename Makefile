@@ -25,7 +25,7 @@ wbuild: clean shaders glfw
 	x86_64-w64-mingw32-gcc src/*.c -o build/${NAME}.exe -D GLFW_DLL $(GLFW_WIN_INCLUDE) $(GLFW_DLL) $(GCC_INCLUDES) $(GCC_FLAGS)
 
 run: clean build
-	cd build/; ./rendering
+	cd build/; ./${NAME}
 
 shaders: clean
 	cat $(wildcard shaders/*frag.glsl) > fragFull.glsl

@@ -1,5 +1,8 @@
 // vim: filetype=c
 
+#ifndef SHAPES_H
+#define SHAPES_H
+
 #include "vector.h"
 
 typedef enum ShapeType {
@@ -71,3 +74,5 @@ Shape* ccone(vec3 start, vec3 end,  vec3 clr, float startR, float endR, float rv
 
 ShapeGroup* group(ShapeType ta, int a, ShapeType tb, int b, OperationType op, float k);
 Shape* shape(ShapeType type, void* shape, vec3 pos, vec3 clr, float rv);
+
+#endif
