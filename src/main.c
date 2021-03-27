@@ -28,13 +28,13 @@ int main() {
 	dprint("starting main loop");
 
 	float lastTime = 0.0f;
-	float frameTime = 0.0f;
-	unsigned int frameCount = 0;
+	//float frameTime = 0.0f;
+	//unsigned int frameCount = 0;
 
 	umkaCall(umka, umkaStartFunc, 0, NULL, NULL);
 
 	while (!glfwWindowShouldClose(gl->window)) {
-		frameCount++;
+		//frameCount++;
 
 		updateInput();
 		umkaCall(umka, umkaUpdateFunc, 0, NULL, NULL);
