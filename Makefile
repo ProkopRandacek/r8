@@ -16,7 +16,7 @@ NAME = r8
 
 .PHONY: umka
 
-build: clean shaders glad umka
+build: deps clean shaders glad umka
 	# Build the Linux binary
 	mkdir build/scripts -p
 	cp scripts/* build/scripts/ -r
@@ -46,6 +46,10 @@ umka:
 glfw:
 	cd submodules/glfw/ && cmake ${GLFW_ARGS} .
 	cd submodules/glfw/ && ${MAKE}
+
+deps:
+	if test ! -f submodules/glfw/CMakeLists.txt; then git submodule update --init --recursive; fi
+	if test ! -f submodules/umka/Makefile;       then git submodule update --init --recursive; fi
 
 clean:
 	# Remove previous build files
