@@ -1,8 +1,10 @@
-# Ray marching rendering engine thing
+# R8 Engine
+
+Clone with `--recursive`.
 
 ![2x2 demos](https://randacek.dev/p/demos2x2.png)  
 
-## Current rendering capabilities:  
+## Done:
 - [Constructive solid geometry](https://en.wikipedia.org/wiki/Constructive_solid_geometry)
 - Soft shadows
 - Reflections
@@ -56,3 +58,4 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 (Arch:        `yay -S gcc make unzip pkgconf    mono --needed`)  
 (Fedora: `dnf install gcc make unzip pkgconf    mono-devel gcc`)  
 (Ubuntu: `apt install gcc make unzip pkg-config mono-runtime gcc`)  
+
