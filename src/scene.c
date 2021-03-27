@@ -9,7 +9,6 @@
 #include "settings.h"
 #include "sceneapi.h"
 
-
 extern GL* gl;
 
 Shape*      shapes[SHAPE_NUM];
@@ -33,13 +32,11 @@ void createCamera() {
 void sendCamera() {
 	float camFloats[15];
 	cam2floats(cam, camFloats);
-
 	shdSetVec3Array(gl->s, "cam", 5 * 3, camFloats);
 }
 
 void createLight() {
 	float lsPos[] = {5.0f, 10.0f, 5.0f};
-
 	shdSetVec3Array(gl->s, "lightPos", 1, lsPos);
 }
 
@@ -75,12 +72,6 @@ void sendObjects() {
 }
 
 void updateScene() {
-	// recreate all object that are supposed to be moving
 	sendCamera();
-
-	/*setShapeClr(0, v3f(sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f));
-	setShapePos(1, v3f(sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f));
-	setShapeRv (3, sinf((float)glfwGetTime() * 3.0f) * 0.5f + 0.5f);*/
-
 	sendObjects();
 }

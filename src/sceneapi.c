@@ -2,6 +2,7 @@
 #include "sceneapi.h"
 #include "settings.h"
 #include "debug.h"
+#include "opengl.h"
 
 #include "settings.h"
 
@@ -10,6 +11,7 @@ int freeGrpIndex = 0;
 
 extern Shape*      shapes[SHAPE_NUM];
 extern ShapeGroup* groups[GROUP_NUM];
+extern GL* gl;
 
 // ===== PRIVATE =====
 
@@ -35,7 +37,7 @@ inline ShapeType getShapeType(int i) { return shapes[i]->type; }
 
 /// ===== PUBLIC =====
 
-// Shape editing. I is the shape ID
+// Shape editing. `i` is the shape ID
 
 void setShapeClr(int i, vec3  value) { shapes[i]->clr = value; }
 void setShapePos(int i, vec3  value) { shapes[i]->pos = value; }
@@ -79,6 +81,7 @@ int createCCone(vec3 start, vec3 clr, float rv, vec3 end, float startR, float en
 	return i;
 }
 
+// Group creating
 int createGroup(int a, int b, OperationType op, float k) {
 	int i = nextGrpIndex();
 	if (i == -1) { return -1; }
@@ -92,7 +95,15 @@ int createGroup(int a, int b, OperationType op, float k) {
 
 		groups[i] = group(at, a, bt, b, op, k);
 
-		return i + GROUP_ID_OFFSET; // external group ids start on GROUP_ID_OFFSET -> if ID is bigger than GROUP_ID_OFFSET is a group, otherwise its a shape
+		return i + GROUP_ID_OFFSET; // external group IDs start on GROUP_ID_OFFSET -> if ID is bigger than GROUP_ID_OFFSET is a group, otherwise its a shape
 	}
 }
 
+void moveLight(vec3 pos) {
+	float f[] = {pos.x, pos.y, pos.z};
+	shdSetVec3Array(gl->s, "lightPos", 1, f);
+}
+
+float getTime() {
+	return (float)glfwGetTime();
+}

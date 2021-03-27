@@ -1,6 +1,8 @@
 # Architecture
 
-## File hiearchy and short description
+Slightly outdated.
+
+## File hierarchy and short description
 ```
 main.c                                      - Code initialization, main render loop, glfw callbacks.
  |
