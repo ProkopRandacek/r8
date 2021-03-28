@@ -16,6 +16,9 @@ NAME = r8
 
 all: build
 
+package: build
+	zip -r ${NAME}_$(shell git rev-parse --short HEAD).zip build/
+
 build: deps clean shaders glad glfw umka
 	# Build the Linux binary
 	mkdir build/scripts -p
