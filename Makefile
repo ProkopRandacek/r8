@@ -19,7 +19,7 @@ NAME = r8
 
 .PHONY: umka all glfw scripts
 
-all: build wbuild
+all: build #wbuild
 
 package:
 	zip -r ${NAME}_$(shell git rev-parse --short HEAD).zip build/
