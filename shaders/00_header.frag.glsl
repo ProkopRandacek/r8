@@ -35,7 +35,7 @@ struct map {
 
 vec4  d2GroupsC[maxGroupNum]; // colors
 float d2GroupsD[maxGroupNum]; // distances
-float d2Shapes[maxShapeNum]; // distances to shapes
+float d2Shapes[maxShapeNum];  // distances to shapes
 
 // Functions to find information in groups array
 #define gF(i, o) rawGroups[groupSize * i + o] // returns float on position `o` from group on index `i`
@@ -49,10 +49,10 @@ float d2Shapes[maxShapeNum]; // distances to shapes
 #define sF(i, o) rawShapes[shapeSize * i + o]               // return float on position `o` from shape on index `i`
 #define sV(i, o) vec3(sF(i, o), sF(i, o + 1), sF(i, o + 2)) //vector from 3 floats on position from o to o + 2 from shape on index `i`
 
-#define sT(i) shapeTypes[i]              // type
-#define sR(i) sF(i, 9)                   // radius
+#define sT(i)  shapeTypes[i]             // type
+#define sR(i)  sF(i, 9)                  // radius
 #define sRs(i) sF(i, 15)                 // refletiveness
-#define sP(i) sV(i, 0)                   // position
-#define sS(i) sV(i, 6)                   // scale
-#define sC(i) vec4(sV(i, 3), sRs(i))     // color
+#define sP(i)  sV(i, 0)                  // position
+#define sS(i)  sV(i, 6)                  // scale
+#define sC(i)  vec4(sV(i, 3), sRs(i))    // color
 #define sRV(i) vec2(sF(i, 9), sF(i, 10)) // radius vector

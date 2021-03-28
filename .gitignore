@@ -5,3 +5,4 @@ src/gl.c
 include
 fragFull.glsl
 vertFull.glsl
+r8_*.zip
