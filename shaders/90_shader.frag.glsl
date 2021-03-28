@@ -1,5 +1,6 @@
 #define STEPSNUM 512
-#define COLLISION_THRESHOLD 0.0001 // COLLISION_THRESHOLD has HUGE impact on FPS
+#define COLLISION_THRESHOLD 0.001 // COLLISION_THRESHOLD has HUGE impact on FPS
+#define BACK_STEP COLLISION_THRESHOLD * 20
 #define MAX_TRACE_DIST 15.0
 #define BOUNCES 1
 #define SUN_SIZE 1.0
@@ -9,15 +10,11 @@
 
 // distance to nearest object
 map mapWorld(vec3 pos) {
-	vec4 localClr = vec4(1.0, 0.0, 1.0, 1.0);
-	float localDist = MAX_TRACE_DIST;
-	if (groupNum > 0) {
-		for (int i = 0; i < shapeNum; i++) { d2Shape(pos, sT(i), i); }
-		for (int i = 0; i < groupNum; i++) { d2Group(pos, i); }
+	for (int i = 0; i < shapeNum; i++) { d2Shape(pos, sT(i), i); }
+	for (int i = 0; i < groupNum; i++) { d2Group(pos,        i); }
 
-		localClr  = d2GroupsC[groupNum - 1];
-		localDist = d2GroupsD[groupNum - 1];
-	}
+	vec4  localClr  = d2GroupsC[groupNum - 1];
+	float localDist = d2GroupsD[groupNum - 1];
 
 	// combine with floor and return
 	return Combine(localDist, d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0), localClr, checkerboard(pos), 0, 0.0);
@@ -25,12 +22,11 @@ map mapWorld(vec3 pos) {
 
 // JUST distance to nearest object. no color. used for calculateNormal who calls mapWorld 6 times and doesnt need the color
 float mapWorldD(vec3 pos) {
-	float localDist = MAX_TRACE_DIST;
-	if (groupNum > 0) {
-		for (int i = 0; i < shapeNum; i++) { d2Shape (pos, sT(i), i); }
-		for (int i = 0; i < groupNum; i++) { d2GroupD(pos, i); }
-		localDist = d2GroupsD[groupNum - 1];
-	}
+	for (int i = 0; i < shapeNum; i++) { d2Shape (pos, sT(i), i); }
+	for (int i = 0; i < groupNum; i++) { d2GroupD(pos,        i); }
+
+	float localDist = d2GroupsD[groupNum - 1];
+
 	// Combine with floor and return
 	return CombineD(localDist, d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0), 0, 0.0);
 }
@@ -84,35 +80,41 @@ void main() {
 	// calculate ray direction
 	vec2 uv = gl_FragCoord.xy / resolution.xy;
 
-	vec3 pos, dir, finalClr, normal, smolNormal;
-	float lastR;
-	rayHit hit;
+	vec3 pos, dir;
 	dir = normalize(mix(mix(cam[3], cam[1], uv.y), mix(cam[4], cam[2], uv.y), uv.x) - cam[0]);
 	pos = cam[0];
 
-	// cast main ray
-	for (int i = 0; i < BOUNCES + 1; i++) {
-		hit = rayMarch(pos, dir);
+	// test if the ray is gonna intersect with the world box, if not, just render it as a sky box
+	if (!intersection(pos, dir)) {
+		outColor = vec4(0.12, 0.12, 0.12, 1);
+	} else {
+		vec3 finalClr, normal, smolNormal;
+		float lastR;
+		rayHit hit;
+		// cast main ray
+		for (int i = 0; i < BOUNCES + 1; i++) {
+			hit = rayMarch(pos, dir);
 
-		finalClr = mix(hit.surfaceClr.rgb, mix(finalClr, hit.surfaceClr.rgb, lastR), min(i, 1));
+			finalClr = mix(hit.surfaceClr.rgb, mix(finalClr, hit.surfaceClr.rgb, lastR), min(i, 1));
 
-		if (!hit.hit) break; // only reflect and shadown when hit a surface
+			if (!hit.hit) break; // only reflect and shadown when hit a surface
 
-		lastR = hit.surfaceClr.w;
+			lastR = hit.surfaceClr.w;
 
-		normal = calculateNormal(hit.hitPos);
-		smolNormal = normal * COLLISION_THRESHOLD * 50;
+			normal = calculateNormal(hit.hitPos);
+			smolNormal = normal * BACK_STEP;
 
-		pos = hit.hitPos + smolNormal;
-		dir = reflect(dir, normal);
+			pos = hit.hitPos + smolNormal;
+			dir = reflect(dir, normal);
 
-		if (hit.surfaceClr.w == 0.0) { // shadow only 100% non reflective surfaces. shadows on reflective surfaces look weird.
-			finalClr *= vec3(rayMarchShadow(pos, normalize(lightPos - pos)));
-			break;
+			if (hit.surfaceClr.w == 0.0) { // shadow only 100% non reflective surfaces. shadows on reflective surfaces look weird.
+				finalClr *= vec3(rayMarchShadow(pos, normalize(lightPos - pos)));
+				break;
+			}
 		}
-	}
 
-	// output color
-	outColor = vec4(finalClr, 1.0);
+		// output color
+		outColor = vec4(finalClr, 1.0);
+	}
 }
 
