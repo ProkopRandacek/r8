@@ -1,9 +1,9 @@
 // distance to a shape. st = shape type; i = shape index
 // some shapes are commented since they are not yes used and just take up space in the binary
 void d2Shape(vec3 pos, int st, int i) {
-	     if (st == 1 ) { d2Shapes[i] = d2Cube    (pos, sP(i), sS (i), sR(i)              ); } // cube
-	else if (st == 2 ) { d2Shapes[i] = d2Sphere  (pos, sP(i), sR (i)                     ); } // sphere
-	else if (st == 3 ) { d2Shapes[i] = d2Cylinder(pos, sP(i), sS (i), sR(i)              ); } // cylinder
+	     //if (st == 1 ) { d2Shapes[i] = d2Cube    (pos, sP(i), sS (i), sR(i)              ); } // cube
+	if (st == 2 ) { d2Shapes[i] = d2Sphere  (pos, sP(i), sR (i)                     ); } // sphere
+	//else if (st == 3 ) { d2Shapes[i] = d2Cylinder(pos, sP(i), sS (i), sR(i)              ); } // cylinder
 	else if (st == 5 ) { d2Shapes[i] = d2Torus   (pos, sP(i), sRV(i)                     ); } // torus
 	else if (st == 12) { d2Shapes[i] = d2CCone   (pos, sP(i), sS (i), sF(i, 9), sF(i, 10)); } // capped cone
 }

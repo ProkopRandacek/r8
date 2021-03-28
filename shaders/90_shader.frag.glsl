@@ -51,12 +51,8 @@ rayHit rayMarch(vec3 rayOrigin, vec3 rayDir) {
 		hit = mapWorld(currentPos);
 		distTraveled += hit.d;
 
-		if (hit.d < COLLISION_THRESHOLD) { // collision
-			return rayHit(currentPos, hit.clr, true);
-		}
-		if (distTraveled > MAX_TRACE_DIST) { // too far
-			return rayHit(vec3(0), vec4(0.1, 0.1, 0.1, 0), false); // run out of trace_dist
-		}
+		if (hit.d < COLLISION_THRESHOLD)   { return rayHit(currentPos, hit.clr               , true ); }
+		if (distTraveled > MAX_TRACE_DIST) { return rayHit(vec3(0)   , vec4(0.1, 0.1, 0.1, 0), false); }
 	}
 
 	return rayHit(vec3(0), vec4(1, 1, 1, 0), false); // run out of stepsnum

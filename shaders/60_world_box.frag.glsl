@@ -5,3 +5,4 @@ bool intersection(vec3 ro, vec3 rd) {
 	vec3 t2 = max(tMin, tMax);
 	return max(max(t1.x, t1.y), t1.z) <= min(min(t2.x, t2.y), t2.z);
 }
+
