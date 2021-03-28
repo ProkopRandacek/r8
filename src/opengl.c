@@ -101,7 +101,7 @@ void initOGL() {
 	glfwSetFramebufferSizeCallback(gl->window, resize);
 	glfwSetKeyCallback(gl->window, onKey);
 
-	glfwSetInputMode(gl->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(gl->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	dprint("GL DONE");
 }

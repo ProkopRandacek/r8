@@ -1,16 +1,17 @@
 // combine clr and distance
 map Combine(float dstA, float dstB, vec4 colorA, vec4 colorB, int op, float k) {
-	if (op == 1) { // Blend
-		float h = clamp(0.5 + 0.5 * (dstB - dstA) / k, 0.0, 1.0);
+	float h = clamp(0.5 + 0.5 * (dstB - dstA) / k, 0.0, 1.0);
+
+	if (op == 1) {
 		dstA = mix(dstB, dstA, h) - k * h * (1.0 - h);
 		colorA = mix(colorA, colorB, k);
-	} else if (op == 4) { // Average
+	} else if (op == 4) {
 		dstA = mix(dstA, dstB, k);
 		colorA = mix(colorA, colorB, k);
 	}
-	else if (op == 0) { if ( dstB < dstA) { dstA =  dstB; colorA = colorB; } } // Normal (min(a,  b))
-	else if (op == 2) { if (-dstB > dstA) { dstA = -dstB; colorA = colorB; } } // Cut    (max(a, -b))
-	else if (op == 3) { if ( dstB > dstA) { dstA =  dstB; colorA = colorB; } } // Mask   (max(a,  b))
+	else if (op == 0 &&  dstB < dstA) { dstA =  dstB; colorA = colorB; }
+	else if (op == 2 && -dstB > dstA) { dstA = -dstB; colorA = colorB; }
+	else if (op == 3 &&  dstB > dstA) { dstA =  dstB; colorA = colorB; }
 
 	return map(colorA, dstA);
 }
@@ -19,11 +20,22 @@ map Combine(float dstA, float dstB, vec4 colorA, vec4 colorB, int op, float k) {
 float CombineD(float a, float b, int op, float k) {
 	float h=clamp(0.5+0.5*(b-a)/k,0,1);
 
-	     if (op == 0) { a = min(a,b);   } // Normal
-	else if (op == 1) { a = mix(b,a,h)-k*h*(1-h); } // Blend
-	else if (op == 2) { a = max(a,-b);  } // Cut
-	else if (op == 3) { a = max(a,b);   } // Mask
-	else if (op == 4) { a = mix(a,b,k); } // Average
-
-	return a;
+	return mix(mix(mix(mix(b,a,h)-k*h*(1-h),min(a,-b),step(3,op)),mix(mix(b,a,h)-k*h*(1-h),min(a,b),step(1,op)),step(3,op)),mix(a,b,k),step(3,op));
+	/*return mix(
+			mix(
+				mix(
+					mix(b,a,h)-k*h*(1-h), // 3 .. Mask
+					min(a,-b),            // 2 .. Cut
+					step(3, op)
+				   ),
+				mix(
+					mix(b,a,h)-k*h*(1-h), // 1 .. blend
+					min(a,b),             // 0 .. Normal
+					step(1, op)
+				   ),
+				step(3, op)
+			   ),
+			mix(a,b,k),                           // 4 .. Average
+			step(3,op)
+		  );*/
 }
