@@ -11,3 +11,4 @@ void shdSetIVec2(shader s, const char* name, int x, int y);
 void shdSetVec3Array (shader s, const char* name, int count, float* values);
 void shdSetVec4Array (shader s, const char* name, int count, float* values);
 void shdSetFloatArray(shader s, const char* name, int count, float* values);
+void shdSetIntArray  (shader s, const char* name, int count, int*   values);

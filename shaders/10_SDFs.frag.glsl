@@ -4,7 +4,8 @@
 // Source of the following functions: http://iquilezles.org/www/articles/distfunctions/distfunctions.htm
 // =====================================================================================================
 
-float dot2(vec2 v) { return dot(v,v); } float dot2(vec3 v) { return dot(v,v); } float ndot(vec2 a, vec2 b) { return a.x*b.x-a.y*b.y; }
+#define dot2(v) dot(v,v)
+#define ndot(a, b) a.x*b.x-a.y*b.y
 
 // Distance Functions
 // ==================

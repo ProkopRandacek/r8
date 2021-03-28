@@ -1,11 +1,9 @@
-LIBS = glfw3 gl
-
 GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized
 GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast
 GCC_LIB = -lm -ldl -lpthread
 GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include
 
-#D = --no-renaming
+D = --preserve-externals --smoothstep #--no-renaming
 
 UMKA_LIB = submodules/umka/build/libumka.a
 
@@ -32,8 +30,8 @@ shaders: clean
 	# Minify shaders
 	cat $(wildcard shaders/*frag.glsl) > fragFull.glsl
 	cat $(wildcard shaders/*vert.glsl) > vertFull.glsl
-	mono glsl_minify.exe fragFull.glsl --preserve-externals ${D} -o src/frag.h
-	mono glsl_minify.exe vertFull.glsl --preserve-externals ${D} -o src/vert.h
+	mono glsl_minify.exe fragFull.glsl ${D} -o src/frag.h
+	mono glsl_minify.exe vertFull.glsl ${D} -o src/vert.h
 	rm fragFull.glsl vertFull.glsl -f
 
 # I don't want to have 3rd praty source in plan text because github then shows random +20000 lines of code in statistics

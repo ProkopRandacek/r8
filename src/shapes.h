@@ -57,8 +57,6 @@ typedef struct Shape { // General shape
 } Shape;
 
 typedef struct ShapeGroup {
-	ShapeType ta;
-	ShapeType tb;
 	OperationType op;
 	float k; // modifier for operation.
 	int a; // id of the shape A
@@ -72,7 +70,7 @@ Shape* caps (vec3 start, vec3 end,  vec3 clr, float r, float rv);
 Shape* cyl  (vec3 start, vec3 stop, vec3 clr, float r, float rv);
 Shape* ccone(vec3 start, vec3 end,  vec3 clr, float startR, float endR, float rv);
 
-ShapeGroup* group(ShapeType ta, int a, ShapeType tb, int b, OperationType op, float k);
+ShapeGroup* group(int a, int b, OperationType op, float k);
 Shape* shape(ShapeType type, void* shape, vec3 pos, vec3 clr, float rv);
 
 #endif

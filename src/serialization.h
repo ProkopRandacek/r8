@@ -2,7 +2,8 @@
 #include "shapes.h"
 
 void shapes2floats(float *f, unsigned int num, Shape*      shapes[num]);
-void groups2floats(float* f, unsigned int num, ShapeGroup* groups[num]);
+void groups2floats(int* f, unsigned int num, ShapeGroup* groups[num]);
+void shapes2types(int *f, unsigned int num, Shape* shp[num]);
 
 void sphere2floats(float* f, Sphere* s);
 void cube2floats(float* f, Cube* s);

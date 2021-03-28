@@ -107,11 +107,10 @@ void initOGL() {
 }
 
 void renderOGL() {
-	shdSetFloat(gl->s, "time", (float)glfwGetTime());
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	// swap buffers
-	//glClear(GL_COLOR_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT); saves 0.1 milisecond lol
 	glfwSwapBuffers(gl->window);
 	glfwPollEvents();
 }
