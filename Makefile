@@ -3,27 +3,39 @@ GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast
 GCC_LIB = -lm -ldl -lpthread
 GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include
 
+MINGW_FLAGS = $(GCC_FLAGS)
+MINGW_LIB = -lm -lopengl32 -lgdi32 -Wl,-Bstatic -lpthread -Llib/windows -DUMKA_STATIC -static
+
 D = --preserve-externals --smoothstep #--no-renaming
 
 UMKA_LIB = submodules/umka/build/libumka.a
+UMKA_LIB_WIN = submodules/libumka_static.a
 
-GLFW_LIB = submodules/glfw/src/libglfw3.a
 GLFW_ARGS = -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -DGLFW_VULKAN_STATIC=OFF
+GLFW_LIB = submodules/glfw/src/libglfw3.a
+GLFW_LIB_WIN = submodules/libglfw3.a
 
 NAME = r8
 
-.PHONY: umka all glfw
+.PHONY: umka all glfw scripts
 
-all: build
+all: build wbuild
 
-package: build
+package:
 	zip -r ${NAME}_$(shell git rev-parse --short HEAD).zip build/
 
-build: deps clean shaders glad glfw umka
-	# Build the Linux binary
+scripts:
+	# Copy scripts
 	mkdir build/scripts -p
 	cp scripts/* build/scripts/ -r
-	gcc src/*.c ${UMKA_LIB} ${GLFW_LIB} -o build/${NAME} $(GCC_INCLUDES) $(GCC_FLAGS) $(GCC_LIB)
+
+build: deps clean shaders glad glfw umka scripts
+	# Build the Linux binary
+	gcc src/*.c $(UMKA_LIB) $(GLFW_LIB) -o build/${NAME} $(GCC_INCLUDES) $(GCC_FLAGS) $(GCC_LIB)
+
+wbuild: deps clean shaders glad scripts
+	#Build the Windows binary
+	x86_64-w64-mingw32-gcc src/*.c $(UMKA_LIB_WIN) $(GLFW_LIB_WIN) -o build/${NAME}.exe $(GCC_INCLUDES) $(MINGW_FLAGS) $(MINGW_LIB)
 
 run: clean build
 	# Run the binary
@@ -59,4 +71,4 @@ clean:
 	rm build/ -rf
 	rm fragFull.glsl vertFull.glsl -f
 	rm src/vert.h src/frag.h src/gl.c -f
-	rm include glfw -rf
+	rm include -rf
