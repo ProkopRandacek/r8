@@ -29,7 +29,6 @@ int nextShpIndex() {
 int nextGrpIndex() {
 	if (freeGrpIndex < MAX_GROUP_NUM) {
 		freeGrpIndex++;
-		shdSetInt(gl->s, "groupNum", freeGrpIndex);
 		groupNum = freeGrpIndex;
 		return freeGrpIndex - 1;
 	} else {
@@ -90,16 +89,9 @@ int createGroup(int a, int b, OperationType op, float k) {
 	int i = nextGrpIndex();
 	if (i == -1) { return -1; }
 	else {
-		// recognize if a and b are shapes or groups
-		ShapeType at, bt;
-		if (a >= GROUP_ID_OFFSET) { at = GROUP; a -= GROUP_ID_OFFSET; } // if it is a group, set the type and remove external group offset
-		else { at = shapes[a]->type; } // otherwise act normally
-		if (b >= GROUP_ID_OFFSET) { bt = GROUP; b -= GROUP_ID_OFFSET; }
-		else { bt = shapes[b]->type; }
+		groups[i] = group(a, b, op, k);
 
-		groups[i] = group(at, a, bt, b, op, k);
-
-		return i + GROUP_ID_OFFSET; // external group IDs start on GROUP_ID_OFFSET -> if ID is bigger than GROUP_ID_OFFSET is a group, otherwise its a shape
+		return i + MAX_SHAPE_NUM; // external group IDs start on MAX_SHAPE_NUM -> if ID is bigger than MAX_SHAPE_NUM is a group, otherwise its a shape
 	}
 }
 

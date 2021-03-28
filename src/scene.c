@@ -46,17 +46,24 @@ void freeObjects() {
 }
 
 void sendObjects() {
-	float g[GROUP_SIZE * groupNum];
 	float s[SHAPE_SIZE * shapeNum];
+	int   g[GROUP_SIZE * groupNum];
+	int   st[shapeNum];
 
-	shapes2floats(s, (unsigned int)shapeNum, shapes);
-	groups2floats(g, (unsigned int)groupNum, groups);
+	shapes2floats(s , (unsigned int)shapeNum, shapes);
+	groups2floats(g , (unsigned int)groupNum, groups);
+	shapes2types (st, (unsigned int)shapeNum, shapes);
 
-	shdSetFloatArray(gl->s, "rawShapes", (int)(SHAPE_SIZE * shapeNum), s);
-	shdSetFloatArray(gl->s, "rawGroups", (int)(GROUP_SIZE * groupNum), g);
+	shdSetFloatArray(gl->s, "rawShapes" , (int)(SHAPE_SIZE * shapeNum), s);
+	shdSetIntArray  (gl->s, "rawGroups" , (int)(GROUP_SIZE * groupNum), g);
+	shdSetIntArray  (gl->s, "shapeTypes", shapeNum, st);
+
+	shdSetInt(gl->s, "shapeNum", shapeNum);
+	shdSetInt(gl->s, "groupNum", groupNum);
 }
 
 void updateScene() {
 	sendCamera();
 	sendObjects();
 }
+

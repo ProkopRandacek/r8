@@ -16,7 +16,7 @@
 
 // internal. Don't change these
 #define SHAPE_SIZE 16
-#define GROUP_SIZE 6
+#define GROUP_SIZE 4
 
 #define GROUP_ID_OFFSET 1000
 

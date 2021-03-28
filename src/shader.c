@@ -65,5 +65,6 @@ void shdSetIVec2(shader s, const char* name, int x, int y) { glUniform2i(glGetUn
 
 // arrays
 void shdSetFloatArray(shader s, const char* name, int count, float* values) { glUniform1fv(glGetUniformLocation(s.ID, name), count, values); }
+void shdSetIntArray  (shader s, const char* name, int count, int*   values) { glUniform1iv(glGetUniformLocation(s.ID, name), count, values); }
 void shdSetVec3Array (shader s, const char* name, int count, float* values) { glUniform3fv(glGetUniformLocation(s.ID, name), count, values); }
 void shdSetVec4Array (shader s, const char* name, int count, float* values) { glUniform4fv(glGetUniformLocation(s.ID, name), count, values); }
