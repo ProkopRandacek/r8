@@ -61,12 +61,10 @@ inline Shape* shape(ShapeType type, void* shape, vec3 pos, vec3 clr, float rv) {
 	return p;
 }
 
-inline ShapeGroup* group(ShapeType ta, int a, ShapeType tb, int b, OperationType op, float k) {
+inline ShapeGroup* group(int a, int b, OperationType op, float k) {
 	ShapeGroup* sg = malloc(sizeof(ShapeGroup));
 	sg->a = a;
 	sg->b = b;
-	sg->ta = ta;
-	sg->tb = tb;
 	sg->op = op;
 	sg->k = k;
 	return sg;
