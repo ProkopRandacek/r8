@@ -3,6 +3,7 @@ GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast
 GCC_LIB = -lm -ldl -lpthread -DUMKA_STATIC
 GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include
 
+MINGW = x86_64-w64-mingw32-gcc
 MINGW_FLAGS = $(GCC_FLAGS)
 MINGW_LIB = -lm -lopengl32 -lgdi32 -Wl,-Bstatic -lpthread -Llib/windows -DUMKA_STATIC -static
 
@@ -14,6 +15,7 @@ UMKA_LIB_WIN = submodules/libumka_static.a
 GLFW_ARGS = -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS=OFF -DGLFW_BUILD_DOCS=OFF -DGLFW_VULKAN_STATIC=OFF
 GLFW_LIB = submodules/glfw/src/libglfw3.a
 GLFW_LIB_WIN = submodules/libglfw3.a
+
 
 NAME = r8
 
@@ -36,7 +38,7 @@ all: build wbuild
 
 wbuild: deps clean shaders glad scripts
 	#Build the Windows binary
-	x86_64-w64-mingw32-gcc src/*.c $(UMKA_LIB_WIN) $(GLFW_LIB_WIN) -o build/${NAME}.exe $(GCC_INCLUDES) $(MINGW_FLAGS) $(MINGW_LIB) #-D_WIN32
+	$(MINGW) src/*.c $(UMKA_LIB_WIN) $(GLFW_LIB_WIN) -o build/${NAME}.exe $(GCC_INCLUDES) $(MINGW_FLAGS) $(MINGW_LIB) #-D_WIN32
 
 run: clean build
 	# Run the binary
