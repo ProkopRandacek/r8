@@ -56,6 +56,7 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 - pkg-config
 - unzip  
 - libx{randr, inerama, cursor, i}  
+- mingw if you want to compile for windows
 Arch:  
          `yay -S gcc make cmake unzip libxrandr       libxinerama       libxcursor       libxi       mono --needed`  
 Fedora:  
