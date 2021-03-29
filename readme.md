@@ -11,6 +11,7 @@
 - WASD + mouse controls
 - Checkerboard floor
 - Works real time
+- Works on Linux and Windows
 
 ## TODO:
 - Umka scripting
@@ -30,7 +31,6 @@
     - Needs render order rework
 - Read scene configuration from file?
   - Relative position for shapes in subgroups?
-- Compile for windows somehow?
 - Shape rotating
 - `#import`s seems to be messy
 
@@ -42,11 +42,10 @@ see [`archtecture.md`](architecture.md) for explanation what every file does.
 
 ## Build:
 `make` to (re)build the binary or `make run` to (re)build the binary and run it.  
-  
 Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum)
 
 ### Runtime deps:
-- None! Glfw and Umka sources are downloaded, compiled and included in the binary automatically when building ^^
+- None! All sources are downloaded, compiled and included in the binary automatically when building ^^
 
 ### Build deps:
 - make
@@ -56,7 +55,7 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 - pkg-config
 - unzip  
 - libx{randr, inerama, cursor, i}  
-- mingw if you want to compile for windows
+- mingw for compiling for windows (run as `make wbuild -e MINGW=mingw-gcc-binary-name-on-your-system`)
 Arch:  
          `yay -S gcc make cmake unzip libxrandr       libxinerama       libxcursor       libxi       mono --needed`  
 Fedora:  
