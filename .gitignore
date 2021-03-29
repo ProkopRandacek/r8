@@ -3,6 +3,6 @@ src/frag.h
 src/vert.h
 src/gl.c
 include
-fragFull.glsl
-vertFull.glsl
+full.frag
+full.vert
 r8_*.zip

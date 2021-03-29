@@ -1,4 +1,4 @@
-#version 330
+#version 460
 //uniform float time;
 uniform vec3 lightPos;
 uniform ivec2 resolution;

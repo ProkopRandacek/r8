@@ -58,21 +58,44 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 	//printf("%d, %d, %d, %d\n", key, scancode, action, mods);
 
-	if (scancode == 24 && action == 1) glfwSetWindowShouldClose(gl->window, GL_TRUE);
+#ifdef _WIN32
+	const int scQ = 16;
+	const int scW = 17;
+	const int scA = 30;
+	const int scS = 31;
+	const int scD = 32;
+	const int scE = 18;
+	const int scShift = 42;
+	const int scSpace = 57;
+	const int scP = 25;
+#else
+	const int scQ = 24;
+	const int scW = 25;
+	const int scA = 38;
+	const int scS = 39;
+	const int scD = 40;
+	const int scE = 26;
+	const int scShift = 50;
+	const int scSpace = 65;
+	const int scP = 33;
+#endif
 
-	else if (scancode == 25 && action == 1) wDown = 1;
-	else if (scancode == 38 && action == 1) aDown = 1;
-	else if (scancode == 39 && action == 1) sDown = 1;
-	else if (scancode == 40 && action == 1) dDown = 1;
-	else if (scancode == 50 && action == 1) shiftDown = 1;
-	else if (scancode == 65 && action == 1) spaceDown = 1;
+	if (scancode == scQ && action == 1) glfwSetWindowShouldClose(gl->window, GL_TRUE);
 
-	else if (scancode == 25 && action == 0) wDown = 0;
-	else if (scancode == 38 && action == 0) aDown = 0;
-	else if (scancode == 39 && action == 0) sDown = 0;
-	else if (scancode == 40 && action == 0) dDown = 0;
-	else if (scancode == 50 && action == 0) shiftDown = 0;
-	else if (scancode == 65 && action == 0) spaceDown = 0;
+	else if (scancode == scW && action == 1) wDown = 1;
+	else if (scancode == scA && action == 1) aDown = 1;
+	else if (scancode == scS && action == 1) sDown = 1;
+	else if (scancode == scD && action == 1) dDown = 1;
+	else if (scancode == scShift && action == 1) shiftDown = 1;
+	else if (scancode == scSpace && action == 1) spaceDown = 1;
 
-	else if (scancode == 33 && action == 1) screenshot();
+	else if (scancode == scW && action == 0) wDown = 0;
+	else if (scancode == scA && action == 0) aDown = 0;
+	else if (scancode == scS && action == 0) sDown = 0;
+	else if (scancode == scD && action == 0) dDown = 0;
+	else if (scancode == scShift && action == 0) shiftDown = 0;
+	else if (scancode == scSpace && action == 0) spaceDown = 0;
+
+	else if (scancode == scP && action == 1) screenshot();
 }
+
