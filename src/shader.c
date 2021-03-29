@@ -13,7 +13,7 @@ shader shd() {
 	shader s;
 	int success;
 	char infoLog[2048];
-	const char* vertShdSource = vertFull_glsl;
+	const char* vertShdSource = full_vert;
 	unsigned int vertShd = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vertShd, 1, &vertShdSource, NULL);
 	glCompileShader(vertShd);
@@ -26,7 +26,7 @@ shader shd() {
 
 	char l[61]; sprintf(l, "GL - SHADER - vertex shader compiled (%ld)", strlen(vertShdSource)); dprint(l);
 
-	const char* fragShdSource = fragFull_glsl;
+	const char* fragShdSource = full_frag;
 	unsigned int fragShd = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fragShd, 1, &fragShdSource, NULL);
 	glCompileShader(fragShd);

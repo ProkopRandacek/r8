@@ -19,6 +19,13 @@ extern int umkaStartFunc, umkaUpdateFunc;
 int main() {
 	printf("\n\n====================================\n\n\n");
 
+	printf("I think I'm running on ");
+#ifdef _WIN32
+	printf("windows\n");
+#else
+	printf("Linux\n");
+#endif
+
 	startTime(); // debug init
 	initOGL();
 	initUmka();
@@ -48,7 +55,7 @@ int main() {
 		frameTime += deltaTime;
 
 		if (frameTime > 1.0f) {
-			printf("FPS: %d, MSPF: %.4f\n", frameCount, 1000.0f / (float)frameCount);
+			//printf("FPS: %d, MSPF: %.4f\n", frameCount, 1000.0f / (float)frameCount);
 			frameCount = 0;
 			frameTime = 0.0f;
 		}

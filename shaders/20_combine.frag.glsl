@@ -21,21 +21,21 @@ float CombineD(float a, float b, int op, float k) {
 	float h=clamp(0.5+0.5*(b-a)/k,0,1);
 
 	return mix(mix(mix(mix(b,a,h)-k*h*(1-h),min(a,-b),step(3,op)),mix(mix(b,a,h)-k*h*(1-h),min(a,b),step(1,op)),step(3,op)),mix(a,b,k),step(3,op));
-	/*return mix(
-			mix(
-				mix(
-					mix(b,a,h)-k*h*(1-h), // 3 .. Mask
-					min(a,-b),            // 2 .. Cut
-					step(3, op)
-				   ),
-				mix(
-					mix(b,a,h)-k*h*(1-h), // 1 .. blend
-					min(a,b),             // 0 .. Normal
-					step(1, op)
-				   ),
-				step(3, op)
-			   ),
-			mix(a,b,k),                           // 4 .. Average
-			step(3,op)
-		  );*/
+//	return mix(
+//			mix(
+//				mix(
+//					mix(b,a,h)-k*h*(1-h), // 3 .. Mask
+//					min(a,-b),            // 2 .. Cut
+//					step(3, op)
+//				   ),
+//				mix(
+//					mix(b,a,h)-k*h*(1-h), // 1 .. blend
+//					min(a,b),             // 0 .. Normal
+//					step(1, op)
+//				   ),
+//				step(3, op)
+//			   ),
+//			mix(a,b,k),                           // 4 .. Average
+//			step(3,op)
+//		 );
 }
