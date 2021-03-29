@@ -1,4 +1,4 @@
-name: build
+name: shader-check
 
 on:
   push:
@@ -7,19 +7,20 @@ on:
     branches: [ main ]
 
 jobs:
-  linux:
+  fragment-shader:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: make
       run: |
-        sudo apt-get install gcc make unzip libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev mono-runtime
-        make build
-  windows:
+        cat shaders/*.frag.glsl > full.frag
+        ./glslangValidator full.frag
+        
+  vertex-shader:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - name: make
       run: |
-        sudo apt-get install gcc make unzip mono-runtime gcc-mingw-w64-x86-64
-        make wbuild
+        cat shaders/*.vert.glsl > full.vert
+        ./glslangValidator full.vert
