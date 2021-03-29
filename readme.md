@@ -52,9 +52,9 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 - mono (for running the shader minifier)
 - gcc
 - pkg-config
-- unzip  
-- libx{randr, inerama, cursor, i}  
-- mingw for compiling for windows (run as `make wbuild -e MINGW=mingw-gcc-binary-name-on-your-system`)
+- unzip
+- libx{randr, inerama, cursor, i}
+- mingw for compiling for windows (run as `make wbuild -e MINGW=mingw-gcc-binary-name-on-your-system`)  
 Arch:  
          `yay -S gcc make cmake unzip libxrandr       libxinerama       libxcursor       libxi       mono --needed`  
 Fedora:  
