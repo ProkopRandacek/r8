@@ -46,8 +46,8 @@ shaders: clean
 	# Minify shaders
 	cat $(wildcard shaders/*frag.glsl) > full.frag
 	cat $(wildcard shaders/*vert.glsl) > full.vert
-	./glslangValidator full.frag
-	./glslangValidator full.vert
+	#./glslangValidator full.frag
+	#./glslangValidator full.vert
 	mono glsl_minify.exe full.frag ${D} -o src/frag.h
 	mono glsl_minify.exe full.vert ${D} -o src/vert.h
 	rm fragFull.glsl vertFull.glsl -f
