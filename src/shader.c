@@ -6,8 +6,7 @@
 
 #include "shader.h"
 #include "debug.h"
-#include "vert.h" // generated on build. contain the shader source code string.
-#include "frag.h" // -//-
+#include "glsl.h" // generated on build. contain the shader source code string.
 
 unsigned int shd() {
 	unsigned int s;

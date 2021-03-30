@@ -56,7 +56,7 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (window != gl->window) return;
 	if (action == 2) return;
 
-	printf("%d, %d, %d, %d\n", key, scancode, action, mods);
+	//printf("%d, %d, %d, %d\n", key, scancode, action, mods);
 
 #ifdef _WIN32
 	const int scQ = 16;

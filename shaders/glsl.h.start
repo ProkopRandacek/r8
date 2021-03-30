@@ -1,0 +1,14 @@
+// vim: filetype=c
+
+#ifndef GLSL_H
+#define GLSL_G
+
+const char *full_vert = 
+"#version 330\n"
+"layout(location=0)in vec3 aPos;"
+"void main()"
+"{"
+"gl_Position=vec4(aPos,1.);"
+"}";
+
+const char *full_frag =

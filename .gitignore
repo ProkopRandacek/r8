@@ -1,6 +1,5 @@
 build
-src/frag.h
-src/vert.h
+src/glsl.h
 src/gl.c
 include
 full.frag
