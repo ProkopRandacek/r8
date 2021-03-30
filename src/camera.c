@@ -8,13 +8,13 @@ float lastAngle, lastH, lastW;
 
 extern int w, h; // these are from opengl.c. I need to change these for the screenshots to be the right size
 
-Camera cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
+Camera* cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
 	lastAngle = angle;
 	lastH = he;
 	lastW = wi;
 
-	Camera cam;
-	cam.pos = pos;
+	Camera* cam = malloc(sizeof(Camera));
+	cam->pos = pos;
 
 	vec3 sc = vAdd(pos, dir); // Screen center
 	// SIDE VIEW
@@ -50,13 +50,13 @@ Camera cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
 	vec3 right = vMultf(left, -1.0f);
 	vec3 down = vMultf(up, -1.0f);
 
-	cam.left = vNorm(left);
-	cam.forward = vNorm(dir);
+	cam->left = vNorm(left);
+	cam->forward = vNorm(dir);
 
-	cam.tl = vAdd(vAdd(up, left), sc);
-	cam.tr = vAdd(vAdd(up, right), sc);
-	cam.bl = vAdd(vAdd(down, left), sc);
-	cam.br = vAdd(vAdd(down, right), sc);
+	cam->tl = vAdd(vAdd(up, left), sc);
+	cam->tr = vAdd(vAdd(up, right), sc);
+	cam->bl = vAdd(vAdd(down, left), sc);
+	cam->br = vAdd(vAdd(down, right), sc);
 	return cam;
 }
 
@@ -75,4 +75,4 @@ void setWH(float iw, float ih) {
 	h = (int) (ih * 1000.0f);
 }
 
-Camera updateCamDir(vec3 pos, vec3 dir) { return cmr(pos, dir, lastAngle, lastH, lastW); }
+Camera* updateCamDir(vec3 pos, vec3 dir) { return cmr(pos, dir, lastAngle, lastH, lastW); }

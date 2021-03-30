@@ -161,6 +161,7 @@ void resize(GLFWwindow* window, int width, int height) {
 	setWH((float)width / k, (float)height / k);
 }
 
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 void APIENTRY glDebugOutput(GLenum source,
 		GLenum type,
 		unsigned int id,
@@ -183,6 +184,7 @@ void APIENTRY glDebugOutput(GLenum source,
 		case GL_DEBUG_SOURCE_THIRD_PARTY:     printf("Source: Third Party"); break;
 		case GL_DEBUG_SOURCE_APPLICATION:     printf("Source: Application"); break;
 		case GL_DEBUG_SOURCE_OTHER:           printf("Source: Other"); break;
+		default: break;
 	} printf("\n");
 
 	switch (type)
@@ -196,6 +198,7 @@ void APIENTRY glDebugOutput(GLenum source,
 		case GL_DEBUG_TYPE_PUSH_GROUP:          printf("Type: Push Group"); break;
 		case GL_DEBUG_TYPE_POP_GROUP:           printf("Type: Pop Group"); break;
 		case GL_DEBUG_TYPE_OTHER:               printf("Type: Other"); break;
+		default: break;
 	} printf("\n");
 
 	switch (severity)
@@ -204,6 +207,7 @@ void APIENTRY glDebugOutput(GLenum source,
 		case GL_DEBUG_SEVERITY_MEDIUM:       printf("Severity: medium"); break;
 		case GL_DEBUG_SEVERITY_LOW:          printf("Severity: low"); break;
 		case GL_DEBUG_SEVERITY_NOTIFICATION: printf("Severity: notification"); break;
+		default: break;
 	} printf("\n");
 	printf("\n");
 }
