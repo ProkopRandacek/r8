@@ -2,7 +2,7 @@
 
 ![2x2 demos](https://randacek.dev/p/demos2x2.png)  
 
-## Done:
+## Done
 - [Constructive solid geometry](https://en.wikipedia.org/wiki/Constructive_solid_geometry)
 - Soft shadows
 - Reflections
@@ -13,7 +13,7 @@
 - Works real time
 - Works on Linux and Windows
 
-## TODO:
+## TODO
 - [Umka](https://github.com/vtereshkov/umka-lang) scripting
   - Shape editing
   - Player input
@@ -34,18 +34,14 @@
 
 see [`archtecture.md`](architecture.md) for explanation what every file does.  
 
-## Demos
-[Transform demo](https://randacek.dev/p/transform_demo.mp4) - (Torus to Cube transition, rendering to file, Multiple object in scene)  
-[Move demo](https://randacek.dev/p/move_demo.mp4) - (WASD & Mouse movement, Multiple object in scene)  
-
-## Build:
+## Build
 `make` to (re)build the binary or `make run` to (re)build the binary and run it.  
 Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum)
 
-### Runtime deps:
+### Runtime deps
 - None! All sources are downloaded, compiled and included in the binary automatically when building ^^
 
-### Build deps:
+### Build deps
 - make
 - cmake (for glfw build, Linux build only)
 - mono (for running the shader minifier)
