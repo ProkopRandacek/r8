@@ -18,7 +18,7 @@ int shapeNum = 0;
 int groupNum = 0;
 int sceneChanged = 0;
 
-Camera cam;
+Camera* cam;
 
 void createScene() {
 	vec3 campos = v3(0.0f, 5.0f, -10.0f);
@@ -36,6 +36,7 @@ void sendCamera() {
 void freeObjects() {
 	for (int i = 0; i < shapeNum; i++) { free(shapes[i]->shape); free(shapes[i]); }
 	for (int i = 0; i < groupNum; i++) { free(groups[i]); }
+	free(cam);
 }
 
 void sendObjects() {
