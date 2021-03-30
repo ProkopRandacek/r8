@@ -54,11 +54,11 @@ shaders: clean
 	# Minify shaders
 	cat $(wildcard $(SHADER_DIR)/*frag.glsl) > full.frag
 	cat $(wildcard $(SHADER_DIR)/*vert.glsl) > full.vert
-	#./glslangValidator full.frag
-	#./glslangValidator full.vert
-	mono glsl_minify.exe full.frag ${D} -o src/frag.h
-	mono glsl_minify.exe full.vert ${D} -o src/vert.h
-	rm fragFull.glsl vertFull.glsl -f
+	./glslangValidator full.frag
+	./glslangValidator full.vert
+	cat shaders/glsl.h.start > src/glsl.h
+	while read line; do echo '"'"$$line"'\n"'; done < full.frag >> src/glsl.h
+	cat shaders/glsl.h.end >> src/glsl.h
 
 # I don't want to have 3rd praty source in plan text because github then shows random +20000 lines of code in statistics
 glad:
