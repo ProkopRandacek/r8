@@ -7,15 +7,14 @@
 - Soft shadows
 - Reflections
 - Sphere, Cube, Torus, Capped Cone and Cylinder rendering (I will add more as I need them)
-- Transforming between shapes over time
+- Blend, average, mask, cut and union shape operations
 - WASD + mouse controls
-- Checkerboard floor
+- Scene modeling from [Umka](https://github.com/vtereshkov/umka-lang)
 - Works real time
 - Works on Linux and Windows
 
 ## TODO:
-- Umka scripting
-  - Shape creating DONE
+- [Umka](https://github.com/vtereshkov/umka-lang) scripting
   - Shape editing
   - Player input
 - Merge `sceneapi.c` and `shapes.c` constructors
@@ -48,12 +47,11 @@ Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums
 
 ### Build deps:
 - make
-- cmake (for glfw build)
+- cmake (for glfw build, Linux build only)
 - mono (for running the shader minifier)
 - gcc
-- pkg-config
 - unzip
-- libx{randr, inerama, cursor, i}
+- libx{randr, inerama, cursor, i} (Linux build only)
 - mingw for compiling for windows (run as `make wbuild -e MINGW=mingw-gcc-binary-name-on-your-system`)  
 Arch:  
          `yay -S gcc make cmake unzip libxrandr       libxinerama       libxcursor       libxi       mono --needed`  
