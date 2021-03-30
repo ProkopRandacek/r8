@@ -10,7 +10,7 @@
 
 
 extern GL* gl;
-extern Camera cam;
+extern Camera* cam;
 extern int w, h;
 extern float deltaTime;
 
@@ -34,7 +34,7 @@ void updateInput() {
 	if (shiftDown) moveDir.y = -1.0f;
 	if (vMag(moveDir) > 0.0f) {
 		moveDir = vMultf(vNorm(moveDir), MOVE_SPEED * deltaTime);
-		updateCamPos(&cam, moveDir);
+		updateCamPos(cam, moveDir);
 	}
 
 	// mouse
@@ -47,7 +47,7 @@ void updateInput() {
 		sinf(y),
 		cosf(y) * cosf(x)
 	));
-	cam = updateCamDir(cam.pos, dir);
+	cam = updateCamDir(cam->pos, dir);
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -56,7 +56,7 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (window != gl->window) return;
 	if (action == 2) return;
 
-	//printf("%d, %d, %d, %d\n", key, scancode, action, mods);
+	printf("%d, %d, %d, %d\n", key, scancode, action, mods);
 
 #ifdef _WIN32
 	const int scQ = 16;
@@ -64,7 +64,7 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	const int scA = 30;
 	const int scS = 31;
 	const int scD = 32;
-	const int scE = 18;
+	//const int scE = 18;
 	const int scShift = 42;
 	const int scSpace = 57;
 	const int scP = 25;
@@ -74,7 +74,7 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	const int scA = 38;
 	const int scS = 39;
 	const int scD = 40;
-	const int scE = 26;
+	//const int scE = 26;
 	const int scShift = 50;
 	const int scSpace = 65;
 	const int scP = 33;

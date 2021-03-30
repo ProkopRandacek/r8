@@ -75,8 +75,7 @@ glfw:
 
 deps:
 	# Checking dependencies
-	if test ! -f submodules/glfw/CMakeLists.txt; then git submodule update --init --recursive; fi
-	if test ! -f submodules/umka/Makefile;       then git submodule update --init --recursive; fi
+	if test ! -f submodules/glfw/CMakeLists.txt || test ! -f submodules/umka/Makefile; then git submodule update --init --recursive; fi
 
 clean:
 	# Remove previous build files
