@@ -9,8 +9,8 @@
 #include "vert.h" // generated on build. contain the shader source code string.
 #include "frag.h" // -//-
 
-shader shd() {
-	shader s;
+unsigned int shd() {
+	unsigned int s;
 	int success;
 	char infoLog[2048];
 	const char* vertShdSource = full_vert;
@@ -39,13 +39,13 @@ shader shd() {
 
 	sprintf(l, "GL - SHADER - fragment shader compiled (%ld)", strlen(fragShdSource)); dprint(l);
 
-	s.ID = glCreateProgram();
-	glAttachShader(s.ID, vertShd);
-	glAttachShader(s.ID, fragShd);
-	glLinkProgram(s.ID);
-	glGetProgramiv(s.ID, GL_LINK_STATUS, &success);
+	s = glCreateProgram();
+	glAttachShader(s, vertShd);
+	glAttachShader(s, fragShd);
+	glLinkProgram(s);
+	glGetProgramiv(s, GL_LINK_STATUS, &success);
 	if (!success) {
-		glGetProgramInfoLog(s.ID, 512, NULL, infoLog);
+		glGetProgramInfoLog(s, 512, NULL, infoLog);
 		printf("Error while linking shaders\n%s\n", infoLog);
 		exit(1);
 	}
@@ -56,15 +56,13 @@ shader shd() {
 	return s;
 }
 
-void shdUse(shader* s) { glUseProgram(s->ID); }
-
 // single values
-void shdSetInt  (shader s, const char* name, int value)    { glUniform1i(glGetUniformLocation(s.ID, name), value); }
-void shdSetFloat(shader s, const char* name, float value)  { glUniform1f(glGetUniformLocation(s.ID, name), value); }
-void shdSetIVec2(shader s, const char* name, int x, int y) { glUniform2i(glGetUniformLocation(s.ID, name), x, y); }
+void shdSetInt  (unsigned int s, const char* name, int value)    { glUniform1i(glGetUniformLocation(s, name), value); }
+void shdSetFloat(unsigned int s, const char* name, float value)  { glUniform1f(glGetUniformLocation(s, name), value); }
+void shdSetIVec2(unsigned int s, const char* name, int x, int y) { glUniform2i(glGetUniformLocation(s, name), x, y); }
 
 // arrays
-void shdSetFloatArray(shader s, const char* name, int count, float* values) { glUniform1fv(glGetUniformLocation(s.ID, name), count, values); }
-void shdSetIntArray  (shader s, const char* name, int count, int*   values) { glUniform1iv(glGetUniformLocation(s.ID, name), count, values); }
-void shdSetVec3Array (shader s, const char* name, int count, float* values) { glUniform3fv(glGetUniformLocation(s.ID, name), count, values); }
-void shdSetVec4Array (shader s, const char* name, int count, float* values) { glUniform4fv(glGetUniformLocation(s.ID, name), count, values); }
+void shdSetFloatArray(unsigned int s, const char* name, int count, float* values) { glUniform1fv(glGetUniformLocation(s, name), count, values); }
+void shdSetIntArray  (unsigned int s, const char* name, int count, int*   values) { glUniform1iv(glGetUniformLocation(s, name), count, values); }
+void shdSetVec3Array (unsigned int s, const char* name, int count, float* values) { glUniform3fv(glGetUniformLocation(s, name), count, values); }
+void shdSetVec4Array (unsigned int s, const char* name, int count, float* values) { glUniform4fv(glGetUniformLocation(s, name), count, values); }

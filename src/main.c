@@ -7,7 +7,6 @@
 
 #include "debug.h"
 #include "main.h"
-#include "sceneio.h"
 #include "settings.h"
 #include "umka.h"
 
@@ -19,11 +18,13 @@ extern int umkaStartFunc, umkaUpdateFunc;
 int main() {
 	printf("\n\n====================================\n\n\n");
 
+	printf("build name: %s\n", BUILD_NAME);
+
 	printf("I think I'm running on ");
 #ifdef _WIN32
-	printf("windows\n");
+	printf("windows\n\n");
 #else
-	printf("Linux\n");
+	printf("Linux\n\n");
 #endif
 
 	startTime(); // debug init

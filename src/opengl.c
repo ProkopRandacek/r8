@@ -28,8 +28,11 @@ void initOGL() {
 	}
 	dprint("GL - glfw init");
 
+	char title[32] = "R8 - ";
+	strcat(title, BUILD_NAME);
+
 	// create window
-	gl->window = glfwCreateWindow(w, h, "Title", NULL, NULL);
+	gl->window = glfwCreateWindow(w, h, title, NULL, NULL);
 	if (!gl->window) {
 		glfwTerminate();
 		printf("window creation failed\n");
@@ -92,7 +95,7 @@ void initOGL() {
 
 	// create shader
 	gl->s = shd();
-	shdUse(&gl->s);
+	glUseProgram(gl->s);
 
 	dprint("GL - shaders done");
 
