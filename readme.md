@@ -36,7 +36,7 @@ see [`archtecture.md`](architecture.md) for explanation what every file does.
 
 ## Build
 `make` to (re)build the binary or `make run` to (re)build the binary and run it.  
-Compiled birary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum)
+Compiled binary can be found [here](https://randacek.dev/p/build.7z); [checksums](https://randacek.dev/p/build.7z.checksum)
 
 ### Runtime deps
 - None! All sources are downloaded, compiled and included in the binary automatically when building ^^
