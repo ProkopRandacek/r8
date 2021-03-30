@@ -1,4 +1,4 @@
-GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized
+GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized -Waggregate-return
 GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast
 GCC_LIB = -lm -ldl -lpthread -DUMKA_STATIC
 GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include
@@ -16,29 +16,35 @@ GLFW_ARGS = -DBUILD_SHARED_LIBS=OFF -DGLFW_BUILD_EXAMPLES=OFF -DGLFW_BUILD_TESTS
 GLFW_LIB = submodules/glfw/src/libglfw3.a
 GLFW_LIB_WIN = submodules/libglfw3.a
 
+#SHADER_DIR = test-shaders/color-gradient
+#SHADER_DIR = test-shaders/single-sphere
+SHADER_DIR = test-shaders/static-scene
+#SHADER_DIR = shaders/
 
 NAME = r8
+BUILD_NAME = $(shell git rev-parse --short HEAD)
+BUILD_TIME = $(shell date +'%H%M%S_%d%m%y')
 
 .PHONY: umka all glfw scripts
 
 build: deps clean shaders glad glfw umka scripts
 	# Build the Linux binary
-	gcc src/*.c $(UMKA_LIB) $(GLFW_LIB) -o build/${NAME} $(GCC_INCLUDES) $(GCC_FLAGS) $(GCC_LIB) #-Dlinux
+	gcc src/*.c $(UMKA_LIB) $(GLFW_LIB) -o build/${NAME} $(GCC_INCLUDES) $(GCC_FLAGS) $(GCC_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
 
 package:
 	# Making a package
-	zip -r ${NAME}_$(shell git rev-parse --short HEAD)_$(shell date +'%H%M%S_%d%m%y').zip build/
+	zip -r ${NAME}_$(BUILD_NAME)_$(BUILD_TIME).zip build/
 
 scripts:
 	# Copy scripts
 	mkdir build/scripts -p
 	cp scripts/* build/scripts/ -r
 
-all: build wbuild
-
 wbuild: deps clean shaders glad scripts
 	#Build the Windows binary
-	$(MINGW) src/*.c $(UMKA_LIB_WIN) $(GLFW_LIB_WIN) -o build/${NAME}.exe $(GCC_INCLUDES) $(MINGW_FLAGS) $(MINGW_LIB) #-D_WIN32
+	$(MINGW) src/*.c $(UMKA_LIB_WIN) $(GLFW_LIB_WIN) -o build/${NAME}.exe $(GCC_INCLUDES) $(MINGW_FLAGS) $(MINGW_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
+	echo ".\r8.exe > log.txt 2>&1" > build/run.bat
+	touch build/log.txt
 
 run: clean build
 	# Run the binary
@@ -46,8 +52,8 @@ run: clean build
 
 shaders: clean
 	# Minify shaders
-	cat $(wildcard shaders/*frag.glsl) > full.frag
-	cat $(wildcard shaders/*vert.glsl) > full.vert
+	cat $(wildcard $(SHADER_DIR)/*frag.glsl) > full.frag
+	cat $(wildcard $(SHADER_DIR)/*vert.glsl) > full.vert
 	#./glslangValidator full.frag
 	#./glslangValidator full.vert
 	mono glsl_minify.exe full.frag ${D} -o src/frag.h

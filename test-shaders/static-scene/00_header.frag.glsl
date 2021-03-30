@@ -2,7 +2,8 @@
 //uniform float time;
 uniform vec3 lightPos, cam[5];
 uniform ivec2 resolution;
-uniform int groupNum, shapeNum; // the number of created groups and shapes
+const int groupNum = 3;
+const int shapeNum = 4;
 
 #define maxShapeNum 4
 #define maxGroupNum 3
@@ -11,10 +12,16 @@ uniform int groupNum, shapeNum; // the number of created groups and shapes
 #define groupSize 4
 
 #define ones vec3(1.0)
-vec3 smol = vec3(0.02, 0.0, 0.0);
+vec2 smol = vec2(0.02, 0);
 
-uniform float rawShapes[shapeSize * maxShapeNum];
-uniform int   rawGroups[groupSize * maxGroupNum], shapeTypes[maxShapeNum];
+const float rawShapes[shapeSize * maxShapeNum] = float[](
+		0.50, 2.10, 0.50, 0.70, 0.00, 0.70, 0.00, 0.00, 0.00, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00, 0.00,
+		0.50, 1.90, 0.50, 0.70, 0.00, 0.70, 0.00, 0.00, 0.00, 0.25, 0.09, 0.00, 0.00, 0.00, 0.00, 0.00,
+		0.50, 2.20, 0.50, 0.70, 0.00, 0.70, 0.50, 1.30, 0.50, 0.17, 0.30, 0.00, 0.00, 0.00, 0.00, 0.00,
+		0.50, 1.30, 0.50, 0.70, 0.00, 0.70, 0.50, 1.00, 0.50, 0.40, 0.40, 0.00, 0.00, 0.00, 0.00, 0.00
+		);
+const int rawGroups[groupSize * maxGroupNum] = int[]( 0, 1, 0, 0, 2, 3, 1, 200, 4, 5, 1, 19);
+const int shapeTypes[maxShapeNum] = int[]( 2, 5, 12, 12);
 
 out vec4 outColor;
 
