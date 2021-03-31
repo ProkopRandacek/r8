@@ -7,7 +7,7 @@
 #define SUN_SIZE 1.0
 
 // 3D checkerboard pattern for coloring object. RN accesible only if hardcoded (like floor in mapWorld())
-#define checkerboard(p) mix(vec4(0.5, 0.5, 0.5, 0), vec4(0.7, 0.7, 0.7, 0), max(sign(mod(dot(floor(p), ones), 2.0)), 0.0))
+#define checkerboard(p) mix(vec4(0.5, 0.5, 0.5, 1), vec4(0.7, 0.7, 0.7, 0), max(sign(mod(dot(floor(p), ones), 2.0)), 0.0))
 
 // distance to nearest object
 map mapWorld(vec3 pos) {

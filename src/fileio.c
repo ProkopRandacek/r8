@@ -1,6 +1,6 @@
 #include "fileio.h"
 
-void writeBMP(const char* filename, char* pixels, unsigned int w, unsigned int h) {
+void writeBMP(const char* filename, float* pixels, unsigned int w, unsigned int h) {
 	unsigned int header[14];
 	unsigned int i, j;
 	FILE* fp = fopen(filename, "wb");
@@ -20,9 +20,9 @@ void writeBMP(const char* filename, char* pixels, unsigned int w, unsigned int h
 	for (i = 0; i < h; i++) {
 		for (j = 0; j < w; j++) {
 			unsigned int index = w * i + j;
-			unsigned char R = (unsigned char)pixels[index * 3 + 0];
-			unsigned char G = (unsigned char)pixels[index * 3 + 1];
-			unsigned char B = (unsigned char)pixels[index * 3 + 2];
+			unsigned char R = (unsigned char)(pixels[index * 3 + 0] * 256.0f);
+			unsigned char G = (unsigned char)(pixels[index * 3 + 1] * 256.0f);
+			unsigned char B = (unsigned char)(pixels[index * 3 + 2] * 256.0f);
 			fwrite(&B, 1, 1, fp);
 			fwrite(&G, 1, 1, fp);
 			fwrite(&R, 1, 1, fp);
