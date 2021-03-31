@@ -121,7 +121,7 @@ void umCreateCylinder(UmkaStackSlot* P, UmkaStackSlot* R) {
 
 	float rd = (float)P[0].realVal;
 
-	int i = createCapsule(v3(x, y, z), v3(r, g, b), rv, v3(ex, ey, ez), rd);
+	int i = createCylinder(v3(x, y, z), v3(r, g, b), rv, v3(ex, ey, ez), rd);
 
 	R[0].intVal = i;
 }
