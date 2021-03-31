@@ -1,7 +1,8 @@
 #define STEPSNUM 512
 #define COLLISION_THRESHOLD 0.001 // COLLISION_THRESHOLD has HUGE impact on FPS
+#define SHADOW_COLLISION_THRESHOLD 0.001
 #define BACK_STEP COLLISION_THRESHOLD * 100
-#define MAX_TRACE_DIST 15.0
+#define MAX_TRACE_DIST 8.0
 #define BOUNCES 1
 #define SUN_SIZE 1.0
 
@@ -16,18 +17,18 @@ map mapWorld(vec3 pos) {
 	vec4  localClr  = d2GroupsC[groupNum - 1];
 	float localDist = d2GroupsD[groupNum - 1];
 
-	return map(localClr, localDist);
+	//return map(localClr, localDist);
 
 	// combine with floor and return
 	return Combine(
 			localDist,
-			d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0),
+			d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 0.0, 4.0), 0.0),
 			localClr,
 			checkerboard(pos),
 			0, 0);
 }
 
-// JUST distance to nearest object. no color. used for calculateNormal who calls mapWorld 6 times and doesnt need the color
+// just distance to nearest object. no color. used for calculateNormal who calls mapWorld 6 times and doesnt need the color
 float mapWorldD(vec3 pos) {
 	float localDist = MAX_TRACE_DIST;
 
@@ -37,10 +38,10 @@ float mapWorldD(vec3 pos) {
 
 	localDist = d2GroupsD[groupNum - 1];
 
-	return localDist;
+	//return localDist;
 
 	// Combine with floor and return
-	return CombineD(localDist, d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0), 0, 0.0);
+	return CombineD(localDist, d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 0.0, 4.0), 0.0), 0, 0.0);
 }
 
 // calculate normal from given point on a surface
@@ -53,18 +54,17 @@ vec3 calculateNormal(vec3 p) {
 }
 
 // casts a ray
-rayHit rayMarch(vec3 rayOrigin, vec3 rayDir) {
-	float distTraveled = 0;
-	vec3 currentPos;
-	map hit;
+rayHit rayMarch(vec3 ro, vec3 rd) {
+	float t = 0;
+	vec3 pos;
 
 	for (int i = 0; i < STEPSNUM; i++) {
-		currentPos = rayOrigin + distTraveled * rayDir;
-		hit = mapWorld(currentPos);
-		distTraveled += hit.d;
+		pos = ro + t * rd;
+		map hit = mapWorld(pos);
+		t += hit.d;
 
-		if (hit.d < COLLISION_THRESHOLD)   { return rayHit(vec4(currentPos, 1), hit.clr               ); }
-		if (distTraveled > MAX_TRACE_DIST) { return rayHit(vec4(0)            , vec4(0.1, 0.1, 0.1, 0)); }
+		if (hit.d < COLLISION_THRESHOLD) { return rayHit(vec4(pos, 1), hit.clr               ); }
+		if (t > MAX_TRACE_DIST)          { return rayHit(vec4(0)     , vec4(0.1, 0.1, 0.1, 0)); }
 	}
 
 	return rayHit(vec4(0), vec4(1, 1, 1, 0)); // run out of stepsnum
@@ -72,15 +72,20 @@ rayHit rayMarch(vec3 rayOrigin, vec3 rayDir) {
 
 // light version of rayMarch that cares ony about the shadow info
 float rayMarchShadow(vec3 ro, vec3 rd) {
-	float t, shadow = 1;
+	float res = 1;
+	float ph = 1e20;
+	float t = 0;
 	for (int i = 0; i < STEPSNUM; i++) {
-		vec3 pos = ro + t * rd;
-		float h = mapWorldD(pos);
-		shadow = min(shadow, h / (t * SUN_SIZE));
+		float h = mapWorldD(ro + rd * t);
+		if (h < SHADOW_COLLISION_THRESHOLD) return 0.0;
+		float y = h*h/(2.0*ph);
+		float d = sqrt(h*h-y*y);
+		res = min(res, d / max(0, t-y) * SUN_SIZE);
+		ph = h;
 		t += h;
-		if (h < COLLISION_THRESHOLD || t > MAX_TRACE_DIST) break;
+		if (t > MAX_TRACE_DIST) return res;
 	}
-	return shadow;
+	return res;
 }
 
 void main() {

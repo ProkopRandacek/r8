@@ -52,8 +52,8 @@ shaders: clean
 	# Minify shaders
 	cat $(wildcard $(SHADER_DIR)/*frag.glsl) > full.frag
 	cat $(wildcard $(SHADER_DIR)/*vert.glsl) > full.vert
-	./glslangValidator full.frag
-	./glslangValidator full.vert
+	#./glslangValidator full.frag
+	#./glslangValidator full.vert
 	cat shaders/glsl.h.start > src/glsl.h
 	while read line; do echo '"'"$$line"'\n"'; done < full.frag >> src/glsl.h
 	cat shaders/glsl.h.end >> src/glsl.h
