@@ -13,13 +13,12 @@ int w = 1000;
 int h = 1000;
 
 GL* gl;
-char* pixels;
+float* pixels;
 unsigned int frameCount = 0;
 
 void initOGL() {
 	dprint("GL START");
 	gl = malloc(sizeof(GL));
-	pixels = malloc((long unsigned int)(w * h * 3));
 
 	// glfw init
 	if (!glfwInit()) {
@@ -128,7 +127,7 @@ void renderOGL() {
 void screenshot() {
 	frameCount++;
 
-	glReadPixels(0, 0, w, h, GL_RGB, GL_UNSIGNED_BYTE, pixels);
+	pixels = malloc(sizeof(float) * (long unsigned int)(w * h * 3));
 
 	char fname[15];
 	sprintf(fname, "%04d", frameCount);
@@ -136,7 +135,11 @@ void screenshot() {
 
 	printf("taking a screenshot \"%s\", %dx%d\n", fname, w, h);
 
+	glReadPixels(0, 0, w, h, GL_RGB, GL_FLOAT, pixels);
+
 	writeBMP(fname, pixels, (unsigned int)w, (unsigned int)h);
+
+	free(pixels);
 }
 
 void exitOGL() {
