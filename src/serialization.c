@@ -92,9 +92,9 @@ void shapes2floats(float *f, unsigned int num, Shape* shp[num]) {
 void shapes2types(int *f, unsigned int num, Shape* shp[num]) {
 	for (unsigned int i = 0; i < num; i++) {
 		f[i] = (int)shp[i]->type;
-		printf("%d, ", f[i]);
+		//printf("%d, ", f[i]);
 	}
-	printf("\n");
+	//printf("\n");
 }
 
 void cam2floats(Camera* cam, float* f) {

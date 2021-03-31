@@ -8,18 +8,27 @@ import (
 )
 
 fn start() {
-	head := r8.CreateSphere(0.5, 2.1, 0.5, 0.7, 0.0, 0.7, 0.0, 0.3)
+	/*head := r8.CreateSphere(0.5, 2.1, 0.5, 0.7, 0.0, 0.7, 0.0, 0.3)
 	ring := r8.CreateTorus (0.5, 1.9, 0.5, 0.7, 0.0, 0.7, 0.0, 0.25, 0.09)
 	body := r8.CreateCCone (0.5, 2.2, 0.5, 0.7, 0.0, 0.7, 0.0, 0.5, 1.3, 0.5, 0.17, 0.3)
 	base := r8.CreateCCone (0.5, 1.3, 0.5, 0.7, 0.0, 0.7, 0.0, 0.5, 1.0, 0.5, 0.40, 0.4)
 
 	top    := r8.CreateGroup(head, ring,  0, 0.0)
-	bottom := r8.CreateGroup(body, base,  1, 0.2)
-	root   := r8.CreateGroup(top, bottom, 1, 0.02)
+	bottom := r8.CreateGroup(base, body,  0, 0.0)
+	root   := r8.CreateGroup(top, bottom, 0, 0.0)*/
+	crossX := r8.CreateCylinder(-1,  0,  0,   0, 1, 0, 0,   1, 0, 0,   0.5)
+	crossY := r8.CreateCylinder( 0, -1,  0,   0, 1, 0, 0,   0, 1, 0,   0.5)
+	crossZ := r8.CreateCylinder( 0,  0, -1,   0, 1, 0, 0,   0, 0, 1,   0.5)
+
+	cube   := r8.CreateCube  (0, 0, 0,   0, 1, 1, 0,   0.9, 0.9, 0.9)
+	sphere := r8.CreateSphere(0, 0, 0,   0, 0, 1, 0,   1.2)
+
+	crossXY  := r8.CreateGroup(crossX , crossY, 0, 0)
+	crossXYZ := r8.CreateGroup(crossXY, crossZ, 0, 0)
+
+	a    := r8.CreateGroup(sphere, cube, 3, 0)
+	root := r8.CreateGroup(a, crossXYZ, 2, 0)
 }
 
-fn update() {
-	
-}
-
+fn update() { }
 fn main() { }

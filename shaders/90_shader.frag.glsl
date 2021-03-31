@@ -1,12 +1,12 @@
 #define STEPSNUM 512
 #define COLLISION_THRESHOLD 0.001 // COLLISION_THRESHOLD has HUGE impact on FPS
-#define BACK_STEP COLLISION_THRESHOLD * 20
+#define BACK_STEP COLLISION_THRESHOLD * 100
 #define MAX_TRACE_DIST 15.0
 #define BOUNCES 1
 #define SUN_SIZE 1.0
 
 // 3D checkerboard pattern for coloring object. RN accesible only if hardcoded (like floor in mapWorld())
-#define checkerboard(p) mix(vec4(0.5, 0.5, 0.5, 1), vec4(0.7, 0.7, 0.7, 0), max(sign(mod(dot(floor(p), ones), 2.0)), 0.0))
+#define checkerboard(p) mix(vec4(0.5, 0.5, 0.5, 0), vec4(0.7, 0.7, 0.7, 0), max(sign(mod(dot(floor(p), ones), 2.0)), 0.0))
 
 // distance to nearest object
 map mapWorld(vec3 pos) {
@@ -16,16 +16,28 @@ map mapWorld(vec3 pos) {
 	vec4  localClr  = d2GroupsC[groupNum - 1];
 	float localDist = d2GroupsD[groupNum - 1];
 
+	return map(localClr, localDist);
+
 	// combine with floor and return
-	return Combine(localDist, d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0), localClr, checkerboard(pos), 0, 0.0);
+	return Combine(
+			localDist,
+			d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0),
+			localClr,
+			checkerboard(pos),
+			0, 0);
 }
 
 // JUST distance to nearest object. no color. used for calculateNormal who calls mapWorld 6 times and doesnt need the color
 float mapWorldD(vec3 pos) {
-	for (int i = 0; i < shapeNum; i++) { d2Shape (pos, sT(i), i); }
-	for (int i = 0; i < groupNum; i++) { d2GroupD(pos,        i); }
+	float localDist = MAX_TRACE_DIST;
 
-	float localDist = d2GroupsD[groupNum - 1];
+	for (int i = 0; i < shapeNum; i++) { d2Shape (pos, sT(i), i); /*localDist = min(localDist, abs(d2Shapes[i]));*/ }
+	for (int i = 0; i < groupNum; i++) { d2GroupD(pos,        i); }
+	// I can approximate the scene by using min to connect all shapes instead of calculating groups
+
+	localDist = d2GroupsD[groupNum - 1];
+
+	return localDist;
 
 	// Combine with floor and return
 	return CombineD(localDist, d2Cube(pos, vec3(0.0, -1.0, 0.0), vec3(4.0, 2.0, 4.0), 0.0), 0, 0.0);
@@ -112,4 +124,4 @@ void main() {
 		outColor = vec4(finalClr, 1.0);
 	}
 }
-// */
+

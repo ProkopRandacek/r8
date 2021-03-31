@@ -16,11 +16,7 @@ float deltaTime = 0.0f;
 extern int umkaStartFunc, umkaUpdateFunc;
 
 int main() {
-	printf("\n\n====================================\n\n\n");
-
-	printf("build name: %s\n", BUILD_NAME);
-
-	printf("I think I'm running on ");
+	printf("\n\n====================================\n\n\nbuild name: %s\nI think I'm runnig on ", BUILD_NAME);
 #ifdef _WIN32
 	printf("windows\n\n");
 #else

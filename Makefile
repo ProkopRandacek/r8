@@ -1,13 +1,11 @@
 GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized -Waggregate-return
-GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast
+GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast #-g3
 GCC_LIB = -lm -ldl -lpthread -DUMKA_STATIC
 GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include
 
 MINGW = x86_64-w64-mingw32-gcc
 MINGW_FLAGS = $(GCC_FLAGS)
 MINGW_LIB = -lm -lopengl32 -lgdi32 -Wl,-Bstatic -lpthread -Llib/windows -DUMKA_STATIC -static
-
-D = --preserve-externals --smoothstep #--no-renaming
 
 UMKA_LIB = submodules/umka/build/libumka.a
 UMKA_LIB_WIN = submodules/libumka_static.a
@@ -18,8 +16,8 @@ GLFW_LIB_WIN = submodules/libglfw3.a
 
 #SHADER_DIR = test-shaders/color-gradient
 #SHADER_DIR = test-shaders/single-sphere
-SHADER_DIR = test-shaders/static-scene
-#SHADER_DIR = shaders/
+#SHADER_DIR = test-shaders/static-scene
+SHADER_DIR = shaders/
 
 NAME = r8
 BUILD_NAME = $(shell git rev-parse --short HEAD)

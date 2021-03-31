@@ -1,20 +1,23 @@
 #version 330
-//uniform float time;
-uniform vec3 lightPos, cam[5];
-uniform ivec2 resolution;
-uniform int groupNum, shapeNum; // the number of created groups and shapes
 
-#define maxShapeNum 4
-#define maxGroupNum 3
+// when editing these you have to edit it in settings.h too!!!!!
+#define maxShapeNum 10
+#define maxGroupNum 10
 
 #define shapeSize 16
 #define groupSize 4
 
-#define ones vec3(1.0)
-vec3 smol = vec3(0.02, 0.0, 0.0);
-
+uniform int groupNum, shapeNum, rawGroups[groupSize * maxGroupNum], shapeTypes[maxShapeNum];
 uniform float rawShapes[shapeSize * maxShapeNum];
-uniform int   rawGroups[groupSize * maxGroupNum], shapeTypes[maxShapeNum];
+uniform ivec2 resolution;
+uniform vec3 lightPos, cam[5];
+
+vec4  d2GroupsC[maxGroupNum]; // colors
+float d2GroupsD[maxGroupNum]; // distances
+float d2Shapes[maxShapeNum];
+
+#define ones vec3(1.0)
+const vec3 smol = vec3(0.02, 0.0, 0.0);
 
 out vec4 outColor;
 
@@ -27,10 +30,6 @@ struct map {
 	vec4 clr;
 	float d;
 };
-
-vec4  d2GroupsC[maxGroupNum]; // colors
-float d2GroupsD[maxGroupNum]; // distances
-float d2Shapes[maxShapeNum];  // distances to shapes
 
 // Functions to find information in groups array
 #define gF(i, o) rawGroups[groupSize * i + o] // returns float on position `o` from group on index `i`
