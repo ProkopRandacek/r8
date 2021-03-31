@@ -52,7 +52,7 @@ int main() {
 		frameTime += deltaTime;
 
 		if (frameTime > 1.0f) {
-			//printf("FPS: %d, MSPF: %.4f\n", frameCount, 1000.0f / (float)frameCount);
+			printf("FPS: %d, MSPF: %.4f\n", frameCount, 1000.0f / (float)frameCount);
 			frameCount = 0;
 			frameTime = 0.0f;
 		}

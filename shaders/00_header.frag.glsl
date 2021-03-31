@@ -13,8 +13,7 @@ uniform ivec2 resolution;
 uniform vec3 lightPos, cam[5];
 
 vec4  d2GroupsC[maxGroupNum]; // colors
-float d2GroupsD[maxGroupNum]; // distances
-float d2Shapes[maxShapeNum];
+float d2GroupsD[maxGroupNum], d2Shapes[maxShapeNum];
 
 #define ones vec3(1.0)
 const vec3 smol = vec3(0.02, 0.0, 0.0);

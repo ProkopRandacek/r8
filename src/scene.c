@@ -54,8 +54,8 @@ void sendObjects() {
 
 	shdSetInt(gl->s, "shapeNum", shapeNum);
 	shdSetInt(gl->s, "groupNum", groupNum);
-	printf("shapeNum: %d\n", shapeNum);
-	printf("groupNum: %d\n", groupNum);
+	/*printf("shapeNum: %d\n", shapeNum);
+	printf("groupNum: %d\n", groupNum);*/
 }
 
 void updateScene() {
