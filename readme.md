@@ -17,8 +17,8 @@
 - [Umka](https://github.com/vtereshkov/umka-lang) scripting
   - Shape editing
   - Player input
-- Merge `sceneapi.c` and `shapes.c` constructors
-- Update architecture.md
+- Shader code generation at runtime as a part of scene creation
+  - Scene = shader. This would simplify the shader complexity and improve performance.
 - Modifiers for shapes (twist, round edges, displacement, ...)
 - Inline functions (there are probably some funcs that should be inlined)
 - Upgrade light source objects
