@@ -1,20 +1,17 @@
 #include "bindings.h"
-#include "vector.h"
-#include "sceneapi.h"
+#include "../vector.h"
+#include "../scene/sceneapi.h"
 
 void umkaBind(void* umka) {
 	umkaAddFunc(umka, "SetShpClr", &umSetShapeClr);
-
 	umkaAddFunc(umka, "CreateSphere",   &umCreateSphere);
 	umkaAddFunc(umka, "CreateCube",     &umCreateCube);
 	umkaAddFunc(umka, "CreateTorus",    &umCreateTorus);
 	umkaAddFunc(umka, "CreateCapsule",  &umCreateCapsule);
 	umkaAddFunc(umka, "CreateCylinder", &umCreateCylinder);
 	umkaAddFunc(umka, "CreateCCone",    &umCreateCCone);
-
 	umkaAddFunc(umka, "CreateGroup",    &umCreateGroup);
 }
-
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 void umSetShapeClr(UmkaStackSlot* P, UmkaStackSlot* R) {
@@ -150,8 +147,8 @@ void umCreateCCone(UmkaStackSlot* P, UmkaStackSlot* R) {
 }
 
 void umCreateGroup(UmkaStackSlot* P, UmkaStackSlot* R) {
-	int   a = (int)P[3].intVal;
-	int   b = (int)P[2].intVal;
+	int a = (int)P[3].intVal;
+	int b = (int)P[2].intVal;
 	OperationType op = (OperationType)P[1].intVal;
 	float k = (float)P[0].realVal;
 
@@ -159,3 +156,4 @@ void umCreateGroup(UmkaStackSlot* P, UmkaStackSlot* R) {
 
 	R[0].intVal = i;
 }
+

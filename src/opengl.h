@@ -7,6 +7,7 @@
 
 #include "shader.h"
 #include "fileio.h"
+#include "scene/shaderGen.h"
 
 typedef struct GL {
 	unsigned int VBO;
@@ -17,7 +18,7 @@ typedef struct GL {
 } GL;
 
 // init GL stuff
-void initOGL(void);
+void initOGL(Scene s);
 
 // render fragment shader basically
 void renderOGL(void);

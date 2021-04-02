@@ -1,5 +1,5 @@
 // vim: filetype=c
-unsigned int shd(void);
+unsigned int shd(const char* vertShdSource, const char* fragShdSource);
 void shdSetInt(unsigned int s, const char* name, int value);
 void shdSetFloat(unsigned int s, const char* name, float value);
 void shdSetIVec2(unsigned int s, const char* name, int x, int y);

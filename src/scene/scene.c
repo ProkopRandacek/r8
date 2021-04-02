@@ -3,10 +3,10 @@
 #include <math.h>
 #include <time.h>
 
-#include "opengl.h"
+#include "../opengl.h"
 #include "scene.h"
 #include "serialization.h"
-#include "settings.h"
+#include "../settings.h"
 #include "sceneapi.h"
 
 extern GL* gl;
@@ -54,8 +54,6 @@ void sendObjects() {
 
 	shdSetInt(gl->s, "shapeNum", shapeNum);
 	shdSetInt(gl->s, "groupNum", groupNum);
-	/*printf("shapeNum: %d\n", shapeNum);
-	printf("groupNum: %d\n", groupNum);*/
 }
 
 void updateScene() {
@@ -63,4 +61,3 @@ void updateScene() {
 	if (sceneChanged == 1) sendObjects();
 	sceneChanged = 0;
 }
-

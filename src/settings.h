@@ -8,7 +8,6 @@
 #define MOUSE_SENS 0.12f
 #define MOVE_SPEED 5.0f
 
-// when changing these you have to change them in shaders/00_header.frag.glsl too!!!
 #define MAX_SHAPE_NUM 10
 #define MAX_GROUP_NUM 10
 

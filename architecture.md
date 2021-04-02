@@ -2,36 +2,30 @@
 
 ## File hierarchy and short description
 ```
-main.c                     - Code initialization, main render loop.
- |
- +-> opengl.c              - All interactions with OpenGL are here.
- |    |
- |    +-> shader.c         - Shader reading, compiling, uniforms functions.
- |
- +-> fileio.c              - Reads pixel bytes from memory and dumps them into a bmp file
- |
- +-> input.c               - Input handling
- |
- +-> vector.c              - Vector untils
- |
- +-> umka.c                - Umka initialization.
- |
- +-> debug.c               - Debug prints.
- |
- +-> fileio.c              - Writting pixel array as BMP file. Used to taking screenshots
- |
- +-> scene.c               - Sending scene to the gpu
-      |
-      +-> sceneapi.c       - Functions available to Umka
-      |    |
-      |    +-> bindings.c  - Binding the sceneapi.c to umka functions
-      |
-      +-> camera.c         - Calculate edge rays from camera position and facing direction. Edge rays are
-      |                    - used to interpolate between, when calculating what direction to cast the rays in.
-      |
-      +-> shapes.c         - Definitions of shapes and shape functions.
-      |
-      +-> serialization.c  - Exporting structs to float / int arrays. Arrays are then send to uniforms in the shader
+src
+├── scene              - Code related to scenes and object in them
+│  ├── camera.c        - Calculate edge rays from camera position and facing direction. Edge rays are
+│  │                   - used to interpolate between, when calculating what direction to cast the rays in.
+│  ├── scene.c         - Main scene handling
+│  ├── sceneapi.c      - Functions available to Umka
+│  ├── serialization.c - Exporting structs to float / int arrays. Arrays are then send to uniforms in the shader
+│  ├── shaderGen.c     - Generates shader source from scene settings
+│  ├── shapes.c        - Definitions of shapes and shape functions.
+│  ├── SDFs.h          - GLSL SDF functions
+│  ├── general.h       - General GLSL code
+│  ├── head.h          - GLSL header code
+│  └── rayMarch.h      - GLSL ray machring code
+├── umka               - Umka related code
+│  ├── bindings.c      - Binding sceneapi.c to Umka functions
+│  └── umka.c          - Umka init
+├── debug.c            - Debug prints
+├── fileio.c           - Takes pixel array and writes it as a BMP file to disk. Used as a screenshot
+├── gl.c               - GLAD stuff idk
+├── input.c            - Input handling
+├── main.c             - Main
+├── opengl.c           - All interactions with GL are here
+├── settings.h         - Some global settings
+└── shader.c           - Shader compiling
 ```
 
 ## Shapes

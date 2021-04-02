@@ -16,17 +16,19 @@ fn start() {
 	top    := r8.CreateGroup(head, ring,  0, 0.0)
 	bottom := r8.CreateGroup(base, body,  0, 0.0)
 	root   := r8.CreateGroup(top, bottom, 0, 0.0)*/
-	crossX := r8.CreateCylinder(-1,  0,  0,   0, 1, 0, 0,   1, 0, 0,   0.5)
-	crossY := r8.CreateCylinder( 0, -1,  0,   0, 1, 0, 0,   0, 1, 0,   0.5)
-	crossZ := r8.CreateCylinder( 0,  0, -1,   0, 1, 0, 0,   0, 0, 1,   0.5)
 
 	cube   := r8.CreateCube  (0, 0, 0,   0, 1, 1, 0,   0.9, 0.9, 0.9)
 	sphere := r8.CreateSphere(0, 0, 0,   0, 0, 1, 0,   1.2)
 
+	crossX := r8.CreateCylinder(-1,  0,  0,   0, 1, 0, 0,   1, 0, 0,   0.5)
+	crossY := r8.CreateCylinder( 0, -1,  0,   0, 1, 0, 0,   0, 1, 0,   0.5)
+	crossZ := r8.CreateCylinder( 0,  0, -1,   0, 1, 0, 0,   0, 0, 1,   0.5)
+
+	a    := r8.CreateGroup(sphere, cube    , 3, 0)
+
 	crossXY  := r8.CreateGroup(crossX , crossY, 0, 0)
 	crossXYZ := r8.CreateGroup(crossXY, crossZ, 0, 0)
 
-	a    := r8.CreateGroup(sphere, cube    , 3, 0)
 	root := r8.CreateGroup(a     , crossXYZ, 2, 0)
 }
 

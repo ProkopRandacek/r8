@@ -1,6 +1,6 @@
 // vim: filetype=c
 #include "opengl.h"
-#include "scene.h"
+#include "scene/scene.h"
 #include "input.h"
 
 

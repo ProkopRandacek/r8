@@ -8,7 +8,7 @@
 #include "debug.h"
 #include "main.h"
 #include "settings.h"
-#include "umka.h"
+#include "umka/umka.h"
 
 extern GL* gl;
 extern void* umka;
@@ -23,8 +23,21 @@ int main() {
 	printf("Linux\n\n");
 #endif
 
+	Scene s;
+	s.shapeMask = CUBE_MASK | SPHERE_MASK | CYLINDER_MASK;
+	s.maxShapeNum = MAX_SHAPE_NUM;
+	s.maxGroupNum = MAX_GROUP_NUM;
+	s.stepsNum = 256;
+	s.bounces = 1;
+	s.epsilon = 0.02f;
+	s.collisionThreshold = 0.001f;
+	s.shadowCollisionThreshold = 0.001f;
+	s.backStepK = 100.0f;
+	s.maxTraceDist = 10.0f;
+	s.sunSize = 1.0f;
+
 	startTime(); // debug init
-	initOGL();
+	initOGL(s);
 	initUmka();
 	createScene();
 
