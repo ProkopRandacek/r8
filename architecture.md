@@ -20,7 +20,6 @@ src
 │  └── umka.c          - Umka init
 ├── debug.c            - Debug prints
 ├── fileio.c           - Takes pixel array and writes it as a BMP file to disk. Used as a screenshot
-├── gl.c               - GLAD stuff idk
 ├── input.c            - Input handling
 ├── main.c             - Main
 ├── opengl.c           - All interactions with GL are here

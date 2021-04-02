@@ -24,12 +24,12 @@ fn start() {
 	crossY := r8.CreateCylinder( 0, -1,  0,   0, 1, 0, 0,   0, 1, 0,   0.5)
 	crossZ := r8.CreateCylinder( 0,  0, -1,   0, 1, 0, 0,   0, 0, 1,   0.5)
 
-	a    := r8.CreateGroup(sphere, cube    , 3, 0)
-
 	crossXY  := r8.CreateGroup(crossX , crossY, 0, 0)
 	crossXYZ := r8.CreateGroup(crossXY, crossZ, 0, 0)
 
-	root := r8.CreateGroup(a     , crossXYZ, 2, 0)
+	a := r8.CreateGroup(sphere, cube, 3, 0)
+
+	root := r8.CreateGroup(a, crossXYZ, 2, 0)
 }
 
 fn update() { }
