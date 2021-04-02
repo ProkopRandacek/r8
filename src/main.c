@@ -24,7 +24,7 @@ int main() {
 #endif
 
 	Scene s;
-	s.shapeMask = CUBE_MASK | SPHERE_MASK | CYLINDER_MASK;
+	s.shapeMask = CUBE_MASK | SPHERE_MASK | CYLINDER_MASK | TORUS_MASK | CCONE_MASK;
 	s.maxShapeNum = MAX_SHAPE_NUM;
 	s.maxGroupNum = MAX_GROUP_NUM;
 	s.stepsNum = 256;
