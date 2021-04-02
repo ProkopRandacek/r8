@@ -80,7 +80,6 @@ void makeShape(int i) {
 
 	char* a = strReplace(SDFArgs[shapes[i]->type - 1], '_', str);
 
-	printf("%s\n", a);
 	sprintf(c, "map(sC(%d), %s(%s))", i, SDFNames[shapes[i]->type - 1], a);
 
 	strcat(sdf, c);

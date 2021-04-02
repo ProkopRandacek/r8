@@ -149,7 +149,6 @@ char* createMapWorldSource() {
 	strcat(c, mapFuncEnd);
 	strcat(c, "// MAP WORLD END\n\n");
 
-	printf("%s\n", sdf);
 	free(sdf);
 
 	return c;

@@ -7,13 +7,19 @@
 float lastAngle, lastH, lastW;
 
 extern int w, h; // these are from opengl.c. I need to change these for the screenshots to be the right size
+Camera* cam; // global camera pointer
+char camCreated = 0;
 
-Camera* cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
+void cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
+	if (!camCreated) {
+		cam = malloc(sizeof(Camera));
+		camCreated = 1;
+	}
+
 	lastAngle = angle;
 	lastH = he;
 	lastW = wi;
 
-	Camera* cam = malloc(sizeof(Camera));
 	cam->pos = pos;
 
 	vec3 sc = vAdd(pos, dir); // Screen center
@@ -57,10 +63,9 @@ Camera* cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
 	cam->tr = vAdd(vAdd(up, right), sc);
 	cam->bl = vAdd(vAdd(down, left), sc);
 	cam->br = vAdd(vAdd(down, right), sc);
-	return cam;
 }
 
-void updateCamPos(Camera* cam, vec3 offset) {
+void updateCamPos(vec3 offset) {
 	vec3 forward = v3(cam->forward.x, 0, cam->forward.z);
 	vec3 left = v3(cam->left.x, 0, cam->left.z);
 	cam->pos = vAdd(cam->pos, vMultf(forward, offset.z));
@@ -75,4 +80,4 @@ void setWH(float iw, float ih) {
 	h = (int) (ih * 1000.0f);
 }
 
-Camera* updateCamDir(vec3 pos, vec3 dir) { return cmr(pos, dir, lastAngle, lastH, lastW); }
+void updateCamDir(vec3 pos, vec3 dir) { cmr(pos, dir, lastAngle, lastH, lastW); }
