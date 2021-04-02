@@ -2,11 +2,13 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "head.h"
+#include "glslPieces/head.h"
+#include "glslPieces/SDFs.h"
+#include "glslPieces/rayMarch.h"
+#include "glslPieces/general.h"
 #include "shaderGen.h"
-#include "SDFs.h"
-#include "rayMarch.h"
-#include "general.h"
+#include "shapes.h"
+#include "SDFGen.h"
 #include "../settings.h"
 
 #define FRAG_FULL_SIZE     65536 // 2^16
@@ -20,6 +22,10 @@
 #define VERT_SIZE 128
 
 #define GLSL_VERSION 330
+
+extern Shape*      shapes[MAX_SHAPE_NUM];
+extern ShapeGroup* groups[MAX_GROUP_NUM];
+extern int groupNum;
 
 char* createVertSource() {
 	char* c = malloc(sizeof(char) * VERT_SIZE);
@@ -39,7 +45,7 @@ char* createVersionSource() {
 
 	return c;
 }
-// 10 10 0.02 256 0.001, 0.001, 100.0f
+
 char* createSettingsSource(Scene s) {
 	char* c = malloc(sizeof(char) * FRAG_SETTINGS_SIZE);
 	memset(c, 0, FRAG_SETTINGS_SIZE);
@@ -90,7 +96,6 @@ char* createSettingsSource(Scene s) {
 	return c;
 }
 
-
 char* createHeaderSource() {
 	char* c = malloc(sizeof(char) * FRAG_HEADER_SIZE);
 	memset(c, 0, FRAG_HEADER_SIZE);
@@ -134,24 +139,18 @@ char* createSDFsSource(short shapesMask) {
 
 char* createMapWorldSource() {
 	char* c = malloc(sizeof(char) * FRAG_MAP_SIZE);
+	char* sdf = genSDF();
 	memset(c, 0, FRAG_MAP_SIZE);
 
 	strcat(c, "// MAP WORLD START\n");
 	strcat(c, combineFuncs);
-
 	strcat(c, mapFuncStart);
-	char* fullSDF = malloc(sizeof(char) * FRAG_MAP_SIZE);
-	sprintf(fullSDF, "cutM(maxM(%s, %s), minM(%s, minM(%s, %s)))",
-			"map(vec4(0,1,1,0),d2Cube    (pos,vec3(0),vec3(0.9)))",
-			"map(vec4(0,0,1,0),d2Sphere  (pos,vec3(0),1.2))",
-			"map(vec4(0,1,0,0),d2Cylinder(pos,vec3(-1, 0, 0),vec3(1,0,0),0.5))",
-			"map(vec4(0,1,0,0),d2Cylinder(pos,vec3( 0,-1, 0),vec3(0,1,0),0.5))",
-			"map(vec4(0,1,0,0),d2Cylinder(pos,vec3( 0, 0,-1),vec3(0,0,1),0.5))"
-			);
-	strcat(c, fullSDF);
+	strcat(c, sdf);
 	strcat(c, mapFuncEnd);
-
 	strcat(c, "// MAP WORLD END\n\n");
+
+	printf("%s\n", sdf);
+	free(sdf);
 
 	return c;
 }

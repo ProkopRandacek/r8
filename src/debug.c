@@ -1,7 +1,5 @@
 #include "debug.h"
 
-extern GL* gl;
-
 clock_t st;
 
 float t() { return ((float)(clock() - st) / CLOCKS_PER_SEC * 1000.0f); }

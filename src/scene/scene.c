@@ -49,8 +49,6 @@ void sendObjects() {
 	shapes2types (st, (unsigned int)shapeNum, shapes);
 
 	shdSetFloatArray(gl->s, "rawShapes" , (int)(SHAPE_SIZE * shapeNum), s);
-	shdSetIntArray  (gl->s, "rawGroups" , (int)(GROUP_SIZE * groupNum), g);
-	shdSetIntArray  (gl->s, "shapeTypes", shapeNum, st);
 
 	shdSetInt(gl->s, "shapeNum", shapeNum);
 	shdSetInt(gl->s, "groupNum", groupNum);

@@ -37,8 +37,9 @@ int main() {
 	s.sunSize = 1.0f;
 
 	startTime(); // debug init
-	initOGL(s);
 	initUmka();
+	umkaCall(umka, umkaStartFunc, 0, NULL, NULL);
+	initOGL(s);
 	createScene();
 
 	dprint("INIT DONE");
@@ -47,8 +48,6 @@ int main() {
 	float lastTime = 0.0f;
 	float frameTime = 0.0f;
 	unsigned int frameCount = 0;
-
-	umkaCall(umka, umkaStartFunc, 0, NULL, NULL);
 
 	while (!glfwWindowShouldClose(gl->window)) {
 		frameCount++;
