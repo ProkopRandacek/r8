@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "vector.h"
+#include "../vector.h"
 #include "shapes.h"
 
 inline Shape* sph(vec3 pos, vec3 clr, float radius, float rv) {

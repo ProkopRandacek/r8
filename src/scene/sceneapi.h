@@ -1,5 +1,5 @@
 // vim: filetype=c
-#include "vector.h"
+#include "../vector.h"
 #include "shapes.h"
 
 // === private ===

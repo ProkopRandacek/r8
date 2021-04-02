@@ -3,7 +3,7 @@
 #include <stdlib.h>
 
 #include "input.h"
-#include "camera.h"
+#include "scene/camera.h"
 #include "opengl.h"
 #include "time.h"
 #include "settings.h"

@@ -3,10 +3,25 @@
 #ifndef SHAPES_H
 #define SHAPES_H
 
-#include "vector.h"
+#include "../vector.h"
 
 typedef enum ShapeType {
-	GROUP, CUBE, SPHERE, CYLINDER, BOXFRAME, TORUS, CTORUS, LINK, PLANE, HEXPRISM, TRIPRISM, CAPSULE, CCONE, PYRAMID, TRIANGLE, QUAD
+	GROUP    = 0,
+	CUBE     = 1,
+	SPHERE   = 2,
+	CYLINDER = 3,
+	BOXFRAME = 4,
+	TORUS    = 5,
+	CTORUS   = 6,
+	LINK     = 7,
+	PLANE    = 8,
+	HEXPRISM = 9,
+	TRIPRISM = 10,
+	CAPSULE  = 11,
+	CCONE    = 12,
+	PYRAMID  = 13,
+	TRIANGLE = 14,
+	QUAD     = 15
 } ShapeType;
 
 typedef enum OperationType {

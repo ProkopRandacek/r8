@@ -1,10 +1,10 @@
 #include "serialization.h"
 #include "sceneapi.h"
-#include "settings.h"
-#include "debug.h"
-#include "opengl.h"
+#include "../settings.h"
+#include "../debug.h"
+#include "../opengl.h"
 
-#include "settings.h"
+#include "../settings.h"
 
 int freeShpIndex = 0;
 int freeGrpIndex = 0;
@@ -13,6 +13,7 @@ extern Shape*      shapes[MAX_SHAPE_NUM];
 extern ShapeGroup* groups[MAX_GROUP_NUM];
 extern GL* gl;
 extern int shapeNum, groupNum, sceneChanged;
+extern Camera* cam;
 
 // ===== PRIVATE =====
 

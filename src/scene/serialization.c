@@ -3,9 +3,9 @@
 
 #include "camera.h"
 #include "serialization.h"
-#include "debug.h"
-#include "opengl.h"
-#include "settings.h"
+#include "../debug.h"
+#include "../opengl.h"
+#include "../settings.h"
 
 extern GL* gl;
 

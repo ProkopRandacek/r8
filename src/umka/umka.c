@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stddef.h>
 
-#include "debug.h"
+#include "../debug.h"
 #include "bindings.h"
 #include "umka.h"
 

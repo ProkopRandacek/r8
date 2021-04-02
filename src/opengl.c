@@ -4,7 +4,7 @@
 
 #include "opengl.h"
 #include "debug.h"
-#include "camera.h" // the camera needs to be resized with the window
+#include "scene/camera.h" // the camera needs to be resized with the window
 
 #include "time.h"
 
@@ -16,7 +16,7 @@ GL* gl;
 float* pixels;
 unsigned int frameCount = 0;
 
-void initOGL() {
+void initOGL(Scene s) {
 	dprint("GL START");
 	gl = malloc(sizeof(GL));
 
@@ -93,7 +93,13 @@ void initOGL() {
 	dprint("GL - buffers done");
 
 	// create shader
-	gl->s = shd();
+
+	char* vert = createVertSource();
+	char* frag = createFragSource(s);
+
+	gl->s = shd(vert, frag);
+	free(vert);
+	free(frag);
 	glUseProgram(gl->s);
 
 	dprint("GL - shaders done");

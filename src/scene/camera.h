@@ -3,7 +3,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "vector.h"
+#include "../vector.h"
 
 typedef struct Cameras {
 	vec3 pos;
@@ -12,7 +12,7 @@ typedef struct Cameras {
 	vec3 bl; // ...
 	vec3 br; // ...
 
-	vec3 left;
+	vec3 left; // these are for C, not actually send to the GPU
 	vec3 forward;
 } Camera;
 
