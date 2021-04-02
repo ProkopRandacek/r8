@@ -6,7 +6,6 @@
 
 #include "shader.h"
 #include "debug.h"
-#include "glsl.h" // generated on build. contain the shader source code string.
 #include "scene/shaderGen.h"
 
 
