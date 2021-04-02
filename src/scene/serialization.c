@@ -45,23 +45,6 @@ void ccone2floats(float* f, CCone*s) {
 	f[12] = 0.0f;       f[13] = 0.0f;       f[14] = 0.0f;
 }
 
-
-void groups2floats(int* f, unsigned int num, ShapeGroup* groups[num]) {
-	for (unsigned int i = 0; i < num; i++) {
-		unsigned int p = i * GROUP_SIZE;
-		f[p + 0] = groups[i]->a;
-		f[p + 1] = groups[i]->b;
-		f[p + 2] = groups[i]->op;
-		f[p + 3] = (int)(groups[i]->k * 1000.0);
-
-		for (int j = 0; j < GROUP_SIZE; j++) {
-			//printf("%d, ", f[p + j]);
-		}
-		//printf("\n");
-	}
-	//printf("\n");
-}
-
 void shapes2floats(float *f, unsigned int num, Shape* shp[num]) {
 	for (unsigned int i = 0; i < num; i++) {
 		// for all shapes same:
@@ -81,18 +64,10 @@ void shapes2floats(float *f, unsigned int num, Shape* shp[num]) {
 			sprintf(errMsg, "Unknown shape %d on index %d (shapes2floats)", shp[i]->type, i);
 			eprint(errMsg);
 		}
-		for (int j = 0; j < SHAPE_SIZE; j++) {
-			//printf("%.2f, ", f[p + j]);
+		/*for (int j = 0; j < SHAPE_SIZE; j++) { // debug printing
+			printf("%.2f, ", f[p + j]);
 		}
-		//printf("\n");
-	}
-	//printf("\n");
-}
-
-void shapes2types(int *f, unsigned int num, Shape* shp[num]) {
-	for (unsigned int i = 0; i < num; i++) {
-		f[i] = (int)shp[i]->type;
-		//printf("%d, ", f[i]);
+		printf("\n");*/
 	}
 	//printf("\n");
 }

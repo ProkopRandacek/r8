@@ -103,7 +103,6 @@ char* createHeaderSource() {
 	strcat(c, "// HEADER START\n");
 	strcat(c, defines);
 	strcat(c, uniforms);
-	strcat(c, globals);
 	strcat(c, consts);
 	strcat(c, out);
 	strcat(c, structs);
