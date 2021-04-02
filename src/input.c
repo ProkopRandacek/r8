@@ -34,7 +34,7 @@ void updateInput() {
 	if (shiftDown) moveDir.y = -1.0f;
 	if (vMag(moveDir) > 0.0f) {
 		moveDir = vMultf(vNorm(moveDir), MOVE_SPEED * deltaTime);
-		updateCamPos(cam, moveDir);
+		updateCamPos(moveDir);
 	}
 
 	// mouse
@@ -47,7 +47,7 @@ void updateInput() {
 		sinf(y),
 		cosf(y) * cosf(x)
 	));
-	cam = updateCamDir(cam->pos, dir);
+	updateCamDir(cam->pos, dir);
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"

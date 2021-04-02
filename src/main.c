@@ -70,6 +70,7 @@ int main() {
 		}
 	}
 
+	freeObjects();
 	umkaFree(umka);
 	dprint("exiting GL");
 	exitOGL();

@@ -18,11 +18,11 @@ int shapeNum = 0;
 int groupNum = 0;
 int sceneChanged = 0;
 
-Camera* cam;
+extern Camera* cam;
 
 void createScene() {
 	vec3 campos = v3(0.0f, 5.0f, -10.0f);
-	cam = cmr(campos, vNorm(vDir(campos, v3(0.0f, 5.0f, 0.0f))), 0.0f, 0.01f, 0.01f);
+	cmr(campos, vNorm(vDir(campos, v3(0.0f, 5.0f, 0.0f))), 0.0f, 0.01f, 0.01f);
 	float lsPos[] = {5.0f, 2.0f, 5.0f};
 	shdSetVec3Array(gl->s, "lightPos", 1, lsPos);
 }
