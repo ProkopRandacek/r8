@@ -9,3 +9,7 @@ void umCreateCapsule (UmkaStackSlot* P, UmkaStackSlot* R);
 void umCreateCylinder(UmkaStackSlot* P, UmkaStackSlot* R);
 void umCreateCCone   (UmkaStackSlot* P, UmkaStackSlot* R);
 void umCreateGroup   (UmkaStackSlot* P, UmkaStackSlot* R);
+
+void umGetCamPos  (UmkaStackSlot* p, UmkaStackSlot* r);
+void umGetCamDir  (UmkaStackSlot* p, UmkaStackSlot* r);
+void umSetLightPos(UmkaStackSlot* p, UmkaStackSlot* r);

@@ -12,3 +12,11 @@ fn CreateCylinder*(pos, clr: ^vec3, rv: real, end: ^vec3, rd:     real): int32
 fn CreateCCone   *(pos, clr: ^vec3, rv: real, end: ^vec3, r1, r2: real): int32
 
 fn CreateGroup*(a, b, op: int32, k: real): int32
+
+fn GetCamPos*(): ^vec3
+fn GetCamDir*(): ^vec3
+fn SetLightPos*(pos: ^vec3)
+
+fn vMultf*(a: ^vec3, k: real): ^vec3 { return &vec3{a.x * k,   a.y * k,   a.z * k};   }
+fn vAdd  *(a, b: ^vec3      ): ^vec3 { return &vec3{a.x + b.x, a.y + b.y, a.z + b.z}; }
+
