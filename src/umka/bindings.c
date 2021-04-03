@@ -15,17 +15,17 @@ void umkaBind(void* umka) {
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 void umSetShapeClr(UmkaStackSlot* p, UmkaStackSlot* r) {
-	int shpID =   (int) p[1].intVal;
-	vec3* clr = (vec3*)&p[0];
+	int shpID =   (int)p[1].intVal;
+	vec3* clr = (vec3*)p[0].ptrVal;
 
 	setShapeClr(shpID, *clr);
 }
 
 void umCreateSphere(UmkaStackSlot* p, UmkaStackSlot* r) {
-	vec3* pos = (vec3*)&p[3];
-	vec3* clr = (vec3*)&p[2];
-	float rv  = (float) p[1].realVal;
-	float rd  = (float) p[0].realVal;
+	vec3* pos = (vec3*)p[3].ptrVal;
+	vec3* clr = (vec3*)p[2].ptrVal;
+	float rv  = (float)p[1].realVal;
+	float rd  = (float)p[0].realVal;
 
 	printf("%.1f, %.1f, %.1f, %.1f, %.1f, %.1f, %.1f, %.1f\n", pos->x, pos->y, pos->z, clr->x, clr->y, clr->z, rv, rd);
 
@@ -35,10 +35,10 @@ void umCreateSphere(UmkaStackSlot* p, UmkaStackSlot* r) {
 }
 
 void umCreateCube(UmkaStackSlot* p, UmkaStackSlot* r) {
-	vec3* pos = (vec3*)&p[3];
-	vec3* clr = (vec3*)&p[2];
-	float rv  = (float) p[1].realVal;
-	vec3* scl = (vec3*)&p[0];
+	vec3* pos = (vec3*)p[3].ptrVal;
+	vec3* clr = (vec3*)p[2].ptrVal;
+	float rv  = (float)p[1].realVal;
+	vec3* scl = (vec3*)p[0].ptrVal;
 
 	int i = createCube(*pos, *clr, rv, *scl);
 
@@ -46,11 +46,11 @@ void umCreateCube(UmkaStackSlot* p, UmkaStackSlot* r) {
 }
 
 void umCreateTorus(UmkaStackSlot* p, UmkaStackSlot* r) {
-	vec3* pos = (vec3*)&p[4];
-	vec3* clr = (vec3*)&p[3];
-	float rv  = (float) p[2].realVal;
-	float r1  = (float) p[1].realVal;
-	float r2  = (float) p[0].realVal;
+	vec3* pos = (vec3*)p[4].ptrVal;
+	vec3* clr = (vec3*)p[3].ptrVal;
+	float rv  = (float)p[2].realVal;
+	float r1  = (float)p[1].realVal;
+	float r2  = (float)p[0].realVal;
 
 	int i = createTorus(*pos, *clr, rv, r1, r2);
 
@@ -58,11 +58,11 @@ void umCreateTorus(UmkaStackSlot* p, UmkaStackSlot* r) {
 }
 
 void umCreateCapsule(UmkaStackSlot* p, UmkaStackSlot* r) {
-	vec3* pos = (vec3*)&p[4];
-	vec3* clr = (vec3*)&p[3];
-	float rv  = (float) p[2].realVal;
-	vec3* end = (vec3*)&p[1];
-	float rd  = (float) p[0].realVal;
+	vec3* pos = (vec3*)p[4].ptrVal;
+	vec3* clr = (vec3*)p[3].ptrVal;
+	float rv  = (float)p[2].realVal;
+	vec3* end = (vec3*)p[1].ptrVal;
+	float rd  = (float)p[0].realVal;
 
 	int i = createCapsule(*pos, *clr, rv, *end, rd);
 
@@ -70,11 +70,11 @@ void umCreateCapsule(UmkaStackSlot* p, UmkaStackSlot* r) {
 }
 
 void umCreateCylinder(UmkaStackSlot* p, UmkaStackSlot* r) {
-	vec3* pos = (vec3*)&p[4];
-	vec3* clr = (vec3*)&p[3];
-	float rv  = (float) p[2].realVal;
-	vec3* end = (vec3*)&p[1];
-	float rd  = (float) p[0].realVal;
+	vec3* pos = (vec3*)p[4].ptrVal;
+	vec3* clr = (vec3*)p[3].ptrVal;
+	float rv  = (float)p[2].realVal;
+	vec3* end = (vec3*)p[1].ptrVal;
+	float rd  = (float)p[0].realVal;
 
 	int i = createCylinder(*pos, *clr, rv, *end, rd);
 
@@ -82,12 +82,12 @@ void umCreateCylinder(UmkaStackSlot* p, UmkaStackSlot* r) {
 }
 
 void umCreateCCone(UmkaStackSlot* p, UmkaStackSlot* r) {
-	vec3* pos = (vec3*)&p[5];
-	vec3* clr = (vec3*)&p[4];
-	float rv  = (float) p[3].realVal;
-	vec3* end = (vec3*)&p[2];
-	float r1  = (float) p[1].realVal;
-	float r2  = (float) p[0].realVal;
+	vec3* pos = (vec3*)p[5].ptrVal;
+	vec3* clr = (vec3*)p[4].ptrVal;
+	float rv  = (float)p[3].realVal;
+	vec3* end = (vec3*)p[2].ptrVal;
+	float r1  = (float)p[1].realVal;
+	float r2  = (float)p[0].realVal;
 
 	int i = createCCone(*pos, *clr, rv, *end, r1, r2);
 
