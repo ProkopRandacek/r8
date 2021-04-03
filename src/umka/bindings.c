@@ -2,6 +2,11 @@
 #include "../vector.h"
 #include "../scene/sceneapi.h"
 
+#include "../scene/camera.h"
+
+extern Camera* cam;
+extern vec3 lightPos;
+
 void umkaBind(void* umka) {
 	umkaAddFunc(umka, "SetShpClr",      &umSetShapeClr);
 	umkaAddFunc(umka, "CreateSphere",   &umCreateSphere);
@@ -11,6 +16,11 @@ void umkaBind(void* umka) {
 	umkaAddFunc(umka, "CreateCylinder", &umCreateCylinder);
 	umkaAddFunc(umka, "CreateCCone",    &umCreateCCone);
 	umkaAddFunc(umka, "CreateGroup",    &umCreateGroup);
+
+	umkaAddFunc(umka, "GetCamPos", &umGetCamPos);
+	umkaAddFunc(umka, "GetCamDir", &umGetCamDir);
+
+	umkaAddFunc(umka, "SetLightPos", &umSetLightPos);
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -26,8 +36,6 @@ void umCreateSphere(UmkaStackSlot* p, UmkaStackSlot* r) {
 	vec3* clr = (vec3*)p[2].ptrVal;
 	float rv  = (float)p[1].realVal;
 	float rd  = (float)p[0].realVal;
-
-	printf("%.1f, %.1f, %.1f, %.1f, %.1f, %.1f, %.1f, %.1f\n", pos->x, pos->y, pos->z, clr->x, clr->y, clr->z, rv, rd);
 
 	int i = createSphere(*pos, *clr, rv, rd);
 
@@ -103,5 +111,13 @@ void umCreateGroup(UmkaStackSlot* p, UmkaStackSlot* r) {
 	int i = createGroup(a, b, op, k);
 
 	r[0].intVal = i;
+}
+
+void umGetCamPos(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)&cam->pos;     }
+void umGetCamDir(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)&cam->forward; }
+
+void umSetLightPos(UmkaStackSlot* p, UmkaStackSlot* r) {
+	vec3* t = (vec3*)p[0].ptrVal;
+	lightPos = *t;
 }
 

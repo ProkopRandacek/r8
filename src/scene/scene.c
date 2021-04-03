@@ -20,11 +20,12 @@ int sceneChanged = 0;
 
 extern Camera* cam;
 
+vec3 lightPos;
+
 void createScene() {
 	vec3 campos = v3(0.0f, 5.0f, -10.0f);
 	cmr(campos, vNorm(vDir(campos, v3(0.0f, 5.0f, 0.0f))), 0.0f, 0.01f, 0.01f);
-	float lsPos[] = {5.0f, 2.0f, 5.0f};
-	shdSetVec3Array(gl->s, "lightPos", 1, lsPos);
+	lightPos = v3(5.0f, 2.0f, 5.0f);
 }
 
 void sendCamera() {
@@ -51,4 +52,8 @@ void updateScene() {
 		sendObjects();
 		sceneChanged = 0;
 	}
+
+	float f[] = {lightPos.x, lightPos.y, lightPos.z};
+	shdSetVec3Array(gl->s, "lightPos", 1, f);
 }
+

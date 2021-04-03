@@ -81,3 +81,4 @@ void setWH(float iw, float ih) {
 }
 
 void updateCamDir(vec3 pos, vec3 dir) { cmr(pos, dir, lastAngle, lastH, lastW); }
+
