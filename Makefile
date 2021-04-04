@@ -24,48 +24,50 @@ BUILD_DIR = build
 .PHONY: umka all glfw scripts
 
 build: deps clean glad glfw umka scripts
-	# Build the Linux binary
+	@echo Build the Linux binary
 	gcc $(SOURCES) $(UMKA_LIB) $(GLFW_LIB) -o $(BUILD_DIR)/$(NAME) $(GCC_INCLUDES) $(GCC_FLAGS) $(GCC_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
+	@echo Build succeeded
 
 package:
-	# Making a package
+	@echo Making a package
 	zip -r $(NAME)_$(BUILD_NAME)_$(BUILD_TIME).zip build/
 
 scripts:
-	# Copy scripts
+	@echo Copy scripts
 	mkdir $(BUILD_DIR)/scripts -p
 	cp scripts/* $(BUILD_DIR)/scripts/ -r
 
 wbuild: deps clean glad scripts
-	#Build the Windows binary
+	@echo Build the Windows binary
 	$(MINGW) $(SOURCES) $(UMKA_LIB_WIN) $(GLFW_LIB_WIN) -o $(BUILD_DIR)/$(NAME).exe $(GCC_INCLUDES) $(MINGW_FLAGS) $(MINGW_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
 	echo ".\r8.exe > log.txt 2>&1" > $(BUILD_DIR)/run.bat
 	touch $(BUILD_DIR)/log.txt
+	@echo Build succeeded
 
 run: clean build
-	# Run the binary
+	@echo Run the binary
 	cd $(BUILD_DIR)/ && ./$(NAME)
 
 # I don't want to have 3rd praty source in plan text because github then shows random +20000 lines of code in statistics
 glad:
-	# Extract GLAD source
+	@echo Extract GLAD source
 	unzip -oq glad.zip
 
 umka:
-	# Compile Umka library
+	@echo Compile Umka library
 	cd submodules/umka/ && $(MAKE)
 
 glfw:
-	# Compile GLFW
+	@echo Compile GLFW
 	cd submodules/glfw/ && cmake $(GLFW_ARGS) .
 	cd submodules/glfw/ && $(MAKE)
 
 deps:
-	# Checking dependencies
+	@echo Checking dependencies
 	if test ! -f submodules/glfw/CMakeLists.txt || test ! -f submodules/umka/Makefile; then git submodule update --init --recursive; fi
 
 clean:
-	# Remove previous build files
+	@echo Remove previous build files
 	rm $(BUILD_DIR) include -rf
 	rm full.frag full.vert src/vert.h src/frag.h src/gl.c -f
 

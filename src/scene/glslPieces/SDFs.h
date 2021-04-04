@@ -1,4 +1,9 @@
 const char*   sphereSDF = "float d2Sphere(vec3 pos,vec3 sp,float r){return length(pos-sp)-r;}\n";
+const char*    heartSDF =
+"float opExtrusion(vec3 p,float d,float h){vec2 w=vec2(d,abs(p.z)-h);return min(max(w.x,w.y),0.0)+length(max(w,0.0));}\n"
+"float sdHeart(vec2 p){p.x=abs(p.x);if(p.y+p.x>1.0)return sqrt(dot2(p-vec2(0.25,0.75)))-sqrt(2.0)/4.0;return sqrt(min(dot2(p-vec2(0.00,1.00)),dot2(p-0.5*max(p.x+p.y,0.0))))*sign(p.x-p.y);}\n"
+"float d2Sphere(vec3 pos, vec3 sp, float r) { return opExtrusion(pos, sdHeart(pos.xy), 0.1) - 0.05; }\n";
+
 const char*     cubeSDF = "float d2Cube(vec3 pos,vec3 sp,vec3 b){vec3 p=pos-sp;vec3 q=abs(p)-b;return length(max(q,0.0))+min(max(q.x,max(q.y,q.z)),0.0);}\n";
 const char* cylinderSDF = "float d2Cylinder(vec3 p,vec3 a,vec3 b,float r){vec3 ba=b-a;vec3 pa=p-a;float baba=dot(ba,ba);float paba=dot(pa,ba);float x=length(pa*baba-ba*paba)-r*baba;float y=abs(paba-baba*0.5)-baba*0.5;float x2=x*x;float y2=y*y*baba;float d=(max(x,y)<0.0)?-min(x2,y2):(((x>0.0)?x2:0.0)+((y>0.0)?y2:0.0));return sign(d)*sqrt(abs(d))/baba;}\n";
 const char*    torusSDF = "float d2Torus(vec3 pos,vec3 sp,vec2 t){vec3 p=pos-sp;vec2 q=vec2(length(p.xz)-t.x,p.y);return length(q)-t.y;}\n";
