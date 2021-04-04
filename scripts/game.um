@@ -5,6 +5,8 @@ import (
 	"r8/r8.um"
 )
 
+move := true
+
 fn start() {
 	/*head := r8.CreateSphere(&r8.vec3{0.5, 2.1, 0.5}, &r8.vec3{0.7, 0.0, 0.7}, 0.0, 0.3)
 	ring := r8.CreateTorus (&r8.vec3{0.5, 1.9, 0.5}, &r8.vec3{0.7, 0.0, 0.7}, 0.0, 0.25, 0.09)
@@ -14,6 +16,7 @@ fn start() {
 	top    := r8.CreateGroup(head, ring,  0, 0.0)
 	bottom := r8.CreateGroup(base, body,  0, 0.0)
 	rootB   := r8.CreateGroup(top, bottom, 0, 0.0)*/
+	desk   := r8.CreateCube  (&r8.vec3{0, 0, 0},  &r8.vec3{0, 1, 1}, 0,  &r8.vec3{4.0, 0.2, 4.0})
 
 	cube   := r8.CreateCube  (&r8.vec3{0, 0, 0},  &r8.vec3{0, 1, 1}, 0,  &r8.vec3{0.9, 0.9, 0.9})
 	sphere := r8.CreateSphere(&r8.vec3{0, 0, 0},  &r8.vec3{0, 0, 1}, 0,  1.2)
@@ -30,10 +33,11 @@ fn start() {
 	rootA := r8.CreateGroup(a, crossXYZ, 2, 0)
 
 
-	/*rootroot := r8.CreateGroup(rootA, rootB, 0, 0)*/
+	rootroot := r8.CreateGroup(rootA, desk, 0, 0)
 }
 
 fn update() {
+	if (!move) { return }
 	campos := r8.GetCamPos()
 	camdir := r8.GetCamDir()
 	lspos  := r8.vAdd(r8.vMultf(camdir, 3.0), campos)
@@ -41,4 +45,11 @@ fn update() {
 	r8.SetLightPos(lspos)
 }
 
+fn keyDown(key, scancode: int32) {
+	//printf(r8.itoa(key) + "\n")
+	if (key == 69) {
+		move = !move
+	}
+}
+fn keyUp(key, scancode: int32) { }
 fn main() { }

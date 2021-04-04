@@ -7,12 +7,15 @@
 #include "opengl.h"
 #include "time.h"
 #include "settings.h"
+#include "umka/umka.h"
 
 
 extern GL* gl;
 extern Camera* cam;
 extern int w, h;
 extern float deltaTime;
+extern int umkaKeyDown, umkaKeyUp;
+extern void* umka;
 
 char wDown = 0;
 char aDown = 0;
@@ -55,6 +58,13 @@ void updateInput() {
 void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {
 	if (window != gl->window) return;
 	if (action == 2) return;
+
+	UmkaStackSlot params[2];
+	params[1].intVal = key;
+	params[0].intVal = scancode;
+
+	if (action == 1) { umkaCall(umka, umkaKeyDown, 2, params, NULL); }
+	if (action == 0) { umkaCall(umka, umkaKeyUp,   2, params, NULL); }
 
 	//printf("%d, %d, %d, %d\n", key, scancode, action, mods);
 
