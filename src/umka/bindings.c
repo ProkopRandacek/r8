@@ -5,10 +5,12 @@
 #include "../scene/camera.h"
 
 extern Camera* cam;
-extern vec3 lightPos;
 
 void umkaBind(void* umka) {
-	umkaAddFunc(umka, "SetShpClr",      &umSetShapeClr);
+	umkaAddFunc(umka, "SetShpClr", &umSetShapeClr);
+	umkaAddFunc(umka, "SetShpPos", &umSetShapePos);
+	umkaAddFunc(umka, "SetShpRv",  &umSetShapeRv);
+
 	umkaAddFunc(umka, "CreateSphere",   &umCreateSphere);
 	umkaAddFunc(umka, "CreateCube",     &umCreateCube);
 	umkaAddFunc(umka, "CreateTorus",    &umCreateTorus);
@@ -16,20 +18,15 @@ void umkaBind(void* umka) {
 	umkaAddFunc(umka, "CreateCylinder", &umCreateCylinder);
 	umkaAddFunc(umka, "CreateCCone",    &umCreateCCone);
 	umkaAddFunc(umka, "CreateGroup",    &umCreateGroup);
-
-	umkaAddFunc(umka, "GetCamPos", &umGetCamPos);
-	umkaAddFunc(umka, "GetCamDir", &umGetCamDir);
-
-	umkaAddFunc(umka, "SetLightPos", &umSetLightPos);
+	umkaAddFunc(umka, "GetCamPos",      &umGetCamPos);
+	umkaAddFunc(umka, "GetCamDir",      &umGetCamDir);
+	umkaAddFunc(umka, "SetLightPos",    &umSetLightPos);
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
-void umSetShapeClr(UmkaStackSlot* p, UmkaStackSlot* r) {
-	int shpID =   (int)p[1].intVal;
-	vec3* clr = (vec3*)p[0].ptrVal;
-
-	setShapeClr(shpID, *clr);
-}
+void umSetShapeClr(UmkaStackSlot* p, UmkaStackSlot* r) { setShapeClr((int)p[1].intVal, *(vec3*)p[0].ptrVal); }
+void umSetShapePos(UmkaStackSlot* p, UmkaStackSlot* r) { setShapePos((int)p[1].intVal, *(vec3*)p[0].ptrVal); }
+void umSetShapeRv (UmkaStackSlot* p, UmkaStackSlot* r) { setShapeRv ((int)p[1].intVal,  (float)p[0].ptrVal); }
 
 void umCreateSphere(UmkaStackSlot* p, UmkaStackSlot* r) {
 	vec3* pos = (vec3*)p[3].ptrVal;
@@ -116,8 +113,5 @@ void umCreateGroup(UmkaStackSlot* p, UmkaStackSlot* r) {
 void umGetCamPos(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)&cam->pos;     }
 void umGetCamDir(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)&cam->forward; }
 
-void umSetLightPos(UmkaStackSlot* p, UmkaStackSlot* r) {
-	vec3* t = (vec3*)p[0].ptrVal;
-	lightPos = *t;
-}
+void umSetLightPos(UmkaStackSlot* p, UmkaStackSlot* r) { moveLight(*(vec3*)p[0].ptrVal); }
 
