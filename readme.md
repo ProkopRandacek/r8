@@ -9,14 +9,13 @@
 - Sphere, Cube, Torus, Capped Cone and Cylinder rendering (I will add more as I need them)
 - Blend, average, mask, cut and union shape operations
 - WASD + mouse controls
-- Scene modeling from [Umka](https://github.com/vtereshkov/umka-lang)
+- [Umka](https://github.com/vtereshkov/umka-lang) scripting
 - Works real time
 - Works on Linux and Windows
 
 ## TODO
-- [Umka](https://github.com/vtereshkov/umka-lang) scripting
-  - Shape editing
-  - Player input
+- [Umka](https://github.com/vtereshkov/umka-lang)
+  - Player input (keyboard done, mouse todo)
 - Modifiers for shapes (twist, round edges, displacement, ...)
 - Inline functions (there are probably some funcs that should be inlined)
 - Upgrade light source objects

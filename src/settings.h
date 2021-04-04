@@ -18,6 +18,4 @@
 #define SHAPE_SIZE 16
 #define GROUP_SIZE 4
 
-#define GROUP_ID_OFFSET 1000
-
 #endif

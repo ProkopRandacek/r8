@@ -18,9 +18,9 @@ extern int umkaStartFunc, umkaUpdateFunc;
 int main() {
 	printf("\n\n====================================\n\n\nbuild name: %s\nI think I'm runnig on ", BUILD_NAME);
 #ifdef _WIN32
-	printf("windows\n\n");
+	printf("windows\n");
 #else
-	printf("Linux\n\n");
+	printf("Linux\n");
 #endif
 
 	Scene s;

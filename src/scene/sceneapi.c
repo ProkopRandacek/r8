@@ -100,7 +100,6 @@ int createGroup(int a, int b, OperationType op, float k) {
 void moveLight(vec3 pos) {
 	float f[] = {pos.x, pos.y, pos.z};
 	shdSetVec3Array(gl->s, "lightPos", 1, f);
-	sceneChanged = 1;
 }
 
 float getTime() {

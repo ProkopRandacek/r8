@@ -1,7 +1,11 @@
 #include "../../submodules/umka/src/umka_api.h"
 
 void umkaBind(void* umka);
-void umSetShapeClr   (UmkaStackSlot* p, UmkaStackSlot* r);
+
+void umSetShapeClr(UmkaStackSlot* p, UmkaStackSlot* r);
+void umSetShapePos(UmkaStackSlot* p, UmkaStackSlot* r);
+void umSetShapeRv (UmkaStackSlot* p, UmkaStackSlot* r);
+
 void umCreateSphere  (UmkaStackSlot* P, UmkaStackSlot* R);
 void umCreateCube    (UmkaStackSlot* P, UmkaStackSlot* R);
 void umCreateTorus   (UmkaStackSlot* P, UmkaStackSlot* R);

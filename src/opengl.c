@@ -38,7 +38,9 @@ void initOGL(Scene s) {
 		exit(1);
 	}
 
+#ifdef DO_GL_DEBUG
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
+#endif
 
 	dprint("GL - window init");
 
@@ -49,9 +51,11 @@ void initOGL(Scene s) {
 		dprint("Failed to initialize OpenGL context");
 		exit(1);
 	}
-	char n[33];
-	sprintf(n, "GL - Loaded OpenGL %d.%d", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version));
-	dprint(n);
+	char g[128];
+	sprintf(g, "GL - Loaded OpenGL %d.%d", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version)); dprint(g);
+	sprintf(g, "GL - GL_RENDERER: %s",                 glGetString(GL_RENDERER));                     dprint(g);
+	sprintf(g, "GL - GL_VERSION: %s",                  glGetString(GL_VERSION));                      dprint(g);
+	sprintf(g, "GL - GL_SHADING_LANGUAGE_VERSION: %s", glGetString(GL_SHADING_LANGUAGE_VERSION));     dprint(g);
 
 	glViewport(10, 10, w, h);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
