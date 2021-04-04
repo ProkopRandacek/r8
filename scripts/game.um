@@ -41,12 +41,13 @@ fn update() {
 	campos := r8.GetCamPos()
 	camdir := r8.GetCamDir()
 	lspos  := r8.vAdd(r8.vMultf(camdir, 3.0), campos)
+	//printf(repr(lspos^)+"\n")
 
 	r8.SetLightPos(lspos)
 }
 
 fn keyDown(key, scancode: int32) {
-	//printf(r8.itoa(key) + "\n")
+	//printf(repr(key) + "\n")
 	if (key == 69) {
 		move = !move
 	}
