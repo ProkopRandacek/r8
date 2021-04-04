@@ -20,3 +20,9 @@ fn SetLightPos*(pos: ^vec3)
 fn vMultf*(a: ^vec3, k: real): ^vec3 { return &vec3{a.x * k,   a.y * k,   a.z * k};   }
 fn vAdd  *(a, b: ^vec3      ): ^vec3 { return &vec3{a.x + b.x, a.y + b.y, a.z + b.z}; }
 
+fn itoa*(x: int): str {
+    s := str(new([256]char))
+    sprintf(s, "%lld", x)
+    return s
+}
+

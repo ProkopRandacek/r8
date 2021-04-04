@@ -56,7 +56,7 @@ void initOGL(Scene s) {
 	glViewport(10, 10, w, h);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	glfwSwapInterval(0);
+	//glfwSwapInterval(0);
 
 	dprint("GL - window setup");
 
