@@ -27,14 +27,14 @@ int main() {
 	s.shapeMask = CUBE_MASK | SPHERE_MASK | CYLINDER_MASK | TORUS_MASK | CCONE_MASK;
 	s.maxShapeNum = MAX_SHAPE_NUM;
 	s.maxGroupNum = MAX_GROUP_NUM;
-	s.stepsNum = 256;
+	s.stepsNum = 512;
 	s.bounces = 1;
 	s.epsilon = 0.02f;
-	s.collisionThreshold = 0.001f;
+	s.collisionThreshold       = 0.001f;
 	s.shadowCollisionThreshold = 0.001f;
 	s.backStepK = 100.0f;
 	s.maxTraceDist = 10.0f;
-	s.sunSize = 1.0f;
+	s.sunSize = 10.0f;
 
 	startTime(); // debug init
 	initUmka();

@@ -8,7 +8,8 @@ import (
 move := true
 
 fn start() {
-	head := r8.CreateSphere(&r8.vec3{0.5, 2.1, 0.5}, &r8.vec3{0.7, 0.0, 0.7}, 0.0, 0.3)
+	head := r8.CreateSphere(&r8.vec3{0.5, 2.1, 0.5}, &r8.vec3{0.9, 0.1, 0.1}, 0.0, 0.3)
+	//t := r8.CreateSphere(&r8.vec3{0.0, 0.0, 0.0}, &r8.vec3{0.7, 0.0, 0.7}, 0.0, 0.0)
 	ring := r8.CreateTorus (&r8.vec3{0.5, 1.9, 0.5}, &r8.vec3{0.7, 0.0, 0.7}, 0.0, 0.25, 0.09)
 	body := r8.CreateCCone (&r8.vec3{0.5, 2.2, 0.5}, &r8.vec3{0.7, 0.0, 0.7}, 0.0, &r8.vec3{0.5, 1.3, 0.5}, 0.17, 0.3)
 	base := r8.CreateCCone (&r8.vec3{0.5, 1.3, 0.5}, &r8.vec3{0.7, 0.0, 0.7}, 0.0, &r8.vec3{0.5, 1.0, 0.5}, 0.40, 0.4)

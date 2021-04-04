@@ -62,7 +62,7 @@ const char* mainFunc =
 "                        dir = reflect(dir, normal);\n"
 
 "                        if (hit.surfaceClr.w == 0.) {\n" // shadow only 100% non reflective surfaces. shadows on reflective surfaces look weird.
-"                                finalClr *= rayMarchShadow(pos, normalize(lightPos - pos));\n"
+"                                finalClr *= rayMarchShadow(pos, normalize(lightPos - pos), length(lightPos - pos));\n"
 "                                break;\n"
 "                        }\n"
 "                }\n"
