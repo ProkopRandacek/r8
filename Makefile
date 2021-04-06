@@ -1,9 +1,13 @@
+SRC = src
+OBJ = obj
+
 SOURCES = $(wildcard src/*.c) $(wildcard src/**/*.c)
+OBJECTS := $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
 
 GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized -Waggregate-return
 GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast #-g3 -DDO_GL_DEBUG # Trying to access gldebug on devices that don't support it can cause SIGSEGV
 GCC_LIB = -lm -ldl -lpthread -DUMKA_STATIC
-GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include
+GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include -Isrc -I$(SRC)/umka -I$(SRC)/scene
 
 MINGW = x86_64-w64-mingw32-gcc
 MINGW_FLAGS = $(GCC_FLAGS)
@@ -21,12 +25,19 @@ BUILD_NAME = $(shell git rev-parse --short HEAD)
 BUILD_TIME = $(shell date +'%H%M%S_%d%m%y')
 BUILD_DIR = build
 
-.PHONY: umka all glfw scripts
+GCC_FULL = $(GCC_INCLUDES) $(GCC_FLAGS) $(GCC_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
 
-build: deps clean glad glfw umka scripts
+.PHONY: deps glad glfw umka scripts
+
+all: deps glad glfw umka scripts build
+
+build: $(OBJECTS)
 	@echo Build the Linux binary
-	gcc $(SOURCES) $(UMKA_LIB) $(GLFW_LIB) -o $(BUILD_DIR)/$(NAME) $(GCC_INCLUDES) $(GCC_FLAGS) $(GCC_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
+	gcc $(OBJECTS) obj/gl.o $(UMKA_LIB) $(GLFW_LIB) $(GCC_FULL) -o $(BUILD_DIR)/$(NAME)
 	@echo Build succeeded
+
+$(OBJ)/%.o: $(SRC)/%.c
+	gcc $(GCC_FULL) -c $< -o $@
 
 package:
 	@echo Making a package
@@ -35,6 +46,7 @@ package:
 scripts:
 	@echo Copy scripts
 	mkdir $(BUILD_DIR)/scripts -p
+	mkdir $(OBJ)/scene $(OBJ)/umka -p
 	cp scripts/* $(BUILD_DIR)/scripts/ -r
 
 wbuild: deps clean glad scripts
@@ -44,7 +56,7 @@ wbuild: deps clean glad scripts
 	touch $(BUILD_DIR)/log.txt
 	@echo Build succeeded
 
-run: clean build
+run: all
 	@echo Run the binary
 	cd $(BUILD_DIR)/ && ./$(NAME)
 
@@ -68,8 +80,8 @@ deps:
 
 clean:
 	@echo Remove previous build files
-	rm $(BUILD_DIR) include -rf
-	rm full.frag full.vert src/vert.h src/frag.h src/gl.c -f
+	rm $(OBJ) $(BUILD_DIR) include -rf
+	rm full.frag full.vert src/vert.h src/frag.h -f
 
 cleandeps:
 	cd submodules/glfw && git checkout . && git clean -dfx
