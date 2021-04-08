@@ -34,8 +34,8 @@ You can change things that are in the GLSL code represented as uniform variables
   - Args:
     - `pos` - Position vector
 	- `clr` - RGB color vector ranges 0 - 1
-	- `rv ` - Reflectiveness 0 - 1
-	- `rd ` - Radius, >0
+	- `rv`  - Reflectiveness 0 - 1
+	- `rd`  - Radius, >0
   - Returns -1 if there is no more space in currently binded scene. Othrewise returns ID of the sphere
   - Example:
     - `sphere := r8.CreateSphere(&r8.vec3{0, 1.4, 0}, &r8.vec3{0, 0.4, 1}, 0, 1.2)`
@@ -48,14 +48,18 @@ You can change things that are in the GLSL code represented as uniform variables
 	- `clr` - New color of the shape
   - No return value
   - Example:
-    - ```sphere := r8.CreateSphere(pos, &r8.vec3{0, 0.4, 1}, 0, 0.2)
-	     SetShpClr(sphere, &r8.vec3(1, 0, 0))```
+    - ```
+         sphere := r8.CreateSphere(pos, &r8.vec3{0, 0.4, 1}, 0, 0.2)
+	 SetShpClr(sphere, &r8.vec3(1, 0, 0))
+      ```
 - `SetShpPos(shpID: int32, pos: ^vec3)`
   - Args:
     - `shpID` - ID of the desired shape
 	- `pos` - New position of the shape
   - No return value
   - Example:
-    - ```sphere := r8.CreateSphere(&r8.vec3{0, 0.4, 1}, clr, 0, 0.2)
-	     SetShpPos(sphere, &r8.vec3(1, 0, 0))```
+    - ```
+         sphere := r8.CreateSphere(&r8.vec3{0, 0.4, 1}, clr, 0, 0.2)
+	 SetShpPos(sphere, &r8.vec3(1, 0, 0))
+      ```
 
