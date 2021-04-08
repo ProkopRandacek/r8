@@ -4,14 +4,14 @@
 
 ## Done
 - [Constructive solid geometry](https://en.wikipedia.org/wiki/Constructive_solid_geometry)
-- Soft shadows
+- Soft shadows (looks weird in some weird CSG cases)
 - Reflections
 - Sphere, Cube, Torus, Capped Cone and Cylinder rendering (I will add more as I need them)
 - Blend, average, mask, cut and union shape operations
 - WASD + mouse controls
 - [Umka](https://github.com/vtereshkov/umka-lang) scripting
 - Works real time
-- Works on Linux and Windows
+- Works on Linux and sometimes Windows
 
 ## TODO
 - [Umka](https://github.com/vtereshkov/umka-lang)
