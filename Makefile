@@ -1,13 +1,13 @@
 SRC = src
 OBJ = obj
 
-SOURCES = $(wildcard src/*.c) $(wildcard src/**/*.c)
+SOURCES = $(wildcard $(SRC)/*.c) $(wildcard $(SRC)/**/*.c)
 OBJECTS := $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
 
 GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized -Waggregate-return
 GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast #-g3 -DDO_GL_DEBUG # Trying to access gldebug on devices that don't support it can cause SIGSEGV
 GCC_LIB = -lm -ldl -lpthread -DUMKA_STATIC
-GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include -Isrc -I$(SRC)/umka -I$(SRC)/scene
+GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include -I$(SRC) -I$(SRC)/umka -I$(SRC)/scene -I$(SRC)/shader
 
 MINGW = x86_64-w64-mingw32-gcc
 MINGW_FLAGS = $(GCC_FLAGS)
@@ -43,10 +43,13 @@ package:
 	@echo Making a package
 	zip -r $(NAME)_$(BUILD_NAME)_$(BUILD_TIME).zip build/
 
+graph:
+	gcc $(SOURCES) -MM | ./submodules/gcc-deps-graph/graphMaker.py
+	rm ./deps.gv
+
 scripts:
 	@echo Copy scripts
-	mkdir $(BUILD_DIR)/scripts -p
-	mkdir $(OBJ)/scene $(OBJ)/umka -p
+	mkdir $(BUILD_DIR)/scripts $(OBJ)/shader $(OBJ)/scene $(OBJ)/umka -p
 	cp scripts/* $(BUILD_DIR)/scripts/ -r
 
 wbuild: deps clean glad scripts
@@ -81,7 +84,7 @@ deps:
 clean:
 	@echo Remove previous build files
 	rm $(OBJ) $(BUILD_DIR) include -rf
-	rm full.frag full.vert src/vert.h src/frag.h -f
+	rm full.frag full.vert $(SRC)/vert.h $(SRC)/frag.h -f
 
 cleandeps:
 	cd submodules/glfw && git checkout . && git clean -dfx

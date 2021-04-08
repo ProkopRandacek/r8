@@ -1,6 +1,7 @@
 # Architecture
 
 ## File hierarchy and short description
+run `make graph` to create a visual file hierarchy from the sources
 ```
 src
 ├── scene              - Code related to scenes and object in them.
@@ -23,23 +24,17 @@ src
 ├── SDFGen.c           - Generates full SDF.
 └── shader.c           - Compiles shader
 ```
+
 ## Internal scene creation process:
 - CreateScene() is called from Umka
-  - First free scene index is taken
-  - Memory for the scene in scene array is allocated
-  - Scene settings are set
-  - Scene index is returned
-
-
-- CreateScene(settings);
-  - Allocates memory for scene, sets scene settings and returns scene index. (`scene/scene.c`)
-- BindScene(sceneIndex);
-  - Binds the scene. This means that all following shape and group functions take effect on this scene.
-- CompileScene(sceneIndex);
-  - Compiles scene into a shader. Returns shader index. (`shaderGen.c`)
-- BindShader(shaderIndex);
-  - Binds the shader. This means that this shader is used to render.
-
+  - First free scene index is taken (`scene/sceneapi.c`)
+  - Memory for the scene in scene array is allocated (`scene/scene.c`)
+  - Scene settings are set (`scene/scene.c`)
+  - Scene index is returned (`scene/sceneapi.c`)
+- BindScene() is called from Umka
+  - Active scene variable is set (`scene/sceneapi.c`)
+- CompileScene() is called from Umka
+- BindShader() is called from Umka
 
 ## Shapes
 
