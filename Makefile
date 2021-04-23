@@ -4,7 +4,7 @@ OBJ = obj
 SOURCES = $(wildcard $(SRC)/*.c) $(wildcard $(SRC)/**/*.c)
 OBJECTS = $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
 
-GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized -Waggregate-return
+GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized -Waggregate-return -Wno-misleading-indentation
 GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast -g3
 GCC_LIB = -lm -ldl -lpthread -DUMKA_STATIC
 GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include -I$(SRC) -I$(SRC)/umka -I$(SRC)/scene -I$(SRC)/shader
@@ -25,15 +25,16 @@ BUILD_NAME = $(shell git rev-parse --short HEAD)
 BUILD_TIME = $(shell date +'%H%M%S_%d%m%y')
 BUILD_DIR = build
 
-GCC_FULL = $(GCC_INCLUDES) $(GCC_FLAGS) $(GCC_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
+GCC_FULL   = $(GCC_INCLUDES) $(GCC_FLAGS)   $(GCC_LIB)   -DBUILD_NAME=\"$(BUILD_NAME)\"
+MINGW_FULL = $(GCC_INCLUDES) $(MINGW_FLAGS) $(MINGW_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
 
-.PHONY: deps glad glfw umka scripts
+.PHONY: deps glfw umka scripts
 
-all: deps glad glfw umka scripts build
+all: deps glfw umka scripts build
 
 build: $(OBJECTS)
 	@echo Build the Linux binary
-	gcc $(OBJECTS) obj/gl.o $(UMKA_LIB) $(GLFW_LIB) $(GCC_FULL) -o $(BUILD_DIR)/$(NAME)
+	gcc $(OBJECTS) $(UMKA_LIB) $(GLFW_LIB) $(GCC_FULL) -o $(BUILD_DIR)/$(NAME)
 	@echo Build succeeded
 
 $(OBJ)/%.o: $(SRC)/%.c
@@ -52,9 +53,9 @@ scripts:
 	mkdir $(BUILD_DIR)/scripts $(OBJ)/shader $(OBJ)/scene $(OBJ)/umka -p
 	cp scripts/* $(BUILD_DIR)/scripts/ -r
 
-wbuild: deps clean glad scripts
+wbuild: deps clean scripts
 	@echo Build the Windows binary
-	$(MINGW) $(SOURCES) $(UMKA_LIB_WIN) $(GLFW_LIB_WIN) -o $(BUILD_DIR)/$(NAME).exe $(GCC_INCLUDES) $(MINGW_FLAGS) $(MINGW_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
+	$(MINGW) $(SOURCES) $(UMKA_LIB_WIN) $(GLFW_LIB_WIN) $(MINGW_FULL) -o $(BUILD_DIR)/$(NAME).exe
 	echo ".\r8.exe > log.txt 2>&1" > $(BUILD_DIR)/run.bat
 	touch $(BUILD_DIR)/log.txt
 	@echo Build succeeded
@@ -62,11 +63,6 @@ wbuild: deps clean glad scripts
 run: all
 	@echo Run the binary
 	cd $(BUILD_DIR)/ && ./$(NAME)
-
-# I don't want to have 3rd praty source in plan text because github then shows random +20000 lines of code in statistics
-glad:
-	@echo Extract GLAD source
-	unzip -oq glad.zip
 
 umka:
 	@echo Compile Umka library
@@ -83,7 +79,7 @@ deps:
 
 clean:
 	@echo Remove previous build files
-	rm $(OBJ) $(BUILD_DIR) include -rf
+	rm $(OBJ) $(BUILD_DIR) -rf
 	rm full.frag full.vert $(SRC)/vert.h $(SRC)/frag.h -f
 
 cleandeps:
