@@ -1,12 +1,10 @@
 // vim: filetype=c
-#include <stdio.h>
-#include <time.h>
-#include <stdlib.h>
-
-#include "opengl.h"
-#include "settings.h"
+#ifndef DEBUG_H
+#define DEBUG_H
 
 float t(void);
-void startTime(void);
+void startDebugTime(void);
 void dprint(const char* text);
 void eprint(const char* text);
+
+#endif

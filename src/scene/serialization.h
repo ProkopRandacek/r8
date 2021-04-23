@@ -1,4 +1,7 @@
 // vim: filetype=c
+#ifndef SERIALIZATION_H
+#define SERIALIZATION_H
+
 #include "shapes.h"
 #include "camera.h"
 
@@ -14,3 +17,4 @@ void cyl2floats   (float* f, Cylinder* s);
 void ccone2floats (float* f, CCone*    s);
 
 void cam2floats(Camera* cam, float* f);
+#endif

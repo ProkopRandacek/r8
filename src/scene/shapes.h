@@ -1,5 +1,4 @@
 // vim: filetype=c
-
 #ifndef SHAPES_H
 #define SHAPES_H
 
@@ -23,6 +22,25 @@ typedef enum ShapeType {
 	TRIANGLE = 14,
 	QUAD     = 15
 } ShapeType;
+
+typedef enum {
+	    CUBE_MASK = 1,
+	  SPHERE_MASK = 2,
+	CYLINDER_MASK = 4,
+	BOXFRAME_MASK = 8,
+	   TORUS_MASK = 16,
+	  CTORUS_MASK = 32,
+  	    LINK_MASK = 64,
+	   PLANE_MASK = 128,
+	HEXPRISM_MASK = 256,
+	TRIPRISM_MASK = 512,
+	 CAPSULE_MASK = 1024,
+	   CCONE_MASK = 2048,
+	 PYRAMID_MASK = 4096,
+	TRIANGLE_MASK = 8192,
+	    QUAD_MASK = 16384
+	//empty slot  = 32768
+} ShapeMask;
 
 typedef enum OperationType {
 	NORMAL, BLEND, CUT, MASK, AVERAGE
@@ -87,5 +105,4 @@ Shape* ccone(vec3 start, vec3 end,  vec3 clr, float startR, float endR, float rv
 
 ShapeGroup* group(int a, int b, OperationType op, float k);
 Shape* shape(ShapeType type, void* shape, vec3 pos, vec3 clr, float rv);
-
 #endif

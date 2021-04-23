@@ -2,10 +2,6 @@
 #include "../vector.h"
 #include "../scene/sceneapi.h"
 
-#include "../scene/camera.h"
-
-extern Camera* cam;
-
 void umkaBind(void* umka) {
 	umkaAddFunc(umka, "SetShpClr", &umSetShapeClr);
 	umkaAddFunc(umka, "SetShpPos", &umSetShapePos);
@@ -20,7 +16,11 @@ void umkaBind(void* umka) {
 	umkaAddFunc(umka, "CreateGroup",    &umCreateGroup);
 	umkaAddFunc(umka, "GetCamPos",      &umGetCamPos);
 	umkaAddFunc(umka, "GetCamDir",      &umGetCamDir);
-	umkaAddFunc(umka, "SetLightPos",    &umSetLightPos);
+	//umkaAddFunc(umka, "SetLightPos",    &umSetLightPos);
+	umkaAddFunc(umka, "CreateScene",    &umCreateScene);
+	umkaAddFunc(umka, "BindScene",      &umBindScene);
+	umkaAddFunc(umka, "BindShader",     &umBindShader);
+	umkaAddFunc(umka, "CompileScene",   &umCompileScene);
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -110,8 +110,24 @@ void umCreateGroup(UmkaStackSlot* p, UmkaStackSlot* r) {
 	r[0].intVal = i;
 }
 
-void umGetCamPos(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)&cam->pos;     }
-void umGetCamDir(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)&cam->forward; }
+void umCreateScene(UmkaStackSlot* p, UmkaStackSlot* r) {
+	float sunSize      = (float)p[0].realVal;
+	float maxTraceDist = (float)p[1].realVal;
+	int   bounces      = (int)  p[2].intVal;
+	int   stepsNum     = (int)  p[3].intVal;
+	int   maxGroupNum  = (int)  p[4].intVal;
+	int   maxShapeNum  = (int)  p[5].intVal;
 
-void umSetLightPos(UmkaStackSlot* p, UmkaStackSlot* r) { moveLight(*(vec3*)p[0].ptrVal); }
+	int i = createScene(maxShapeNum, maxGroupNum, stepsNum, bounces, maxTraceDist, sunSize);
+
+	r[0].intVal = i;
+}
+
+void umCompileScene(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].intVal = compileScene((int)p[0].intVal); }
+void umBindScene   (UmkaStackSlot* p, UmkaStackSlot* r) { bindScene((int)p[0].intVal); }
+void umBindShader  (UmkaStackSlot* p, UmkaStackSlot* r) { bindShader((unsigned int*)p[0].ptrVal); }
+
+void umGetCamPos(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)getCamPos(); }
+void umGetCamDir(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)getCamDir(); }
+//void umSetLightPos(UmkaStackSlot* p, UmkaStackSlot* r) { moveLight(*(vec3*)p[0].ptrVal); }
 

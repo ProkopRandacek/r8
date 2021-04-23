@@ -58,6 +58,7 @@ inline Shape* shape(ShapeType type, void* shape, vec3 pos, vec3 clr, float rv) {
 	p->pos = pos;
 	p->clr = clr;
 	p->rv = rv;
+
 	return p;
 }
 
@@ -67,5 +68,7 @@ inline ShapeGroup* group(int a, int b, OperationType op, float k) {
 	sg->b = b;
 	sg->op = op;
 	sg->k = k;
+
 	return sg;
 }
+

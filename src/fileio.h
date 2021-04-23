@@ -1,6 +1,7 @@
 // vim: filetype=c
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#ifndef FILEIO_H
+#define FILEIO_H
 
 void writeBMP(const char* filename, float* pixels, unsigned int w, unsigned int h);
+
+#endif

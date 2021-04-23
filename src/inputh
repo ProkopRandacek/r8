@@ -1,0 +1,3 @@
+// vim: filetype=c
+void updateInput(void);
+void onKey(GLFWwindow* window, int key, int scancode, int action, int mods);

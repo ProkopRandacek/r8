@@ -3,10 +3,10 @@ type (
 )
 
 fn SetShpClr*(shpID: int32, clr: ^vec3)
-fn SetShpPos*(shpID: int32, clr: ^vec3)
-fn SetShpRv *(shpID: int32, clr: ^vec3)
+fn SetShpPos*(shpID: int32, pos: ^vec3)
+fn SetShpRv *(shpID: int32, rv : ^vec3)
 
-fn SetLightPos*(pos: ^vec3)
+//fn SetLightPos*(pos: ^vec3)
 
 fn CreateSphere  *(pos, clr: ^vec3, rv, rd:                       real): int32
 fn CreateCube    *(pos, clr: ^vec3, rv: real, scl:               ^vec3): int32
@@ -19,6 +19,11 @@ fn CreateGroup*(a, b, op: int32, k: real): int32
 
 fn GetCamPos*(): ^vec3
 fn GetCamDir*(): ^vec3
+
+fn CompileScene*(scene: int32): int32
+fn BindScene*(scene: int32): int32
+fn BindShader*(shader: int32): int32
+fn CreateScene*(maxShapeNum, maxGroupNum, stepsNum, bounces: int32, maxTraceDist, sunSize: real): int32
 
 fn vMultf*(a: ^vec3, k: real): ^vec3 { return &vec3{a.x * k,   a.y * k,   a.z * k};   }
 fn vAdd  *(a, b: ^vec3      ): ^vec3 { return &vec3{a.x + b.x, a.y + b.y, a.z + b.z}; }
