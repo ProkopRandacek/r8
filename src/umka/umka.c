@@ -1,9 +1,10 @@
 #include <stdio.h>
 #include <stddef.h>
 
-#include "../debug.h"
+#include "../../submodules/umka/src/umka_api.h"
 #include "bindings.h"
 #include "umka.h"
+#include "../debug.h"
 
 void* umka;
 int umkaStartFunc, umkaUpdateFunc, umkaKeyDown, umkaKeyUp;
@@ -37,4 +38,8 @@ void initUmka() {
 	umkaKeyUp      = umkaGetFunc(umka, NULL, "keyUp");
 
 	dprint("UMKA DONE");
+}
+
+void exitUmka() {
+	umkaFree(umka);
 }

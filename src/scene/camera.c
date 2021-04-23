@@ -3,23 +3,9 @@
 
 #include "camera.h"
 
-
-float lastAngle, lastH, lastW;
-
 extern int w, h; // these are from opengl.c. I need to change these for the screenshots to be the right size
-Camera* cam; // global camera pointer
-char camCreated = 0;
 
-void cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
-	if (!camCreated) {
-		cam = malloc(sizeof(Camera));
-		camCreated = 1;
-	}
-
-	lastAngle = angle;
-	lastH = he;
-	lastW = wi;
-
+void cmr(Camera* cam, vec3 pos, vec3 dir, float angle) {
 	cam->pos = pos;
 
 	vec3 sc = vAdd(pos, dir); // Screen center
@@ -34,7 +20,7 @@ void cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
 
 	//float y = 1.0f / tan(angle); calculate angle TODO
 
-	vec3 left = vMultf(vNorm(v3(-dir.z, angle, dir.x)), wi);
+	vec3 left = vMultf(vNorm(v3(-dir.z, angle, dir.x)), ((float)w / 1000.0f));
 	// CAMERA VIEW
 	// tl---------tr // top left, top right
 	// |           | // SC = Screen center point
@@ -44,7 +30,7 @@ void cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
 	// |           |
 	// bl---------br // bottom left, bottom right
 
-	vec3 up = vMultf(vNorm(vCross(left, dir)), he);
+	vec3 up = vMultf(vNorm(vCross(left, dir)), ((float)h / 1000.0f));
 	// tl----^----tr picture in camera space
 	// |     |     | // SC = Screen center point
 	// |     |     |
@@ -64,21 +50,4 @@ void cmr(vec3 pos, vec3 dir, float angle, float he, float wi) {
 	cam->bl = vAdd(vAdd(down, left), sc);
 	cam->br = vAdd(vAdd(down, right), sc);
 }
-
-void updateCamPos(vec3 offset) {
-	vec3 forward = v3(cam->forward.x, 0, cam->forward.z);
-	vec3 left = v3(cam->left.x, 0, cam->left.z);
-	cam->pos = vAdd(cam->pos, vMultf(forward, offset.z));
-	cam->pos = vAdd(cam->pos, vMultf(left, -offset.x));
-	cam->pos.y += offset.y;
-}
-
-void setWH(float iw, float ih) {
-	lastH = ih;
-	lastW = iw;
-	w = (int) (iw * 1000.0f);
-	h = (int) (ih * 1000.0f);
-}
-
-void updateCamDir(vec3 pos, vec3 dir) { cmr(pos, dir, lastAngle, lastH, lastW); }
 

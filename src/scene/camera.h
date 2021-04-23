@@ -1,5 +1,4 @@
 // vim: filetype=c
-
 #ifndef CAMERA_H
 #define CAMERA_H
 
@@ -16,9 +15,9 @@ typedef struct Cameras {
 	vec3 forward;
 } Camera;
 
-void cmr(vec3 pos, vec3 dir, float angle, float h, float w);
-void updateCamPos(vec3 offset);
-void updateCamDir(vec3 pos, vec3 dir);
-void setWH(float w, float h);
+void cmr(Camera* cam, vec3 pos, vec3 dir, float angle);
+//void updateCamPos(Camera* cam, vec3 offset);
+//void updateCamDir(Camera* cam, vec3 pos, vec3 dir);
+//void setWH(Camera* cam, float w, float h);
 
 #endif

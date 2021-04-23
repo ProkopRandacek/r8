@@ -1,82 +1,69 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <math.h>
-#include <unistd.h>
-#include <time.h>
-
 #include "debug.h"
 #include "main.h"
-#include "settings.h"
 #include "umka/umka.h"
+#include "scene/scene.h"
+#include "opengl.h"
 
 extern GL* gl;
 extern void* umka;
-float deltaTime = 0.0f;
 extern int umkaStartFunc, umkaUpdateFunc;
 
+float dt;
+
 int main() {
-	printf("\n\n====================================\n\n\nbuild name: %s\nI think I'm runnig on ", BUILD_NAME);
+	printf("\nBuild name: %s\nI'm running on ", BUILD_NAME);
 #ifdef _WIN32
-	printf("windows\n");
+	printf("Windows\n\n");
 #else
-	printf("Linux\n");
+	printf("Linux\n\n");
 #endif
 
-	Scene s;
-	s.shapeMask = CUBE_MASK | SPHERE_MASK | CYLINDER_MASK | TORUS_MASK | CCONE_MASK;
-	s.maxShapeNum = MAX_SHAPE_NUM;
-	s.maxGroupNum = MAX_GROUP_NUM;
-	s.stepsNum = 512;
-	s.bounces = 1;
-	s.epsilon = 0.02f;
-	s.collisionThreshold       = 0.001f;
-	s.shadowCollisionThreshold = 0.001f;
-	s.backStepK = 100.0f;
-	s.maxTraceDist = 10.0f;
-	s.sunSize = 10.0f;
-
-	startTime(); // debug init
+	// INIT STUFF
+	//============
+	startDebugTime();
+	dprint("INIT START");
+	initOGL();
 	initUmka();
-	umkaCall(umka, umkaStartFunc, 0, NULL, NULL);
-	initOGL(s);
-	createScene();
-
 	dprint("INIT DONE");
-	dprint("starting main loop");
 
-	float lastTime = 0.0f;
-	float frameTime = 0.0f;
-	unsigned int frameCount = 0;
+	// CALL UMKA START FUNC
+	//======================
+	dprint("CALLING UMKA START FUNC");
+	umkaCall(umka, umkaStartFunc, 0, NULL, NULL);
 
+	// FPS counting variables
+	//========================
+	float lt = 0.0f, ft = 0.0f;
+	dt = 0.0f;
+	int   fc = 0;
+
+	dprint("ENTERING RENDER LOOP");
 	while (!glfwWindowShouldClose(gl->window)) {
-		frameCount++;
+		// FPS and delta time counting
+		//=============================
+		fc++;
+		dt = (float)glfwGetTime() - lt;
+		lt = (float)glfwGetTime();
+		ft += dt;
+		if (ft > 1.0f) {
+			//printf("FPS: %d, MSPF: %.4f\n", fc, 1000.0f / (float)fc);
+			fc = 0;
+			ft = 0;
+		}
 
-		updateInput();
+		// UPDATE & RENDER
+		//=================
 		umkaCall(umka, umkaUpdateFunc, 0, NULL, NULL);
 		updateScene();
-
 		renderOGL();
-
-		deltaTime = (float)glfwGetTime() - lastTime;
-		lastTime = (float)glfwGetTime();
-
-		frameTime += deltaTime;
-
-		if (frameTime > 1.0f) {
-			//printf("FPS: %d, MSPF: %.4f\n", frameCount, 1000.0f / (float)frameCount);
-			frameCount = 0;
-			frameTime = 0.0f;
-		}
 	}
 
-	freeObjects();
-	umkaFree(umka);
-	dprint("exiting GL");
+	// EXIT
+	//======
+	dprint("Exiting");
+	exitUmka();
 	exitOGL();
-	dprint("return 0;");
 	return 0;
 }
 
-void stop() { glfwSetWindowShouldClose(gl->window, GL_TRUE); }
-void die()  { exit(1); }

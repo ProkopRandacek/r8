@@ -1,6 +1,6 @@
 // vim: filetype=c
-#ifndef VECTOR
-#define VECTOR
+#ifndef VECTOR_H
+#define VECTOR_H
 
 #include <stdio.h>
 #include <math.h>

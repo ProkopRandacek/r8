@@ -2,10 +2,10 @@ SRC = src
 OBJ = obj
 
 SOURCES = $(wildcard $(SRC)/*.c) $(wildcard $(SRC)/**/*.c)
-OBJECTS := $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
+OBJECTS = $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
 
 GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized -Waggregate-return
-GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast #-g3 -DDO_GL_DEBUG # Trying to access gldebug on devices that don't support it can cause SIGSEGV
+GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast -g3
 GCC_LIB = -lm -ldl -lpthread -DUMKA_STATIC
 GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include -I$(SRC) -I$(SRC)/umka -I$(SRC)/scene -I$(SRC)/shader
 
@@ -44,7 +44,7 @@ package:
 	zip -r $(NAME)_$(BUILD_NAME)_$(BUILD_TIME).zip build/
 
 graph:
-	gcc $(SOURCES) -MM | ./submodules/gcc-deps-graph/graphMaker.py
+	gcc $(SOURCES) -MM | ./submodules/gcc-deps-graph/graphMaker.py -i vector settings debug shapes camera
 	rm ./deps.gv
 
 scripts:
@@ -79,7 +79,7 @@ glfw:
 
 deps:
 	@echo Checking dependencies
-	if test ! -f submodules/glfw/CMakeLists.txt || test ! -f submodules/umka/Makefile; then git submodule update --init --recursive; fi
+	if test ! -f submodules/glfw/CMakeLists.txt || test ! -f submodules/umka/Makefile || test ! -f submodules/gcc-deps-graph/graphMaker.py; then git submodule update --init --recursive; fi
 
 clean:
 	@echo Remove previous build files

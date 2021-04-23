@@ -2,15 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <glad/gl.h>
-#include <GLFW/glfw3.h>
 
 #include "shader.h"
-#include "debug.h"
-#include "scene/shaderGen.h"
+#include "shaderGen.h"
+#include "../debug.h"
 
+unsigned int bindedShader;
 
 unsigned int shd(const char* vertShdSource, const char* fragShdSource) {
-	unsigned int s;
 	int success;
 	char infoLog[2048];
 	unsigned int vertShd = glCreateShader(GL_VERTEX_SHADER);
@@ -22,7 +21,6 @@ unsigned int shd(const char* vertShdSource, const char* fragShdSource) {
 		printf("Error while compiling vertex shader\n%s\n", infoLog);
 		exit(1);
 	}
-
 	char l[61]; sprintf(l, "GL - SHADER - vertex shader compiled (%ld)", strlen(vertShdSource)); dprint(l);
 
 	unsigned int fragShd = glCreateShader(GL_FRAGMENT_SHADER);
@@ -34,10 +32,9 @@ unsigned int shd(const char* vertShdSource, const char* fragShdSource) {
 		printf("Error while compiling fragment shader\n%s\n", infoLog);
 		exit(1);
 	}
-
 	sprintf(l, "GL - SHADER - fragment shader compiled (%ld)", strlen(fragShdSource)); dprint(l);
 
-	s = glCreateProgram();
+	unsigned int s = glCreateProgram();
 	glAttachShader(s, vertShd);
 	glAttachShader(s, fragShd);
 	glLinkProgram(s);
@@ -54,13 +51,25 @@ unsigned int shd(const char* vertShdSource, const char* fragShdSource) {
 	return s;
 }
 
+unsigned int createShader(Scene* s) {
+	char* vert = createVertSource();
+	char* frag = createFragSource(s);
+	return shd(vert, frag);
+}
+
+void activateShader(unsigned int s) {
+	bindedShader = s;
+	glUseProgram(s);
+}
+
 // single values
-void shdSetInt  (unsigned int s, const char* name, int value)    { glUniform1i(glGetUniformLocation(s, name), value); }
-void shdSetFloat(unsigned int s, const char* name, float value)  { glUniform1f(glGetUniformLocation(s, name), value); }
-void shdSetIVec2(unsigned int s, const char* name, int x, int y) { glUniform2i(glGetUniformLocation(s, name), x, y); }
+void shdSetInt  (const char* name, int value)    { glUniform1i(glGetUniformLocation(bindedShader, name), value); }
+void shdSetFloat(const char* name, float value)  { glUniform1f(glGetUniformLocation(bindedShader, name), value); }
+void shdSetIVec2(const char* name, int x, int y) { glUniform2i(glGetUniformLocation(bindedShader, name), x, y); }
 
 // arrays
-void shdSetFloatArray(unsigned int s, const char* name, int count, float* values) { glUniform1fv(glGetUniformLocation(s, name), count, values); }
-void shdSetIntArray  (unsigned int s, const char* name, int count, int*   values) { glUniform1iv(glGetUniformLocation(s, name), count, values); }
-void shdSetVec3Array (unsigned int s, const char* name, int count, float* values) { glUniform3fv(glGetUniformLocation(s, name), count, values); }
-void shdSetVec4Array (unsigned int s, const char* name, int count, float* values) { glUniform4fv(glGetUniformLocation(s, name), count, values); }
+void shdSetFloatArray(const char* name, int count, float* values) { glUniform1fv(glGetUniformLocation(bindedShader, name), count, values); }
+void shdSetIntArray  (const char* name, int count, int*   values) { glUniform1iv(glGetUniformLocation(bindedShader, name), count, values); }
+void shdSetVec3Array (const char* name, int count, float* values) { glUniform3fv(glGetUniformLocation(bindedShader, name), count, values); }
+void shdSetVec4Array (const char* name, int count, float* values) { glUniform4fv(glGetUniformLocation(bindedShader, name), count, values); }
+

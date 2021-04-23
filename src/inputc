@@ -8,14 +8,17 @@
 #include "time.h"
 #include "settings.h"
 #include "umka/umka.h"
+#include "scene/scene.h"
 
 
 extern GL* gl;
 extern Camera* cam;
 extern int w, h;
-extern float deltaTime;
+extern float dt;
 extern int umkaKeyDown, umkaKeyUp;
 extern void* umka;
+extern Scene* scenes;
+extern int bindedScene;
 
 char wDown = 0;
 char aDown = 0;
@@ -36,8 +39,8 @@ void updateInput() {
 	if (spaceDown) moveDir.y = 1.0f;
 	if (shiftDown) moveDir.y = -1.0f;
 	if (vMag(moveDir) > 0.0f) {
-		moveDir = vMultf(vNorm(moveDir), MOVE_SPEED * deltaTime);
-		updateCamPos(moveDir);
+		moveDir = vMultf(vNorm(moveDir), MOVE_SPEED * dt);
+		updateCamPos(scenes[bindedScene].cam, moveDir);
 	}
 
 	// mouse
@@ -46,11 +49,11 @@ void updateInput() {
 	float y = (1.0f - (2.0f *(float) ypos) /(float) h) * MOUSE_SENS;
 
 	vec3 dir = vNorm(v3(
-		cosf(y) * sinf(x),
-		sinf(y),
-		cosf(y) * cosf(x)
-	));
-	updateCamDir(cam->pos, dir);
+				cosf(y) * sinf(x),
+				sinf(y),
+				cosf(y) * cosf(x)
+			   ));
+	updateCamDir(scenes[bindedScene].cam, scenes[bindedScene].cam->pos, dir);
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -108,4 +111,3 @@ void onKey(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 	else if (scancode == scP && action == 1) screenshot();
 }
-

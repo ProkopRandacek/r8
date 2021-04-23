@@ -3,44 +3,31 @@
 #include <string.h>
 
 #include "opengl.h"
+#include "fileio.h"
 #include "debug.h"
-#include "scene/camera.h" // the camera needs to be resized with the window
-
-#include "time.h"
-
+#include "shader/shader.h"
+#include "scene/camera.h"
 
 int w = 1000;
 int h = 1000;
 
 GL* gl;
-float* pixels;
 unsigned int frameCount = 0;
 
-void initOGL(Scene s) {
+void initOGL() {
 	dprint("GL START");
 	gl = malloc(sizeof(GL));
 
 	// glfw init
-	if (!glfwInit()) {
-		printf("glfw init failed\n");
-		exit(1);
-	}
+	if (!glfwInit()) eprint("GL - GLFW init failed\n");
 	dprint("GL - glfw init");
 
 	char title[32] = "R8 - ";
-	strcat(title, BUILD_NAME);
+	strcat(title, BUILD_NAME); // build name is defined from makefile
 
 	// create window
 	gl->window = glfwCreateWindow(w, h, title, NULL, NULL);
-	if (!gl->window) {
-		glfwTerminate();
-		printf("window creation failed\n");
-		exit(1);
-	}
-
-#ifdef DO_GL_DEBUG
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
-#endif
+	if (!gl->window) eprint("GL - Window creation failed\n");
 
 	dprint("GL - window init");
 
@@ -48,8 +35,7 @@ void initOGL(Scene s) {
 
 	int version = gladLoadGL(glfwGetProcAddress);
 	if (version == 0) {
-		dprint("Failed to initialize OpenGL context");
-		exit(1);
+		eprint("GL - Failed to initialize OpenGL context");
 	}
 	char g[128];
 	sprintf(g, "GL - Loaded OpenGL %d.%d", GLAD_VERSION_MAJOR(version), GLAD_VERSION_MINOR(version)); dprint(g);
@@ -60,21 +46,13 @@ void initOGL(Scene s) {
 	glViewport(10, 10, w, h);
 	glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
-	//glfwSwapInterval(0);
+	glfwSwapInterval(0);
 
 	dprint("GL - window setup");
 
 	// triangles
-	float vertices[] = {
-		1.0f, 1.0f, 0.0f,
-		1.0f, -1.0f, 0.0f,
-		-1.0f, -1.0f, 0.0f,
-		-1.0f, 1.0f, 0.0f
-	};
-	unsigned int indices[] = {
-		0, 1, 3,
-		1, 2, 3
-	};
+	float vertices[] = { 1.0f, 1.0f, 0.0f, 1.0f, -1.0f, 0.0f, -1.0f, -1.0f, 0.0f, -1.0f, 1.0f, 0.0f };
+	unsigned int indices[] = { 0, 1, 3, 1, 2, 3 };
 
 	glGenVertexArrays(1, &gl->VAO);
 	glGenBuffers(1, &gl->VBO);
@@ -96,33 +74,14 @@ void initOGL(Scene s) {
 
 	dprint("GL - buffers done");
 
-	// create shader
-
-	char* vert = createVertSource();
-	char* frag = createFragSource(s);
-
-	gl->s = shd(vert, frag);
-	free(vert);
-	free(frag);
-	glUseProgram(gl->s);
-
-	dprint("GL - shaders done");
-
 	glBindVertexArray(gl->VAO);
 
 	glfwSetErrorCallback(onError);
-	glfwSetKeyCallback(gl->window, onKey);
+	//glfwSetKeyCallback(gl->window, onKey);
 	glfwSetFramebufferSizeCallback(gl->window, resize);
-	glfwSetKeyCallback(gl->window, onKey);
+	//glfwSetKeyCallback(gl->window, onKey);
 
 	glfwSetInputMode(gl->window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	#ifdef DO_GL_DEBUG
-	glEnable(GL_DEBUG_OUTPUT);
-	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
-	glDebugMessageCallback(glDebugOutput, NULL);
-	glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, NULL, GL_TRUE);
-	#endif
 
 	dprint("GL DONE");
 }
@@ -131,7 +90,6 @@ void renderOGL() {
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	// swap buffers
-	//glClear(GL_COLOR_BUFFER_BIT); saves 0.1 milisecond lol
 	glfwSwapBuffers(gl->window);
 	glfwPollEvents();
 }
@@ -139,7 +97,7 @@ void renderOGL() {
 void screenshot() {
 	frameCount++;
 
-	pixels = malloc(sizeof(float) * (long unsigned int)(w * h * 3));
+	float* pixels = malloc(sizeof(float) * (long unsigned int)(w * h * 3));
 
 	char fname[15];
 	sprintf(fname, "%04d", frameCount);
@@ -171,58 +129,10 @@ void resize(GLFWwindow* window, int width, int height) {
 	if (window != gl->window) return;
 
 	glViewport(0, 0, width, height);
-	shdSetIVec2(gl->s, "resolution", width, height);
+	shdSetIVec2("resolution", width, height);
 	float k = 1000.0f;
-	setWH((float)width / k, (float)height / k);
+	printf("resizeeee\n");
+	w = width;
+	h = height;
 }
 
-#pragma GCC diagnostic ignored "-Wunused-parameter"
-void APIENTRY glDebugOutput(GLenum source,
-		GLenum type,
-		unsigned int id,
-		GLenum severity,
-		GLsizei length,
-		const char *message,
-		const void *userParam)
-{
-	// ignore non-significant error/warning codes
-	if(id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
-
-	printf("---------------\n");
-	printf("Debug message (%d): %s\n", id, message);
-
-	switch (source)
-	{
-		case GL_DEBUG_SOURCE_API:             printf("Source: API"); break;
-		case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   printf("Source: Window System"); break;
-		case GL_DEBUG_SOURCE_SHADER_COMPILER: printf("Source: Shader Compiler"); break;
-		case GL_DEBUG_SOURCE_THIRD_PARTY:     printf("Source: Third Party"); break;
-		case GL_DEBUG_SOURCE_APPLICATION:     printf("Source: Application"); break;
-		case GL_DEBUG_SOURCE_OTHER:           printf("Source: Other"); break;
-		default: break;
-	} printf("\n");
-
-	switch (type)
-	{
-		case GL_DEBUG_TYPE_ERROR:               printf("Type: Error"); break;
-		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: printf("Type: Deprecated Behaviour"); break;
-		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  printf("Type: Undefined Behaviour"); break;
-		case GL_DEBUG_TYPE_PORTABILITY:         printf("Type: Portability"); break;
-		case GL_DEBUG_TYPE_PERFORMANCE:         printf("Type: Performance"); break;
-		case GL_DEBUG_TYPE_MARKER:              printf("Type: Marker"); break;
-		case GL_DEBUG_TYPE_PUSH_GROUP:          printf("Type: Push Group"); break;
-		case GL_DEBUG_TYPE_POP_GROUP:           printf("Type: Pop Group"); break;
-		case GL_DEBUG_TYPE_OTHER:               printf("Type: Other"); break;
-		default: break;
-	} printf("\n");
-
-	switch (severity)
-	{
-		case GL_DEBUG_SEVERITY_HIGH:         printf("Severity: high"); break;
-		case GL_DEBUG_SEVERITY_MEDIUM:       printf("Severity: medium"); break;
-		case GL_DEBUG_SEVERITY_LOW:          printf("Severity: low"); break;
-		case GL_DEBUG_SEVERITY_NOTIFICATION: printf("Severity: notification"); break;
-		default: break;
-	} printf("\n");
-	printf("\n");
-}

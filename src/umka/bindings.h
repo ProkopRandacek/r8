@@ -1,3 +1,7 @@
+// vim: filetype=c
+#ifndef BINDINGS_H
+#define BINDINGS_H
+
 #include "../../submodules/umka/src/umka_api.h"
 
 void umkaBind(void* umka);
@@ -17,3 +21,10 @@ void umCreateGroup   (UmkaStackSlot* P, UmkaStackSlot* R);
 void umGetCamPos  (UmkaStackSlot* p, UmkaStackSlot* r);
 void umGetCamDir  (UmkaStackSlot* p, UmkaStackSlot* r);
 void umSetLightPos(UmkaStackSlot* p, UmkaStackSlot* r);
+
+void umBindShader  (UmkaStackSlot* p, UmkaStackSlot* r);
+void umBindScene   (UmkaStackSlot* p, UmkaStackSlot* r);
+void umCompileScene(UmkaStackSlot* p, UmkaStackSlot* r);
+void umCreateScene (UmkaStackSlot* p, UmkaStackSlot* r);
+
+#endif

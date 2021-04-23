@@ -6,30 +6,125 @@
 #include "glslPieces/SDFs.h"
 #include "glslPieces/rayMarch.h"
 #include "glslPieces/general.h"
-#include "shaderGen.h"
-#include "shapes.h"
-#include "SDFGen.h"
+#include "../scene/shapes.h"
 #include "../settings.h"
+#include "shaderGen.h"
 
 #define FRAG_FULL_SIZE     65536 // 2^16
-#define FRAG_END_SIZE       4096 // 2^12
-#define FRAG_SDF_SIZE       4096 // 2^12
-#define FRAG_MAP_SIZE       4096 // 2^12
-#define FRAG_HEADER_SIZE    2048 // 2^11
-#define FRAG_SETTINGS_SIZE  1024 // 2^10
-#define FRAG_VERSION_SIZE     16 // 2^4
+#define FRAG_SDF_SIZE       8192 // 2^13
+#define FRAG_END_SIZE       8192 // 2^12
+#define FRAG_MAP_SIZE       8192 // 2^12
+#define FRAG_HEADER_SIZE    8192 // 2^11
+#define FRAG_SETTINGS_SIZE  8192 // 2^10
+#define FRAG_VERSION_SIZE   8192 // 2^4
 
 #define VERT_SIZE 128
 
 #define GLSL_VERSION 330
 
-extern Shape*      shapes[MAX_SHAPE_NUM];
-extern ShapeGroup* groups[MAX_GROUP_NUM];
-extern int groupNum;
+char* sdf;
+
+const char* SDFNames[] = {
+	"d2Cube",
+	"d2Sphere",
+	"d2Cylinder",
+	"d2BoxFrame",
+	"d2Torus",
+	"d2CTorus",
+	"d2Link",
+	"d2Plane",
+	"d2HexPrism",
+	"d2TriPrism",
+	"d2Capsule",
+	"d2CCone",
+	"d2Pyramid",
+	"d2Triangle",
+	"d2Quad"
+};
+
+const char* SDFArgs[] = {
+	/* cube    */"pos, sP(_), sS(_)",
+	/* sphere  */"pos, sP(_), sR(_)",
+	/* cyinder */"pos, sP(_), sS(_), sR(_)",
+	/*         */"",
+	/* torus   */"pos, sP(_), sRV(_)",
+	/*         */"",
+	/*         */"",
+	/*         */"",
+	/*         */"",
+	/*         */"",
+	/*         */"",
+	/* ccone   */"pos, sP(_), sS(_), sF(_, 9), sF(_, 10)",
+	/*         */"",
+	/*         */"",
+	/*         */""
+};
+
+int isGroup(int i) { return i >= MAX_SHAPE_NUM; }
+
+// for replacing the `_` in SDFArgs with the actuall shape number
+char* strReplace(const char* org, char pre, char* post) {
+	int i = 0;
+	int postL = (int)strlen(post);
+	char* buff = malloc(strlen(org) + strlen(post) + 1);
+	memset(buff, 0, strlen(org) + strlen(post) + 1);
+	while (1) {
+		if      (org[i] == 0) break;
+		else if (org[i] == pre) {
+			strcat(buff, post);
+			i += postL;
+		} else {
+			buff[i] = org[i];
+			i++;
+		}
+
+	}
+	return buff;
+}
+
+void makeShape(Scene* s, int i) {
+	char* c = malloc(sizeof(char) * 128);
+	memset(c, 0, sizeof(char) * 128);
+
+	char str[5];
+	sprintf(str, "%d", i);
+
+	char* a = strReplace(SDFArgs[s->shapes[i]->type - 1], '_', str);
+
+	sprintf(c, "map(sC(%d), %s(%s))", i, SDFNames[s->shapes[i]->type - 1], a);
+
+	strcat(sdf, c);
+	free(c);
+	free(a);
+}
+
+// recurively build the sdf from groups tree
+void recr(Scene* s, int pos) {
+	ShapeGroup* me = s->groups[pos - MAX_SHAPE_NUM];
+
+	if      (me->op == NORMAL) { strcat(sdf, "minM("); }
+	else if (me->op == CUT)    { strcat(sdf, "cutM("); }
+	else if (me->op == MASK)   { strcat(sdf, "maxM("); }
+
+	if (isGroup(me->a)) { recr(s, me->a); }
+	else { makeShape(s, me->a); }
+	strcat(sdf, ",");
+	if (isGroup(me->b)) { recr(s, me->b); }
+	else { makeShape(s, me->b); }
+	strcat(sdf, ")");
+}
+
+char* genSDF(Scene* s) {
+	sdf = malloc(sizeof(char) * FRAG_SDF_SIZE);
+	memset(sdf, 0, sizeof(char) * FRAG_SDF_SIZE);
+	recr(s, s->groupNum - 1 + MAX_SHAPE_NUM);
+
+	return sdf;
+}
 
 char* createVertSource() {
 	char* c = malloc(sizeof(char) * VERT_SIZE);
-	memset(c, 0, VERT_SIZE);
+	memset(c, 0, sizeof(char) * VERT_SIZE);
 	char* ver = createVersionSource();
 	strcat(c, ver);
 	strcat(c, vertSource);
@@ -39,19 +134,19 @@ char* createVertSource() {
 
 char* createVersionSource() {
 	char* c = malloc(sizeof(char) * FRAG_VERSION_SIZE);
-	memset(c, 0, FRAG_VERSION_SIZE);
+	memset(c, 0, sizeof(char) * FRAG_VERSION_SIZE);
 
 	sprintf(c, "%s%d\n", version, GLSL_VERSION);
 
 	return c;
 }
 
-char* createSettingsSource(Scene s) {
+char* createSettingsSource(Scene* s) {
 	char* c = malloc(sizeof(char) * FRAG_SETTINGS_SIZE);
-	memset(c, 0, FRAG_SETTINGS_SIZE);
+	memset(c, 0, sizeof(char) * FRAG_SETTINGS_SIZE);
 	int   shapeSize = SHAPE_SIZE;
 	int   groupSize = GROUP_SIZE;
-	float backStep  = s.collisionThreshold * s.backStepK;
+	float backStep  = s->collisionThreshold * s->backStepK;
 
 	char                maxShapeNum_[10] = {0, 0, 0, 0, 0, 0};
 	char                maxGroupNum_[10] = {0, 0, 0, 0, 0, 0};
@@ -66,18 +161,18 @@ char* createSettingsSource(Scene s) {
 	char                    BOUNCES_[10] = {0, 0, 0, 0, 0, 0};
 	char                   SUN_SIZE_[10] = {0, 0, 0, 0, 0, 0};
 
-	sprintf(               maxShapeNum_, "%d"  , s.maxShapeNum             );
-	sprintf(               maxGroupNum_, "%d"  , s.maxGroupNum             );
+	sprintf(               maxShapeNum_, "%d"  , s->maxShapeNum             );
+	sprintf(               maxGroupNum_, "%d"  , s->maxGroupNum             );
 	sprintf(                 shapeSize_, "%d"  , shapeSize                 );
 	sprintf(                 groupSize_, "%d"  , groupSize                 );
-	sprintf(                   epsilon_, "%.2f", s.epsilon                 );
-	sprintf(                  STEPSNUM_, "%d"  , s.stepsNum                );
-	sprintf(       COLLISION_THRESHOLD_, "%.3f", s.collisionThreshold      );
-	sprintf(SHADOW_COLLISION_THRESHOLD_, "%.3f", s.shadowCollisionThreshold);
+	sprintf(                   epsilon_, "%.2f", s->epsilon                 );
+	sprintf(                  STEPSNUM_, "%d"  , s->stepsNum                );
+	sprintf(       COLLISION_THRESHOLD_, "%.3f", s->collisionThreshold      );
+	sprintf(SHADOW_COLLISION_THRESHOLD_, "%.3f", s->shadowCollisionThreshold);
 	sprintf(                 BACK_STEP_, "%.3f", backStep                  );
-	sprintf(            MAX_TRACE_DIST_, "%.3f", s.maxTraceDist            );
-	sprintf(                   BOUNCES_, "%d"  , s.bounces                 );
-	sprintf(                  SUN_SIZE_, "%.3f", s.sunSize                 );
+	sprintf(            MAX_TRACE_DIST_, "%.3f", s->maxTraceDist            );
+	sprintf(                   BOUNCES_, "%d"  , s->bounces                 );
+	sprintf(                  SUN_SIZE_, "%.3f", s->sunSize                 );
 
 	strcat(c, "// SETTINGS START\n");
 	strcat(c,   "#define maxShapeNum "               ); strcat(c,                maxShapeNum_);
@@ -99,7 +194,7 @@ char* createSettingsSource(Scene s) {
 
 char* createHeaderSource() {
 	char* c = malloc(sizeof(char) * FRAG_HEADER_SIZE);
-	memset(c, 0, FRAG_HEADER_SIZE);
+	memset(c, 0, sizeof(char) * FRAG_HEADER_SIZE);
 
 	strcat(c, "// HEADER START\n");
 	strcat(c, defines);
@@ -114,7 +209,7 @@ char* createHeaderSource() {
 
 char* createSDFsSource(short shapesMask) {
 	char* c = malloc(sizeof(char) * FRAG_SDF_SIZE);
-	memset(c, 0, FRAG_SDF_SIZE);
+	memset(c, 0, sizeof(char) * FRAG_SDF_SIZE);
 
 	//shapesMask = shapesMask | SPHERE_MASK;
 
@@ -139,15 +234,15 @@ char* createSDFsSource(short shapesMask) {
 	return c;
 }
 
-char* createMapWorldSource() {
+char* createMapWorldSource(Scene* s) {
 	char* c = malloc(sizeof(char) * FRAG_MAP_SIZE);
-	char* sdf = genSDF();
-	memset(c, 0, FRAG_MAP_SIZE);
+	char* SDF = genSDF(s);
+	memset(c, 0, sizeof(char) * FRAG_MAP_SIZE);
 
 	strcat(c, "// MAP WORLD START\n");
 	strcat(c, combineFuncs);
 	strcat(c, mapFuncStart);
-	strcat(c, sdf);
+	strcat(c, SDF);
 	strcat(c, mapFuncEnd);
 	strcat(c, "// MAP WORLD END\n\n");
 
@@ -158,7 +253,7 @@ char* createMapWorldSource() {
 
 char* createEndSource() {
 	char* c = malloc(sizeof(char) * FRAG_END_SIZE);
-	memset(c, 0, FRAG_END_SIZE);
+	memset(c, 0, sizeof(char) * FRAG_END_SIZE);
 
 	strcat(c, "// END START\n");
 	strcat(c, normalFunc);
@@ -171,15 +266,15 @@ char* createEndSource() {
 	return c;
 }
 
-char* createFragSource(Scene s) {
+char* createFragSource(Scene* s) {
 	char* c = malloc(sizeof(char) * FRAG_FULL_SIZE);
 	char* vers = createVersionSource();
 	char* settings = createSettingsSource(s);
 	char* header = createHeaderSource();
-	char* SDFs = createSDFsSource(s.shapeMask);
-	char* mapWorld = createMapWorldSource();
+	char* SDFs = createSDFsSource(s->shapeMask);
+	char* mapWorld = createMapWorldSource(s);
 	char* end = createEndSource();
-	memset(c, 0, FRAG_FULL_SIZE);
+	memset(c, 0, sizeof(char) * FRAG_FULL_SIZE);
 
 	strcat(c, vers);
 	strcat(c, settings);
@@ -195,7 +290,7 @@ char* createFragSource(Scene s) {
 	free(mapWorld);
 	free(end);
 
-	//printf(c);
+	//printf("%s", c);
 
 	return c;
 }

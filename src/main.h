@@ -1,9 +1,5 @@
 // vim: filetype=c
-#include "opengl.h"
-#include "scene/scene.h"
-#include "input.h"
-
-
+#ifndef MAIN_H
+#define MAIN_H
 int main(void);
-void stop(void);
-void die(void);
+#endif

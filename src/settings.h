@@ -1,5 +1,4 @@
 // vim: filetype=c
-
 #ifndef SETTINGS
 #define SETTINGS
 
@@ -8,8 +7,9 @@
 #define MOUSE_SENS 0.12f
 #define MOVE_SPEED 5.0f
 
-#define MAX_SHAPE_NUM 10
-#define MAX_GROUP_NUM 10
+#define MAX_SHAPE_NUM 16
+#define MAX_GROUP_NUM 16
+#define MAX_SCENE_NUM 16
 
 // this does not do anything rn
 #define WANTED_FPS 60
