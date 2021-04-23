@@ -6,4 +6,4 @@
 	url = https://github.com/glfw/glfw.git
 [submodule "submodules/gcc-deps-graph"]
 	path = submodules/gcc-deps-graph
-	url = git@github.com:ProkopRandacek/gcc-deps-graph.git
+	url = https://github.com/ProkopRandacek/gcc-deps-graph.git
