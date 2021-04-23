@@ -1,9 +1,5 @@
 build
-src/glsl.h
-src/gl.c
-include
-full.frag
-full.vert
 r8_*.zip
 obj
 deps.gv.pdf
+deps.gv
