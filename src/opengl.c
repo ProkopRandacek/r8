@@ -131,7 +131,6 @@ void resize(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 	shdSetIVec2("resolution", width, height);
 	float k = 1000.0f;
-	printf("resizeeee\n");
 	w = width;
 	h = height;
 }

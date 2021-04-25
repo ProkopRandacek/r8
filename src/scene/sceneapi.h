@@ -18,6 +18,8 @@ void setShapeClr(int i, vec3 value);
 void setShapePos(int i, vec3  value);
 void setShapeRv (int i, float value);
 
+void setCam(vec3 pos, vec3 dir, float angle);
+
 // shape creating
 int createSphere  (vec3 pos,   vec3 clr, float rv, float r);
 int createCube    (vec3 pos,   vec3 clr, float rv, vec3 scale);

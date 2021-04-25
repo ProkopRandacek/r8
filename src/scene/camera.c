@@ -3,7 +3,7 @@
 
 #include "camera.h"
 
-extern int w, h; // these are from opengl.c. I need to change these for the screenshots to be the right size
+extern int w, h; // these are from opengl.c. the window width and height
 
 void cmr(Camera* cam, vec3 pos, vec3 dir, float angle) {
 	cam->pos = pos;
@@ -40,14 +40,13 @@ void cmr(Camera* cam, vec3 pos, vec3 dir, float angle) {
 	// bl---------br
 
 	vec3 right = vMultf(left, -1.0f);
-	vec3 down = vMultf(up, -1.0f);
+	vec3 down  = vMultf(up, -1.0f);
 
-	cam->left = vNorm(left);
+	cam->left    = vNorm(left);
 	cam->forward = vNorm(dir);
 
-	cam->tl = vAdd(vAdd(up, left), sc);
-	cam->tr = vAdd(vAdd(up, right), sc);
-	cam->bl = vAdd(vAdd(down, left), sc);
+	cam->tl = vAdd(vAdd(up,    left), sc);
+	cam->tr = vAdd(vAdd(up,   right), sc);
+	cam->bl = vAdd(vAdd(down,  left), sc);
 	cam->br = vAdd(vAdd(down, right), sc);
 }
-

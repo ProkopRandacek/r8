@@ -15,7 +15,6 @@ extern GL* gl;
 Scene* scenes[MAX_SCENE_NUM];
 int sceneChanged = 0;
 unsigned int bindedScene = 0;
-
 Scene* scene(int maxShapeNum, int maxGroupNum, int stepsNum, int bounces, float maxTraceDist, float sunSize) {
 	Scene* s = malloc(sizeof(Scene));
 	s->shapeMask = 32767; // all mask
@@ -40,7 +39,7 @@ Scene* scene(int maxShapeNum, int maxGroupNum, int stepsNum, int bounces, float 
 
 	// Camera
 	s->cam = malloc(sizeof(Camera));
-	cmr(s->cam, v3(0.0f, 0.0f, -4.0f), vNorm(vDir(v3(0.0f, 0.0f, -4.0f), v3(0.0f, 0.0f, 0.0f))), 0.0f);
+	cmr(s->cam, v3(0.0f, 0.0f, 0.0f), v3(0.0f, 0.0f, 1.0f), 0.0f);
 
 	return s;
 }
@@ -63,7 +62,7 @@ void updateScene() {
 	shdSetVec3Array("lightPos", 1, f);
 
 	// Camera needs to be updated if the window resolution changes
-	cmr(scenes[bindedScene]->cam, v3(0.0f, 0.0f, -4.0f), vNorm(vDir(v3(0.0f, 0.0f, -4.0f), v3(0.0f, 0.0f, 0.0f))), 0.0f);
+	//cmr(scenes[bindedScene]->cam, v3(0.0f, 0.0f, -4.0f), vNorm(vDir(v3(0.0f, 0.0f, -4.0f), v3(0.0f, 0.0f, 0.0f))), 0.0f);
 	sendCamera();
 	if (sceneChanged == 1) {
 		sendObjects();

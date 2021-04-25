@@ -62,11 +62,11 @@ void shapes2floats(float *f, unsigned int num, Shape* shp[num]) {
 			eprint(errMsg);
 		}
 		for (int j = 0; j < SHAPE_SIZE; j++) { // debug printing
-			printf("%.2f, ", f[p + j]);
+			//printf("%.2f, ", f[p + j]);
 		}
-		printf("\n");
+		//printf("\n");
 	}
-	printf("\n");
+	//printf("\n");
 }
 
 void cam2floats(Camera* cam, float* f) {
