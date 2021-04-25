@@ -21,12 +21,20 @@ void umkaBind(void* umka) {
 	umkaAddFunc(umka, "BindScene",      &umBindScene);
 	umkaAddFunc(umka, "BindShader",     &umBindShader);
 	umkaAddFunc(umka, "CompileScene",   &umCompileScene);
+	umkaAddFunc(umka, "SetCam",         &umSetCam);
 }
 
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 void umSetShapeClr(UmkaStackSlot* p, UmkaStackSlot* r) { setShapeClr((int)p[1].intVal, *(vec3*)p[0].ptrVal); }
 void umSetShapePos(UmkaStackSlot* p, UmkaStackSlot* r) { setShapePos((int)p[1].intVal, *(vec3*)p[0].ptrVal); }
 void umSetShapeRv (UmkaStackSlot* p, UmkaStackSlot* r) { setShapeRv ((int)p[1].intVal,  (float)p[0].ptrVal); }
+
+void umSetCam(UmkaStackSlot* p, UmkaStackSlot* r) {
+	vec3  pos = *(vec3*)p[2].ptrVal;
+	vec3  dir = *(vec3*)p[1].ptrVal;
+	float ang =  (float)p[0].ptrVal;
+	setCam(pos, dir, ang);
+}
 
 void umCreateSphere(UmkaStackSlot* p, UmkaStackSlot* r) {
 	vec3* pos = (vec3*)p[3].ptrVal;

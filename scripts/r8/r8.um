@@ -6,6 +6,8 @@ fn SetShpClr*(shpID: int32, clr: ^vec3)
 fn SetShpPos*(shpID: int32, pos: ^vec3)
 fn SetShpRv *(shpID: int32, rv : ^vec3)
 
+fn SetCam*(pos, dir: ^vec3, angle: real)
+
 //fn SetLightPos*(pos: ^vec3)
 
 fn CreateSphere  *(pos, clr: ^vec3, rv, rd:                       real): int32
@@ -25,6 +27,7 @@ fn BindScene*(scene: int32): int32
 fn BindShader*(shader: int32): int32
 fn CreateScene*(maxShapeNum, maxGroupNum, stepsNum, bounces: int32, maxTraceDist, sunSize: real): int32
 
-fn vMultf*(a: ^vec3, k: real): ^vec3 { return &vec3{a.x * k,   a.y * k,   a.z * k};   }
+fn vMultf*(a: ^vec3, k: real): ^vec3 { return &vec3{a.x * k,   a.y * k,   a.z * k}; }
 fn vAdd  *(a, b: ^vec3      ): ^vec3 { return &vec3{a.x + b.x, a.y + b.y, a.z + b.z}; }
-
+fn vMag  *(a: ^vec3         ): real  { return sqrt((a.x * a.x) + (a.y * a.y) + (a.z * a.z)); }
+fn vNorm *(a: ^vec3         ): ^vec3 { return vMultf(a, 1.0 / vMag(a)); }

@@ -49,7 +49,6 @@ inline ShapeType getShapeType(int i) { return scenes[bindedScene]->shapes[i]->ty
 
 void bindScene (int i) { bindedScene  = (unsigned int)i; }
 void bindShader(int i) {
-	//printf("%d, %d\n", i, (unsigned int)i);
 	activateShader((unsigned int)i);
 	sendObjects();
 }
@@ -58,6 +57,9 @@ void bindShader(int i) {
 void setShapeClr(int i, vec3  value) { scenes[bindedScene]->shapes[i]->clr = value; sceneChanged = 1; }
 void setShapePos(int i, vec3  value) { scenes[bindedScene]->shapes[i]->pos = value; sceneChanged = 1; }
 void setShapeRv (int i, float value) { scenes[bindedScene]->shapes[i]->rv  = value; sceneChanged = 1; }
+
+// Camera
+void setCam(vec3 pos, vec3 dir, float angle) { cmr(scenes[bindedScene]->cam, pos, dir, angle); }
 
 // Shape creating. Returns ID of the shape. If ID == -1 then you run out of space for shapes.
 int createSphere(vec3 pos, vec3 clr, float rv, float r) {
