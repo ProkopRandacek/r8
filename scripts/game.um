@@ -19,7 +19,7 @@ fn start() {
 
 	// Group Shapes
 	//AB   := r8.CreateGroup(A    , B   , 0, 0)
-	BB   := r8.CreateGroup(board, ball, 4, 0.1)
+	BB   := r8.CreateGroup(ball, board, 2, 0.1)
 	//root := r8.CreateGroup(AB   , BB  , 0, 0)
 
 	// Compile scene
@@ -29,7 +29,7 @@ fn start() {
 }
 
 fn update() {
-	r8.SetCam(&r8.vec3{0, 0, -10}, r8.vNorm(&r8.vec3{0, 0, 1}), 0.0)
+	r8.SetCam(&r8.vec3{4, 0, -10}, r8.vNorm(&r8.vec3{0, 0, 1}), 0.0)
 }
 
 fn keyDown(key, scancode: int32) { }

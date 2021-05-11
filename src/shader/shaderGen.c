@@ -23,6 +23,7 @@
 #define GLSL_VERSION 330
 
 char* sdf;
+char* sdfd;
 
 const char* SDFNames[] = {
 	"d2Cube",
@@ -98,8 +99,24 @@ void makeShape(Scene* s, int i) {
 	free(a);
 }
 
+void makeShapeD(Scene* s, int i) {
+	char* c = malloc(sizeof(char) * 128);
+	memset(c, 0, sizeof(char) * 128);
+
+	char str[5];
+	sprintf(str, "%d", i);
+
+	char* a = strReplace(SDFArgs[s->shapes[i]->type - 1], '_', str);
+
+	sprintf(c, "%s(%s)", SDFNames[s->shapes[i]->type - 1], a);
+
+	strcat(sdfd, c);
+	free(c);
+	free(a);
+}
+
 // recurively build the sdf from groups tree
-void recr(Scene* s, int pos) {
+void makeSDF(Scene* s, int pos) {
 	ShapeGroup* me = s->groups[pos - MAX_SHAPE_NUM];
 
 	if      (me->op == NORMAL)  { strcat(sdf, "minM("); }
@@ -113,20 +130,55 @@ void recr(Scene* s, int pos) {
 		strcat(sdf, ", ");
 	}
 
-	if (isGroup(me->a)) { recr(s, me->a); }
+	if (isGroup(me->a)) { makeSDF(s, me->a); }
 	else { makeShape(s, me->a); }
 	strcat(sdf, ", ");
-	if (isGroup(me->b)) { recr(s, me->b); }
+	if (isGroup(me->b)) { makeSDF(s, me->b); }
 	else { makeShape(s, me->b); }
 	strcat(sdf, ")");
+}
+
+void makeSDFD(Scene* s, int pos) {
+	ShapeGroup* me = s->groups[pos - MAX_SHAPE_NUM];
+
+	if      (me->op == NORMAL)  { strcat(sdfd, "min("); }
+	else if (me->op == CUT)     { strcat(sdfd, "max("); }
+	else if (me->op == MASK)    { strcat(sdfd, "max("); }
+	else if (me->op == AVERAGE) { strcat(sdfd, "mix("); }
+
+	if (isGroup(me->a)) { makeSDFD(s, me->a); }
+	else { makeShapeD(s, me->a); }
+	strcat(sdfd, ", ");
+
+	if (me->op == CUT) { strcat(sdfd, "-"); }
+
+	if (isGroup(me->b)) { makeSDFD(s, me->b); }
+	else { makeShapeD(s, me->b); }
+
+	if (me->op == AVERAGE) {
+		strcat(sdfd, ", ");
+		char c[5];
+		sprintf(&c, "%.2f", me->k);
+		strcat(sdfd, c);
+	}
+
+	strcat(sdfd, ")");
 }
 
 char* genSDF(Scene* s) {
 	sdf = malloc(sizeof(char) * FRAG_SDF_SIZE);
 	memset(sdf, 0, sizeof(char) * FRAG_SDF_SIZE);
-	recr(s, s->groupNum - 1 + MAX_SHAPE_NUM);
+	makeSDF(s, s->groupNum - 1 + MAX_SHAPE_NUM);
 
 	return sdf;
+}
+
+char* genSDFD(Scene* s) {
+	sdfd = malloc(sizeof(char) * FRAG_SDF_SIZE);
+	memset(sdfd, 0, sizeof(char) * FRAG_SDF_SIZE);
+	makeSDFD(s, s->groupNum - 1 + MAX_SHAPE_NUM);
+
+	return sdfd;
 }
 
 char* createVertSource() {
@@ -243,17 +295,21 @@ char* createSDFsSource(short shapesMask) {
 
 char* createMapWorldSource(Scene* s) {
 	char* c = malloc(sizeof(char) * FRAG_MAP_SIZE);
-	char* SDF = genSDF(s);
+	char* SDF  = genSDF (s);
+	char* SDFD = genSDFD(s);
 	memset(c, 0, sizeof(char) * FRAG_MAP_SIZE);
 
 	strcat(c, "// MAP WORLD START\n");
 	strcat(c, combineFuncs);
 	strcat(c, mapFuncStart);
 	strcat(c, SDF);
+	strcat(c, mapFuncMid);
+	strcat(c, SDFD);
 	strcat(c, mapFuncEnd);
 	strcat(c, "// MAP WORLD END\n\n");
 
 	free(sdf);
+	free(sdfd);
 
 	return c;
 }

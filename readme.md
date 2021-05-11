@@ -8,7 +8,6 @@
 - Reflections
 - Sphere, Cube, Torus, Capped Cone and Cylinder rendering (I will add more as I need them)
 - Blend, average, mask, cut and union shape operations
-- WASD + mouse controls
 - [Umka](https://github.com/vtereshkov/umka-lang) scripting
 - Works real time
 - Works on Linux and sometimes Windows
@@ -17,7 +16,6 @@
 - [Umka](https://github.com/vtereshkov/umka-lang)
   - Player input (keyboard done, mouse todo)
 - Modifiers for shapes (twist, round edges, displacement, ...)
-- Inline functions (there are probably some funcs that should be inlined)
 - Upgrade light source objects
   - Multiple lights in a scene
   - Colored lights
@@ -27,7 +25,6 @@
 - Read scene configuration from file?
   - Relative position for shapes in subgroups?
 - Shape rotating
-- `#import`s seems to be messy
 
 see [`archtecture.md`](architecture.md) for explanation what every file does.  
 
