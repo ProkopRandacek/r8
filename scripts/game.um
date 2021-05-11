@@ -5,7 +5,7 @@ import (
 	"r8/r8.um"
 )
 
-fn start() {
+fn main() {
 	// Create scene
 	scene := r8.CreateScene(16, 16, 256, 1, 30.0, 2.0)
 	r8.BindScene(scene)
@@ -35,4 +35,3 @@ fn update() {
 fn keyDown(key, scancode: int32) { }
 
 fn keyUp(key, scancode: int32) { }
-fn main() { }
