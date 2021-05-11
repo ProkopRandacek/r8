@@ -30,7 +30,7 @@ int main() {
 	// CALL UMKA START FUNC
 	//======================
 	dprint("CALLING UMKA START FUNC");
-	umkaCall(umka, umkaStartFunc, 0, NULL, NULL);
+	umkaRun(umka);
 
 	// FPS counting variables
 	//========================
