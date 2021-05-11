@@ -17,7 +17,8 @@ int sceneChanged = 0;
 unsigned int bindedScene = 0;
 Scene* scene(int maxShapeNum, int maxGroupNum, int stepsNum, int bounces, float maxTraceDist, float sunSize) {
 	Scene* s = malloc(sizeof(Scene));
-	s->shapeMask = 32767; // all mask
+	//s->shapeMask = 32767; // all mask
+	s->shapeMask = SPHERE_MASK | CUBE_MASK;
 	s->maxShapeNum = maxShapeNum;
 	s->maxGroupNum = maxGroupNum;
 	s->shapes = malloc(sizeof(Shape     *) * (long unsigned int)maxShapeNum);
@@ -58,7 +59,7 @@ void sendObjects() {
 
 void updateScene() {
 	// Light temporary static here
-	float f[] = {1.0f, 1.0f, -1.0f};
+	float f[] = {1.0f, 1.0f, -5.0f};
 	shdSetVec3Array("lightPos", 1, f);
 
 	// Camera needs to be updated if the window resolution changes

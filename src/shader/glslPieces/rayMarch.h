@@ -25,21 +25,20 @@ const char* rayMarchShadowFunc =
 "	float t = 0.01;\n"
 "	float ph = 1e10;\n" // big, such that y = 0 on the first iteration
 
-"	for( int i=0; i<32; i++ )\n"
-"	{\n"
-"		float h = mapWorld( ro + rd*t ).d;\n"
+"	for (int i=0; i<32; i++) {\n"
+"		float h = mapWorld(ro + rd*t).d;\n"
 
-"		float y = h*h/(2.0*ph);\n"
+"		float y = h * h / (2.0 * ph);\n"
 "		float d = sqrt(h*h-y*y);\n"
-"		res = min(res,SUN_SIZE*d/max(0.0,t-y));\n"
+"		res = min(res, SUN_SIZE * d / max(0.0, t - y));\n"
 "		ph = h;\n"
 
 "		t += h;\n"
 
-"		if( res<0.0001 || t>tmax ) break;\n"
+"		if(res < 0.0001 || t > tmax) break;\n"
 
 "	}\n"
-"	res = clamp( res, 0.0, 1.0 );\n"
-"	return res*res*(3.0-2.0*res);\n"
+"	res = clamp(res, 0.0, 1.0);\n"
+"	return res * res * (3.0 - 2.0 * res);\n"
 "}\n";
 #endif

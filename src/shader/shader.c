@@ -18,6 +18,7 @@ unsigned int shd(const char* vertShdSource, const char* fragShdSource) {
 	glGetShaderiv(vertShd, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(vertShd, 512, NULL, infoLog);
+		printf(vertShdSource);
 		printf("Error while compiling vertex shader\n%s\n", infoLog);
 		exit(1);
 	}
@@ -29,6 +30,7 @@ unsigned int shd(const char* vertShdSource, const char* fragShdSource) {
 	glGetShaderiv(fragShd, GL_COMPILE_STATUS, &success);
 	if (!success) {
 		glGetShaderInfoLog(fragShd, 512, NULL, infoLog);
+		printf(fragShdSource);
 		printf("Error while compiling fragment shader\n%s\n", infoLog);
 		exit(1);
 	}

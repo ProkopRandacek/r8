@@ -62,7 +62,7 @@ const char* SDFArgs[] = {
 
 int isGroup(int i) { return i >= MAX_SHAPE_NUM; }
 
-// for replacing the `_` in SDFArgs with the actuall shape number
+// for replacing the `_` in SDFArgs with the actual shape number
 char* strReplace(const char* org, char pre, char* post) {
 	int i = 0;
 	int postL = (int)strlen(post);
@@ -102,13 +102,20 @@ void makeShape(Scene* s, int i) {
 void recr(Scene* s, int pos) {
 	ShapeGroup* me = s->groups[pos - MAX_SHAPE_NUM];
 
-	if      (me->op == NORMAL) { strcat(sdf, "minM("); }
-	else if (me->op == CUT)    { strcat(sdf, "cutM("); }
-	else if (me->op == MASK)   { strcat(sdf, "maxM("); }
+	if      (me->op == NORMAL)  { strcat(sdf, "minM("); }
+	else if (me->op == CUT)     { strcat(sdf, "cutM("); }
+	else if (me->op == MASK)    { strcat(sdf, "maxM("); }
+	else if (me->op == AVERAGE) {
+		strcat(sdf, "avgM(");
+		char c[5];
+		sprintf(&c, "%.2f", me->k);
+		strcat(sdf, c);
+		strcat(sdf, ", ");
+	}
 
 	if (isGroup(me->a)) { recr(s, me->a); }
 	else { makeShape(s, me->a); }
-	strcat(sdf, ",");
+	strcat(sdf, ", ");
 	if (isGroup(me->b)) { recr(s, me->b); }
 	else { makeShape(s, me->b); }
 	strcat(sdf, ")");
@@ -291,6 +298,9 @@ char* createFragSource(Scene* s) {
 	free(end);
 
 	//printf("%s", c);
+	FILE* fp = fopen("./fragShader.glsl", "w+");
+	fputs(c, fp);
+	fclose(fp);
 
 	return c;
 }
