@@ -7,7 +7,7 @@
 #include "../debug.h"
 
 void* umka;
-int umkaStartFunc, umkaUpdateFunc, umkaKeyDown, umkaKeyUp;
+int umkaUpdateFunc, umkaKeyDown, umkaKeyUp;
 
 void initUmka() {
 	dprint("UMKA START");
