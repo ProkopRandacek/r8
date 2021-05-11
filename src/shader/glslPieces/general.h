@@ -30,10 +30,14 @@ const char* combineFuncs =
 const char* mapFuncStart =
 "map mapWorld(vec3 pos) {\n"
 "        return ";
-const char* mapFuncEnd =
+const char* mapFuncMid =
 ";\n"
 "}\n"
-"float mapWorldD(vec3 pos) { return mapWorld(pos).d; }\n";
+"float mapWorldD(vec3 pos) {\n"
+"        return ";
+const char* mapFuncEnd =
+";\n"
+"}\n";
 
 const char* mainFunc =
 "void main() {\n"

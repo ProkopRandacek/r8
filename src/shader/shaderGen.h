@@ -15,7 +15,9 @@ char* createEndSource(void);
 char* createFragSource(Scene* s);
 
 char* genSDF(Scene* s);
-void recr(Scene* s, int pos);
+char* genSDFD(Scene* s);
+void makeSDF(Scene* s, int pos);
+void makeSDFD(Scene* s, int pos);
 void makeShape(Scene* s, int i);
 char* strReplace(const char* org, char pre, char* post);
 #endif
