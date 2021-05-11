@@ -5,43 +5,34 @@ import (
 	"r8/r8.um"
 )
 
-move := true
-
 fn start() {
 	// Create scene
-	scene := r8.CreateScene(16, 16, 256, 1, 8.0, 2.0)
+	scene := r8.CreateScene(16, 16, 256, 1, 30.0, 2.0)
 	r8.BindScene(scene)
 
 	// Create shapes
-	cube   := r8.CreateCube  (&r8.vec3{0, 0, 0},  &r8.vec3{0, 1, 1}, 0,  &r8.vec3{0.9, 0.9, 0.9})
-	sphere := r8.CreateSphere(&r8.vec3{0, 0, 0},  &r8.vec3{0, 0, 1}, 0,  1.2)
-	crossX := r8.CreateCylinder(&r8.vec3{-1,  0,  0},  &r8.vec3{0, 1, 0}, 0,  &r8.vec3{1, 0, 0},  0.5)
-	crossY := r8.CreateCylinder(&r8.vec3{ 0, -1,  0},  &r8.vec3{0, 1, 0}, 0,  &r8.vec3{0, 1, 0},  0.5)
-	crossZ := r8.CreateCylinder(&r8.vec3{ 0,  0, -1},  &r8.vec3{0, 1, 0}, 0,  &r8.vec3{0, 0, 1},  0.5)
+	/*A     := r8.CreateCube  (&r8.vec3{-5, 1, 0},  &r8.vec3{0, 1, 0}, 0,  &r8.vec3{0.9, 0.9, 0.9})
+	B     := r8.CreateCube  (&r8.vec3{ 5, 1, 0},  &r8.vec3{0, 0, 1}, 0,  &r8.vec3{0.9, 0.9, 0.9})*/
+
+	board := r8.CreateCube  (&r8.vec3{ 0, 0, 0},  &r8.vec3{0.5, 0.5, 0.5}, 0.0,  &r8.vec3{8.0, 8.0, 1.0})
+	ball  := r8.CreateSphere(&r8.vec3{ 0, 0, -1}, &r8.vec3{1, 1, 1}, 0,  1.0)
 
 	// Group Shapes
-	crossXY  := r8.CreateGroup(crossX  , crossY  , 0, 0)
-	crossXYZ := r8.CreateGroup(crossXY , crossZ  , 0, 0)
-	cubeball := r8.CreateGroup(cube    , sphere  , 3, 0)
-	root     := r8.CreateGroup(cubeball, crossXYZ, 2, 0)
+	//AB   := r8.CreateGroup(A    , B   , 0, 0)
+	BB   := r8.CreateGroup(board, ball, 4, 0.1)
+	//root := r8.CreateGroup(AB   , BB  , 0, 0)
 
 	// Compile scene
 	shader := r8.CompileScene(scene)
 	// Bind shader
 	r8.BindShader(shader)
-
-	printf("start done")
 }
 
 fn update() {
-	if (!move) { return }
-	r8.SetCam(&r8.vec3{0, 0, -5}, r8.vNorm(&r8.vec3{0, 0, 1}), 0.0)
+	r8.SetCam(&r8.vec3{0, 0, -10}, r8.vNorm(&r8.vec3{0, 0, 1}), 0.0)
 }
 
-fn keyDown(key, scancode: int32) {
-	//printf(repr(key) + "\n")
-	if (key == 69) { move = !move }
-}
+fn keyDown(key, scancode: int32) { }
 
 fn keyUp(key, scancode: int32) { }
 fn main() { }

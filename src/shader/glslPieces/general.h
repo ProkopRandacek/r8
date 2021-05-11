@@ -4,7 +4,8 @@
 
 const char* vertSource = "layout(location=0)in vec3 aPos;void main(){gl_Position=vec4(aPos,1.);}\n";
 const char* normalFunc = "vec3 calculateNormal(vec3 p){return normalize(vec3(mapWorldD(p+smol.xyy)-mapWorldD(p-smol.xyy),mapWorldD(p+smol.yxy)-mapWorldD(p-smol.yxy),mapWorldD(p+smol.yyx)-mapWorldD(p-smol.yyx)));}\n";
-const char* intersectionFunc = "bool intersection(vec3 ro,vec3 rd){const vec3 box=vec3(4,3,4);vec3 tMin=(-box-ro)/rd;vec3 tMax=(box-ro)/rd;vec3 t1=min(tMin,tMax);vec3 t2=max(tMin,tMax);return max(max(t1.x,t1.y),t1.z)<=min(min(t2.x,t2.y),t2.z);}\n";
+//const char* intersectionFunc = "bool intersection(vec3 ro,vec3 rd){const vec3 box=vec3(4,3,4);vec3 tMin=(-box-ro)/rd;vec3 tMax=(box-ro)/rd;vec3 t1=min(tMin,tMax);vec3 t2=max(tMin,tMax);return max(max(t1.x,t1.y),t1.z)<=min(min(t2.x,t2.y),t2.z);}\n";
+const char* intersectionFunc = "bool intersection(vec3 ro,vec3 rd){return true;}\n";
 const char* checkerboard = "vec4 checkerboard(vec3 p){return mix(vec4(0.5,0.5,0.5,1),vec4(0.7,0.7,0.7,0),max(sign(mod(dot(floor(p),ones),2.0)),0.0))}\n";
 
 const char* combineFuncs =
@@ -17,11 +18,13 @@ const char* combineFuncs =
 "        if (a.d > b.d) return b;\n"
 "        return a;\n"
 "}\n"
-
 "map cutM(map a, map b) {\n"
 "        b.d = -b.d;\n"
 "        if (a.d < b.d) return b;\n"
 "        return a;\n"
+"}\n"
+"map avgM(float k, map a, map b) {\n"
+"        return map(mix(a.clr, b.clr, k), mix(a.d, b.d, k));\n"
 "}\n";
 
 const char* mapFuncStart =
@@ -42,10 +45,10 @@ const char* mainFunc =
 
          // test if the ray is gonna intersect with the world box, if not, just render it as a sky box
 "        if (!intersection(pos, dir)) {\n"
-"                outColor = vec4(0.12, 0.12, 0.12, 1);\n"
+"                outColor = vec4(1, 0, 0, 1);\n"
 "        } else {\n"
-"                vec3 finalClr;\n"
-"                float lastR;\n"
+"                vec3 finalClr = vec3(0);\n"
+"                float lastR = 1;\n"
 "                rayHit hit;\n"
                  // cast main ray
 "                for (int i = 0; i < BOUNCES + 1; i++) {\n"
