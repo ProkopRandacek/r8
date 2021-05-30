@@ -5,7 +5,7 @@ SOURCES = $(wildcard $(SRC)/*.c) $(wildcard $(SRC)/**/*.c)
 OBJECTS = $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
 
 GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized -Waggregate-return -Wno-misleading-indentation
-GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast -g
+GCC_FLAGS = $(GCC_WFLAGS) -std=gnu11 -Ofast -g
 GCC_LIB = -lm -ldl -lpthread -DUMKA_STATIC
 GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include -I$(SRC) -I$(SRC)/umka -I$(SRC)/scene -I$(SRC)/shader -Isubmodules/umka/src
 
@@ -28,9 +28,9 @@ BUILD_DIR = build
 GCC_FULL   = $(GCC_INCLUDES) $(GCC_FLAGS)   $(GCC_LIB)   -DBUILD_NAME=\"$(BUILD_NAME)\"
 MINGW_FULL = $(GCC_INCLUDES) $(MINGW_FLAGS) $(MINGW_LIB) -DBUILD_NAME=\"$(BUILD_NAME)\"
 
-.PHONY: deps glfw umka scripts
+.PHONY: deps glfw umka assets
 
-all: deps glfw umka scripts build
+all: deps glfw umka assets build
 
 build: $(OBJECTS)
 	@echo Build the Linux binary
@@ -45,15 +45,16 @@ package:
 	zip -r $(NAME)_$(BUILD_NAME)_$(BUILD_TIME).zip build/
 
 graph:
-	gcc $(SOURCES) -MM | ./submodules/gcc-deps-graph/graphMaker.py -i vector settings debug shapes camera
+	gcc $(SOURCES) $(GCC_INCLUDES) -MM | ./submodules/gcc-deps-graph/graphMaker.py -i khrplatform gl glfw3 common settings debug
 	rm ./deps.gv
 
-scripts:
-	@echo Copy scripts
-	mkdir $(BUILD_DIR)/scripts $(OBJ)/shader $(OBJ)/scene $(OBJ)/umka -p
+assets:
+	@echo Copying scripts
+	mkdir $(BUILD_DIR)/scripts $(BUILD_DIR)/glslPieces $(OBJ)/shader $(OBJ)/scene $(OBJ)/umka -p
 	cp scripts/* $(BUILD_DIR)/scripts/ -r
+	cp src/shader/glslPieces/* $(BUILD_DIR)/glslPieces/ -r
 
-wbuild: deps clean scripts
+wbuild: deps clean assets
 	@echo Build the Windows binary
 	$(MINGW) $(SOURCES) $(UMKA_LIB_WIN) $(GLFW_LIB_WIN) $(MINGW_FULL) -o $(BUILD_DIR)/$(NAME).exe
 	echo ".\r8.exe > log.txt 2>&1" > $(BUILD_DIR)/run.bat

@@ -1,9 +1,6 @@
 #include "shaderGen.h"
 
-#include "glslPieces/SDFs.h"
-#include "glslPieces/general.h"
-#include "glslPieces/head.h"
-#include "glslPieces/rayMarch.h"
+#include "glslRead.h"
 
 #define FRAG_FULL_SIZE     65536 // 2^16
 #define FRAG_SDF_SIZE       8192 // 2^13
@@ -62,8 +59,7 @@ int isGroup(int i) { return i >= MAX_SHAPE_NUM; }
 char* strReplace(const char* org, char pre, char* post) {
 	int i = 0;
 	int postL = (int)strlen(post);
-	char* buff = malloc(strlen(org) + strlen(post) + 1);
-	memset(buff, 0, strlen(org) + strlen(post) + 1);
+	char* buff = calloc(1, strlen(org) + strlen(post) + 1);
 	while (1) {
 		if      (org[i] == 0) break;
 		else if (org[i] == pre) {
@@ -79,8 +75,7 @@ char* strReplace(const char* org, char pre, char* post) {
 }
 
 void makeShape(Scene* s, int i) {
-	char* c = malloc(sizeof(char) * 128);
-	memset(c, 0, sizeof(char) * 128);
+	char* c = calloc(1, 128);
 
 	char str[5];
 	sprintf(str, "%d", i);
@@ -95,8 +90,7 @@ void makeShape(Scene* s, int i) {
 }
 
 void makeShapeD(Scene* s, int i) {
-	char* c = malloc(sizeof(char) * 128);
-	memset(c, 0, sizeof(char) * 128);
+	char* c = calloc(1, 128);
 
 	char str[5];
 	sprintf(str, "%d", i);
@@ -161,34 +155,34 @@ void makeSDFD(Scene* s, int pos) {
 }
 
 char* genSDF(Scene* s) {
-	sdf = malloc(sizeof(char) * FRAG_SDF_SIZE);
-	memset(sdf, 0, sizeof(char) * FRAG_SDF_SIZE);
+	sdf = calloc(1, FRAG_SDF_SIZE);
 	makeSDF(s, s->groupNum - 1 + MAX_SHAPE_NUM);
 
 	return sdf;
 }
 
 char* genSDFD(Scene* s) {
-	sdfd = malloc(sizeof(char) * FRAG_SDF_SIZE);
-	memset(sdfd, 0, sizeof(char) * FRAG_SDF_SIZE);
+	sdfd = calloc(1, FRAG_SDF_SIZE);
 	makeSDFD(s, s->groupNum - 1 + MAX_SHAPE_NUM);
 
 	return sdfd;
 }
 
 char* createVertSource() {
-	char* c = malloc(sizeof(char) * VERT_SIZE);
-	memset(c, 0, sizeof(char) * VERT_SIZE);
+	char* c = calloc(1, VERT_SIZE);
 	char* ver = createVersionSource();
+	char* vertSource = readGlsl("vertSource");
 	strcat(c, ver);
 	strcat(c, vertSource);
 	free(ver);
+	free(vertSource);
+	printf("\n\n%s\n\n", c);
 	return c;
 }
 
 char* createVersionSource() {
-	char* c = malloc(sizeof(char) * FRAG_VERSION_SIZE);
-	memset(c, 0, sizeof(char) * FRAG_VERSION_SIZE);
+	char* c = calloc(1, FRAG_VERSION_SIZE);
+	char* version = "#version ";
 
 	sprintf(c, "%s%d\n", version, GLSL_VERSION);
 
@@ -196,8 +190,7 @@ char* createVersionSource() {
 }
 
 char* createSettingsSource(Scene* s) {
-	char* c = malloc(sizeof(char) * FRAG_SETTINGS_SIZE);
-	memset(c, 0, sizeof(char) * FRAG_SETTINGS_SIZE);
+	char* c = calloc(1, FRAG_SETTINGS_SIZE);
 	int   shapeSize = SHAPE_SIZE;
 	int   groupSize = GROUP_SIZE;
 	float backStep  = s->collisionThreshold * s->backStepK;
@@ -217,13 +210,13 @@ char* createSettingsSource(Scene* s) {
 
 	sprintf(               maxShapeNum_, "%d"  , s->maxShapeNum             );
 	sprintf(               maxGroupNum_, "%d"  , s->maxGroupNum             );
-	sprintf(                 shapeSize_, "%d"  , shapeSize                 );
-	sprintf(                 groupSize_, "%d"  , groupSize                 );
+	sprintf(                 shapeSize_, "%d"  , shapeSize                  );
+	sprintf(                 groupSize_, "%d"  , groupSize                  );
 	sprintf(                   epsilon_, "%.2f", s->epsilon                 );
 	sprintf(                  STEPSNUM_, "%d"  , s->stepsNum                );
 	sprintf(       COLLISION_THRESHOLD_, "%.3f", s->collisionThreshold      );
 	sprintf(SHADOW_COLLISION_THRESHOLD_, "%.3f", s->shadowCollisionThreshold);
-	sprintf(                 BACK_STEP_, "%.3f", backStep                  );
+	sprintf(                 BACK_STEP_, "%.3f", backStep                   );
 	sprintf(            MAX_TRACE_DIST_, "%.3f", s->maxTraceDist            );
 	sprintf(                   BOUNCES_, "%d"  , s->bounces                 );
 	sprintf(                  SUN_SIZE_, "%.3f", s->sunSize                 );
@@ -247,60 +240,59 @@ char* createSettingsSource(Scene* s) {
 }
 
 char* createHeaderSource() {
-	char* c = malloc(sizeof(char) * FRAG_HEADER_SIZE);
-	memset(c, 0, sizeof(char) * FRAG_HEADER_SIZE);
+	char* c = calloc(1, FRAG_HEADER_SIZE);
+	char* s;
 
 	strcat(c, "// HEADER START\n");
-	strcat(c, defines);
-	strcat(c, uniforms);
-	strcat(c, consts);
-	strcat(c, out);
-	strcat(c, structs);
+	s = readGlsl("defines" ); strcat(c, s); free(s);
+	s = readGlsl("uniforms"); strcat(c, s); free(s);
+	s = readGlsl("const"   ); strcat(c, s); free(s);
+	s = readGlsl("out"     ); strcat(c, s); free(s);
+	s = readGlsl("structs" ); strcat(c, s); free(s);
 	strcat(c, "// HEADER END\n\n");
 
 	return c;
 }
 
 char* createSDFsSource(short shapesMask) {
-	char* c = malloc(sizeof(char) * FRAG_SDF_SIZE);
-	memset(c, 0, sizeof(char) * FRAG_SDF_SIZE);
+	char* c = calloc(1, FRAG_SDF_SIZE);
 
 	//shapesMask = shapesMask | SPHERE_MASK;
 
 	strcat(c, "// SDFS START\n");
-	if (shapesMask & SPHERE_MASK  ) strcat(c, sphereSDF  );
-	if (shapesMask & CUBE_MASK    ) strcat(c, cubeSDF    );
-	if (shapesMask & CYLINDER_MASK) strcat(c, cylinderSDF);
-	if (shapesMask & TORUS_MASK   ) strcat(c, torusSDF   );
-	if (shapesMask & CCONE_MASK   ) strcat(c, cconeSDF   );
-	if (shapesMask & BOXFRAME_MASK) strcat(c, boxFrameSDF);
-	if (shapesMask & CTORUS_MASK  ) strcat(c, ctorusSDF  );
-	if (shapesMask & LINK_MASK    ) strcat(c, linkSDF    );
-	if (shapesMask & PLANE_MASK   ) strcat(c, planeSDF   );
-	if (shapesMask & HEXPRISM_MASK) strcat(c, hexPrismSDF);
-	if (shapesMask & TRIPRISM_MASK) strcat(c, triPrismSDF);
-	if (shapesMask & CAPSULE_MASK ) strcat(c, capsuleSDF );
-	if (shapesMask & PYRAMID_MASK ) strcat(c, pyramidSDF );
-	if (shapesMask & TRIANGLE_MASK) strcat(c, triangleDF );
-	if (shapesMask & QUAD_MASK    ) strcat(c, quadDF     );
+	if (shapesMask & SPHERE_MASK  ) { char* s = readSDF("sphere"  ); strcat(c, s); free(s); }
+	if (shapesMask & CUBE_MASK    ) { char* s = readSDF("cube"    ); strcat(c, s); free(s); }
+	if (shapesMask & CYLINDER_MASK) { char* s = readSDF("cylinder"); strcat(c, s); free(s); }
+	if (shapesMask & TORUS_MASK   ) { char* s = readSDF("torus"   ); strcat(c, s); free(s); }
+	if (shapesMask & CCONE_MASK   ) { char* s = readSDF("ccone"   ); strcat(c, s); free(s); }
+	if (shapesMask & BOXFRAME_MASK) { char* s = readSDF("boxFrame"); strcat(c, s); free(s); }
+	if (shapesMask & CTORUS_MASK  ) { char* s = readSDF("ctorus"  ); strcat(c, s); free(s); }
+	if (shapesMask & LINK_MASK    ) { char* s = readSDF("link"    ); strcat(c, s); free(s); }
+	if (shapesMask & PLANE_MASK   ) { char* s = readSDF("plane"   ); strcat(c, s); free(s); }
+	if (shapesMask & HEXPRISM_MASK) { char* s = readSDF("hexPrism"); strcat(c, s); free(s); }
+	if (shapesMask & TRIPRISM_MASK) { char* s = readSDF("triPrism"); strcat(c, s); free(s); }
+	if (shapesMask & CAPSULE_MASK ) { char* s = readSDF("capsule" ); strcat(c, s); free(s); }
+	if (shapesMask & PYRAMID_MASK ) { char* s = readSDF("pyramid" ); strcat(c, s); free(s); }
+	if (shapesMask & TRIANGLE_MASK) { char* s = readSDF("triangle"); strcat(c, s); free(s); }
+	if (shapesMask & QUAD_MASK    ) { char* s = readSDF("quad"    ); strcat(c, s); free(s); }
 	strcat(c, "// SDFS END\n\n");
 
 	return c;
 }
 
 char* createMapWorldSource(Scene* s) {
-	char* c = malloc(sizeof(char) * FRAG_MAP_SIZE);
+	char* c = calloc(1, FRAG_MAP_SIZE);
 	char* SDF  = genSDF (s);
 	char* SDFD = genSDFD(s);
-	memset(c, 0, sizeof(char) * FRAG_MAP_SIZE);
+	char* x;
 
 	strcat(c, "// MAP WORLD START\n");
-	strcat(c, combineFuncs);
-	strcat(c, mapFuncStart);
+	x = readGlsl("combineFuncs" ); strcat(c, x); free(x);
+	x = readGlsl("mapFuncStart" ); strcat(c, x); free(x);
 	strcat(c, SDF);
-	strcat(c, mapFuncMid);
+	x = readGlsl("mapFuncMid" ); strcat(c, x); free(x);
 	strcat(c, SDFD);
-	strcat(c, mapFuncEnd);
+	x = readGlsl("mapFuncEnd" ); strcat(c, x); free(x);
 	strcat(c, "// MAP WORLD END\n\n");
 
 	free(sdf);
@@ -310,29 +302,28 @@ char* createMapWorldSource(Scene* s) {
 }
 
 char* createEndSource() {
-	char* c = malloc(sizeof(char) * FRAG_END_SIZE);
-	memset(c, 0, sizeof(char) * FRAG_END_SIZE);
+	char* c = calloc(1, FRAG_END_SIZE);
+	char* s;
 
 	strcat(c, "// END START\n");
-	strcat(c, normalFunc);
-	strcat(c, intersectionFunc);
-	strcat(c, rayMarchFunc);
-	strcat(c, rayMarchShadowFunc);
-	strcat(c, mainFunc);
+	s = readGlsl("normalFunc"        ); strcat(c, s); free(s);
+	s = readGlsl("intersectionFunc"  ); strcat(c, s); free(s);
+	s = readGlsl("rayMarchFunc"      ); strcat(c, s); free(s);
+	s = readGlsl("rayMarchShadowFunc"); strcat(c, s); free(s);
+	s = readGlsl("mainFunc"          ); strcat(c, s); free(s);
 	strcat(c, "// END END\n\n");
 
 	return c;
 }
 
 char* createFragSource(Scene* s) {
-	char* c = malloc(sizeof(char) * FRAG_FULL_SIZE);
+	char* c = calloc(1, FRAG_FULL_SIZE);
 	char* vers = createVersionSource();
 	char* settings = createSettingsSource(s);
 	char* header = createHeaderSource();
 	char* SDFs = createSDFsSource(s->shapeMask);
 	char* mapWorld = createMapWorldSource(s);
 	char* end = createEndSource();
-	memset(c, 0, sizeof(char) * FRAG_FULL_SIZE);
 
 	strcat(c, vers);
 	strcat(c, settings);

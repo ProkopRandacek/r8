@@ -2,8 +2,8 @@
 
 #include "debug.h"
 #include "opengl.h"
-#include "scene/scene.h"
-#include "umka/umka.h"
+#include "scene.h"
+#include "umka.h"
 
 extern GL* gl;
 extern void* umka;
@@ -11,21 +11,24 @@ extern int umkaStartFunc, umkaUpdateFunc;
 
 float dt;
 
-int main() {
+int main(int argc, char **argv) {
 	printf("\nBuild name: %s\nI'm running on ", BUILD_NAME);
 #ifdef _WIN32
 	printf("Windows\n\n");
 #else
 	printf("Linux\n\n");
 #endif
+	startDebugTime();
+
+
 
 	// INIT STUFF
 	//============
-	startDebugTime();
 	dprint("INIT START");
 	initOGL();
 	initUmka();
 	dprint("INIT DONE");
+
 
 	// CALL UMKA START FUNC
 	//======================

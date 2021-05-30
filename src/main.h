@@ -1,4 +1,4 @@
 // vim: filetype=c
 #include "common.h"
-int main(void);
+int main(int argc, char **argv);
 

@@ -1,9 +1,9 @@
 #include "opengl.h"
 
+#include "camera.h"
 #include "debug.h"
 #include "fileio.h"
-#include "scene/camera.h"
-#include "shader/shader.h"
+#include "shader.h"
 
 int w = 1000;
 int h = 1000;
