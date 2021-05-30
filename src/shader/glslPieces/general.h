@@ -1,7 +1,4 @@
 // vim: filetype=c
-#ifndef GENERAL_H
-#define GENERAL_H
-
 const char* vertSource = "layout(location=0)in vec3 aPos;void main(){gl_Position=vec4(aPos,1.);}\n";
 const char* normalFunc = "vec3 calculateNormal(vec3 p){return normalize(vec3(mapWorldD(p+smol.xyy)-mapWorldD(p-smol.xyy),mapWorldD(p+smol.yxy)-mapWorldD(p-smol.yxy),mapWorldD(p+smol.yyx)-mapWorldD(p-smol.yyx)));}\n";
 //const char* intersectionFunc = "bool intersection(vec3 ro,vec3 rd){const vec3 box=vec3(4,3,4);vec3 tMin=(-box-ro)/rd;vec3 tMax=(box-ro)/rd;vec3 t1=min(tMin,tMax);vec3 t2=max(tMin,tMax);return max(max(t1.x,t1.y),t1.z)<=min(min(t2.x,t2.y),t2.z);}\n";
@@ -80,4 +77,4 @@ const char* mainFunc =
 "                outColor = vec4(finalClr, 1.);\n"
 "        }\n"
 "}\n";
-#endif
+

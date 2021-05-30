@@ -1,10 +1,7 @@
-#include <stdint.h>
-#include <stdio.h>
-
-#include "camera.h"
 #include "serialization.h"
-#include "../debug.h"
-#include "../settings.h"
+
+#include "debug.h"
+#include "camera.h"
 
 void sphere2floats(float* f, Sphere* s) {
 	f[6 ] = 0.0f;      f[7 ] = 0.0f;     f[8 ] = 0.0f;
@@ -61,17 +58,11 @@ void shapes2floats(float *f, unsigned int num, Shape* shp[num]) {
 			sprintf(errMsg, "Unknown shape %d on index %d (shapes2floats)", shp[i]->type, i);
 			eprint(errMsg);
 		}
-		for (int j = 0; j < SHAPE_SIZE; j++) { // debug printing
-			//printf("%.2f, ", f[p + j]);
-		}
-		//printf("\n");
 	}
-	//printf("\n");
 }
 
 void cam2floats(Camera* cam, float* f) {
 	f[0]  = cam->pos.x; f[1]  = cam->pos.y; f[2] = cam->pos.z;
-	//vPrint(cam->pos); printf("\n");
 	f[3]  = cam->tr.x;  f[4]  = cam->tr.y;  f[5] = cam->tr.z;
 	f[6]  = cam->tl.x;  f[7]  = cam->tl.y;  f[8] = cam->tl.z;
 	f[9]  = cam->br.x;  f[10] = cam->br.y; f[11] = cam->br.z;

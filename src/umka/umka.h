@@ -1,10 +1,7 @@
 // vim: filetype=c
-#ifndef UMKA_H
-#define UMKA_H
-
-#include "../../submodules/umka/src/umka_api.h"
+#include "common.h"
+#include "umka_api.h"
 
 void initUmka(void);
 void exitUmka(void);
 
-#endif

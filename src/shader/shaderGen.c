@@ -1,14 +1,9 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-#include "glslPieces/head.h"
-#include "glslPieces/SDFs.h"
-#include "glslPieces/rayMarch.h"
-#include "glslPieces/general.h"
-#include "../scene/shapes.h"
-#include "../settings.h"
 #include "shaderGen.h"
+
+#include "glslPieces/SDFs.h"
+#include "glslPieces/general.h"
+#include "glslPieces/head.h"
+#include "glslPieces/rayMarch.h"
 
 #define FRAG_FULL_SIZE     65536 // 2^16
 #define FRAG_SDF_SIZE       8192 // 2^13
@@ -22,7 +17,7 @@
 
 #define GLSL_VERSION 330
 
-char* sdf;
+char* sdf; // TODO do this without global variables because thats kinda dumb
 char* sdfd;
 
 const char* SDFNames[] = {

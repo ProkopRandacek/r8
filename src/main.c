@@ -1,9 +1,9 @@
-#include <stdio.h>
-#include "debug.h"
 #include "main.h"
-#include "umka/umka.h"
-#include "scene/scene.h"
+
+#include "debug.h"
 #include "opengl.h"
+#include "scene/scene.h"
+#include "umka/umka.h"
 
 extern GL* gl;
 extern void* umka;

@@ -1,10 +1,6 @@
-#include <stdio.h>
-#include <stddef.h>
-
-#include "../../submodules/umka/src/umka_api.h"
-#include "bindings.h"
 #include "umka.h"
-#include "../debug.h"
+#include "bindings.h"
+#include "debug.h"
 
 void* umka;
 int umkaUpdateFunc, umkaKeyDown, umkaKeyUp;

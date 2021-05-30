@@ -1,7 +1,4 @@
 // vim: filetype=c
-#ifndef RAYMARCH_H
-#define RAYMARCH_H
-
 const char* rayMarchFunc =
 "rayHit rayMarch(vec3 ro, vec3 rd) {\n"
 "        float t = 0;\n"
@@ -41,4 +38,4 @@ const char* rayMarchShadowFunc =
 "	res = clamp(res, 0.0, 1.0);\n"
 "	return res * res * (3.0 - 2.0 * res);\n"
 "}\n";
-#endif
+

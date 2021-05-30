@@ -1,8 +1,5 @@
 // vim: filetype=c
-#ifndef SHADER_H
-#define SHADER_H
-
-#include "../scene/scene.h"
+#include "common.h"
 
 unsigned int shd(const char* vertShdSource, const char* fragShdSource);
 
@@ -16,5 +13,3 @@ void shdSetIntArray  (const char* name, int count, int*   values);
 
 void activateShader(unsigned int s);
 unsigned int createShader(Scene* s);
-
-#endif

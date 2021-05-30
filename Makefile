@@ -5,9 +5,9 @@ SOURCES = $(wildcard $(SRC)/*.c) $(wildcard $(SRC)/**/*.c)
 OBJECTS = $(patsubst $(SRC)/%.c, $(OBJ)/%.o, $(SOURCES))
 
 GCC_WFLAGS = -Wall -Wextra -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-prototypes -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -Wformat=2 -Winit-self -Wuninitialized -Waggregate-return -Wno-misleading-indentation
-GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast -g3
+GCC_FLAGS = $(GCC_WFLAGS) -std=c11 -Ofast -g
 GCC_LIB = -lm -ldl -lpthread -DUMKA_STATIC
-GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include -I$(SRC) -I$(SRC)/umka -I$(SRC)/scene -I$(SRC)/shader
+GCC_INCLUDES = -Iinclude/ -Isubmodules/glfw/include -I$(SRC) -I$(SRC)/umka -I$(SRC)/scene -I$(SRC)/shader -Isubmodules/umka/src
 
 MINGW = x86_64-w64-mingw32-gcc
 MINGW_FLAGS = $(GCC_FLAGS)

@@ -1,11 +1,7 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <glad/gl.h>
-
 #include "shader.h"
+
 #include "shaderGen.h"
-#include "../debug.h"
+#include "debug.h"
 
 unsigned int bindedShader;
 

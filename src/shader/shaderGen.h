@@ -1,8 +1,5 @@
 // vim: filetype=c
-#ifndef SHADERGEN_H
-#define SHADERGEN_H
-
-#include "../scene/scene.h"
+#include "common.h"
 
 char* createVertSource(void);
 
@@ -20,4 +17,3 @@ void makeSDF(Scene* s, int pos);
 void makeSDFD(Scene* s, int pos);
 void makeShape(Scene* s, int i);
 char* strReplace(const char* org, char pre, char* post);
-#endif

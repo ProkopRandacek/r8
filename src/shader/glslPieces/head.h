@@ -1,7 +1,4 @@
 // vim: filetype=c
-#ifndef HEAD_H
-#define HEAD_H
-
 const char* version =
 "#version ";
 
@@ -34,4 +31,4 @@ const char* out =
 const char* structs =
 "struct rayHit{vec4 hitPos,surfaceClr;};\n" // hitPos.w == 0 -> didnt hit else hit
 "struct map{vec4 clr;float d;};\n";
-#endif
+

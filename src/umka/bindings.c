@@ -1,6 +1,5 @@
 #include "bindings.h"
-#include "../vector.h"
-#include "../scene/sceneapi.h"
+#include "sceneapi.h"
 
 void umkaBind(void* umka) {
 	umkaAddFunc(umka, "SetShpClr", &umSetShapeClr);
@@ -138,4 +137,6 @@ void umBindShader  (UmkaStackSlot* p, UmkaStackSlot* r) { bindShader((unsigned i
 void umGetCamPos(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)getCamPos(); }
 void umGetCamDir(UmkaStackSlot* p, UmkaStackSlot* r) { r[0].ptrVal = (intptr_t)getCamDir(); }
 //void umSetLightPos(UmkaStackSlot* p, UmkaStackSlot* r) { moveLight(*(vec3*)p[0].ptrVal); }
+
+#pragma GCC diagnostic pop
 

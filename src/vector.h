@@ -1,14 +1,5 @@
 // vim: filetype=c
-#ifndef VECTOR_H
-#define VECTOR_H
-
-#include <stdio.h>
-#include <math.h>
-
-typedef struct vec3 {
-	float x, y, z;
-} vec3;
-
+#include "common.h"
 static vec3 v3     (float x, float y, float z);
 static vec3 v3f    (float a);
 static void vPrint (vec3 a);
@@ -50,4 +41,3 @@ inline vec3 vCross(vec3 a, vec3 b) {
 	return c;
 }
 
-#endif

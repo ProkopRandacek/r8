@@ -1,9 +1,10 @@
 #include "sceneapi.h"
+
+#include "camera.h"
+#include "debug.h"
 #include "scene.h"
-#include "../shader/shader.h"
-#include "../settings.h"
-#include "../debug.h"
-#include "../settings.h"
+#include "shader.h"
+#include "shapes.h"
 
 int freeScnIndex = 0;
 int sceneIndex = 0;
@@ -125,3 +126,4 @@ int compileScene(int scene) {
 //float getTime() { return (float)glfwGetTime(); }
 vec3* getCamPos() { return &scenes[bindedScene]->cam->pos; }
 vec3* getCamDir() { return &scenes[bindedScene]->cam->forward; }
+

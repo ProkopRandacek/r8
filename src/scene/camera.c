@@ -1,7 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include "camera.h"
+
+#include "vector.h"
 
 extern int w, h; // these are from opengl.c. the window width and height
 

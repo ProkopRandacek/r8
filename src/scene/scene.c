@@ -1,14 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <math.h>
-#include <time.h>
-#include <string.h>
-
-#include "serialization.h"
 #include "scene.h"
-#include "../settings.h"
-#include "../opengl.h"
-#include "../shader/shader.h"
+
+#include "opengl.h"
+#include "serialization.h"
+#include "shader.h"
+#include "vector.h"
 
 extern GL* gl;
 

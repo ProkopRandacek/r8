@@ -1,6 +1,4 @@
 // vim: filetype=c
-#ifndef SDFS_H
-#define SDFS_H
 const char*   sphereSDF = "float d2Sphere(vec3 pos,vec3 sp,float r){return length(pos-sp)-r;}\n";
 const char*    heartSDF =
 "float opExtrusion(vec3 p,float d,float h){vec2 w=vec2(d,abs(p.z)-h);return min(max(w.x,w.y),0.0)+length(max(w,0.0));}\n"
@@ -22,4 +20,4 @@ const char*  pyramidSDF = "float d2Pyramid(vec3 pos,vec3 sp,float h){vec3 p=pos-
 
 const char* triangleDF  = "float d2Triangle(vec3 p,vec3 a,vec3 b,vec3 c){vec3 ba=b-a;vec3 pa=p-a;vec3 cb=c-b;vec3 pb=p-b;vec3 ac=a-c;vec3 pc=p-c;vec3 nor=cross(ba,ac);return sqrt((sign(dot(cross(ba,nor),pa))+sign(dot(cross(cb,nor),pb))+sign(dot(cross(ac,nor),pc))<2.0)?min(min(dot2(ba*clamp(dot(ba,pa)/dot2(ba),0.0,1.0)-pa),dot2(cb*clamp(dot(cb,pb)/dot2(cb),0.0,1.0)-pb)),dot2(ac*clamp(dot(ac,pc)/dot2(ac),0.0,1.0)-pc)):dot(nor,pa)*dot(nor,pa)/dot2(nor));}\n";
 const char*     quadDF  = "float d2Quad(vec3 p,vec3 a,vec3 b,vec3 c,vec3 d){vec3 ba=b-a;vec3 pa=p-a;vec3 cb=c-b;vec3 pb=p-b;vec3 dc=d-c;vec3 pc=p-c;vec3 ad=a-d;vec3 pd=p-d;vec3 nor=cross(ba,ad);return sqrt((sign(dot(cross(ba,nor),pa))+sign(dot(cross(cb,nor),pb))+sign(dot(cross(dc,nor),pc))+sign(dot(cross(ad,nor),pd))<3.0)?min(min(min(dot2(ba*clamp(dot(ba,pa)/dot2(ba),0.0,1.0)-pa),dot2(cb*clamp(dot(cb,pb)/dot2(cb),0.0,1.0)-pb)),dot2(dc*clamp(dot(dc,pc)/dot2(dc),0.0,1.0)-pc)),dot2(ad*clamp(dot(ad,pd)/dot2(ad),0.0,1.0)-pd)):dot(nor,pa)*dot(nor,pa)/dot2(nor));}\n";
-#endif
+

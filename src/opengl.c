@@ -1,12 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "opengl.h"
-#include "fileio.h"
+
 #include "debug.h"
-#include "shader/shader.h"
+#include "fileio.h"
 #include "scene/camera.h"
+#include "shader/shader.h"
 
 int w = 1000;
 int h = 1000;
@@ -130,7 +127,6 @@ void resize(GLFWwindow* window, int width, int height) {
 
 	glViewport(0, 0, width, height);
 	shdSetIVec2("resolution", width, height);
-	float k = 1000.0f;
 	w = width;
 	h = height;
 }

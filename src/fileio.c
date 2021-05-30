@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include "fileio.h"
 
 void writeBMP(const char* filename, float* pixels, unsigned int w, unsigned int h) {
@@ -35,3 +31,4 @@ void writeBMP(const char* filename, float* pixels, unsigned int w, unsigned int 
 	}
 	fclose(fp);
 }
+

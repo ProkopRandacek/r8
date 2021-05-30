@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <time.h>
-#include <stdlib.h>
-
 #include "debug.h"
-#include "settings.h"
 
 clock_t st;
 
@@ -14,3 +9,4 @@ void eprint(const char* text) {
 	printf("%8.2f ms -- ERROR: %s\n", t(), text);
 	exit(1);
 }
+
