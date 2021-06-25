@@ -58,12 +58,9 @@ void activateShader(unsigned int s) {
 	glUseProgram(s);
 }
 
-// single values
 void shdSetInt  (const char* name, int value)    { glUniform1i(glGetUniformLocation(bindedShader, name), value); }
 void shdSetFloat(const char* name, float value)  { glUniform1f(glGetUniformLocation(bindedShader, name), value); }
 void shdSetIVec2(const char* name, int x, int y) { glUniform2i(glGetUniformLocation(bindedShader, name), x, y); }
-
-// arrays
 void shdSetFloatArray(const char* name, int count, float* values) { glUniform1fv(glGetUniformLocation(bindedShader, name), count, values); }
 void shdSetIntArray  (const char* name, int count, int*   values) { glUniform1iv(glGetUniformLocation(bindedShader, name), count, values); }
 void shdSetVec3Array (const char* name, int count, float* values) { glUniform3fv(glGetUniformLocation(bindedShader, name), count, values); }

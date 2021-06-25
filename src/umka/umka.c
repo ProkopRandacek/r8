@@ -38,3 +38,4 @@ void initUmka() {
 void exitUmka() {
 	umkaFree(umka);
 }
+

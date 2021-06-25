@@ -4,13 +4,14 @@ WIP
 
 ## Scene creating guide
 
-### Scene x Shader
-Shader is compiled scene. Internally, it is actual GLSL code and thats why you cannot change things like group order, because the full SDF was already generated.
-You can change things that are in the GLSL code represented as uniform variables.
-- With shader you cannot:
+
+
+### Scene edit ability
+Scene is internally a shader. When you compile it, it is compiled with OpenGL and you can make changes that would require to edit the shader code.
+- After compiling you cannot:
   - Switch one shape type for another, nor delete or add them.
   - Change group order or group type
-- With shader you can:
+- But can:
   - Change shape parameters
     - Color
 	- Position
@@ -20,14 +21,16 @@ You can change things that are in the GLSL code represented as uniform variables
 	- Scale (TODO)
 	- Endpoint (TODO)
   - Change group operation modifier. (TODO)
-- You can do all of this with scene
+- Before compiling you can do all of these
 
 ### Scene creation: 
-- CreateScene(settings);
-- BindScene(sceneIndex);
-- \*Create shapes and groups\*
+- CreateScene(settings); // Creates a blank scene
+- EditScene(sceneIndex); // This specifies what scene you want to edit with the following api calls
+- // Modify the scene
 - CompileScene(sceneIndex);
-- BindShader(shaderIndex);
+- // You cant modify the scene anymore
+- BindScene(sceneIndex);
+- // The scene is being rendered
 
 ## List of API functions
 

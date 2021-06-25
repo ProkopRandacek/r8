@@ -49,3 +49,4 @@ void cmr(Camera* cam, vec3 pos, vec3 dir, float angle) {
 	cam->bl = vAdd(vAdd(down,  left), sc);
 	cam->br = vAdd(vAdd(down, right), sc);
 }
+

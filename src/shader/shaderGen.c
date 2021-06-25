@@ -176,7 +176,6 @@ char* createVertSource() {
 	strcat(c, vertSource);
 	free(ver);
 	free(vertSource);
-	printf("\n\n%s\n\n", c);
 	return c;
 }
 

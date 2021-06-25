@@ -10,6 +10,7 @@ extern GL* gl;
 Scene* scenes[MAX_SCENE_NUM];
 int sceneChanged = 0;
 unsigned int bindedScene = 0;
+
 Scene* scene(int maxShapeNum, int maxGroupNum, int stepsNum, int bounces, float maxTraceDist, float sunSize) {
 	Scene* s = malloc(sizeof(Scene));
 	//s->shapeMask = 32767; // all mask
@@ -53,7 +54,7 @@ void sendObjects() {
 }
 
 void updateScene() {
-	// Light temporary static here
+	// Light temporary static here TODO
 	float f[] = {1.0f, 1.0f, -5.0f};
 	shdSetVec3Array("lightPos", 1, f);
 

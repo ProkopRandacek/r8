@@ -26,3 +26,4 @@ void umBindShader  (UmkaStackSlot* p, UmkaStackSlot* r);
 void umBindScene   (UmkaStackSlot* p, UmkaStackSlot* r);
 void umCompileScene(UmkaStackSlot* p, UmkaStackSlot* r);
 void umCreateScene (UmkaStackSlot* p, UmkaStackSlot* r);
+

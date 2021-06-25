@@ -128,8 +128,10 @@ typedef struct Camera {
 typedef struct Scene {
 	ShapeMask shapeMask;
 	Camera* cam;
-	Shape      **shapes; // array of pointers to shape
-	ShapeGroup **groups; // array of pointers to group
+	Shape      **shapes; // array of pointers to shapes
+	ShapeGroup **groups; // array of pointers to groups
+	bool compiled;
+	int shader; // is 0 until compiled
 	int maxShapeNum;
 	int maxGroupNum;
 	int shapeNum;
