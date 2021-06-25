@@ -1,32 +1,12 @@
+Im rewritting the entire thing in this branch.  
+This time im starting with the documentations and then implementation.
+
 # R8 Engine
 
 ![2x2 demos](https://randacek.dev/p/demos2x2.png)  
 
-## Done
-- [Constructive solid geometry](https://en.wikipedia.org/wiki/Constructive_solid_geometry)
-- Soft shadows (looks weird in some weird CSG cases)
-- Reflections
-- Sphere, Cube, Torus, Capped Cone and Cylinder rendering (I will add more as I need them)
-- Blend, average, mask, cut and union shape operations
-- [Umka](https://github.com/vtereshkov/umka-lang) scripting
-- Works real time
-- Works on Linux and sometimes Windows
-
 ## TODO
-- [Umka](https://github.com/vtereshkov/umka-lang)
-  - Player input (keyboard done, mouse todo)
-- Modifiers for shapes (twist, round edges, displacement, ...)
-- Upgrade light source objects
-  - Multiple lights in a scene
-  - Colored lights
-- Optimization
-  - Bounding box for complicated groups far away from the ray
-    - Needs render order rework
-- Read scene configuration from file?
-  - Relative position for shapes in subgroups?
-- Shape rotating
-
-see [`archtecture.md`](architecture.md) for explanation what every file does.  
+- [ ] Docs
 
 ## Build
 `make` to (re)build the binary or `make run` to (re)build the binary and run it.  

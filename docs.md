@@ -22,8 +22,10 @@ Group is a group of 2 things. Those can be shapes, other groups or wrappers. Gro
 - Subtract (Difference)
 - Intersect (Intersection)
 - Blend
-- Average
+- Average  
 Groups are the implementation of [CSG](https://en.wikipedia.org/wiki/Constructive_solid_geometry)
+
+### PortalBridge
 
 ## Functions
 
