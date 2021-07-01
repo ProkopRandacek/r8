@@ -20,7 +20,7 @@ typedef struct List {
 	ListNode* first, last;
 } List;
 
-List* listInit(unsigned int num, Move* val[num]);
-void listFree(List* l);
-void listAppend(List* l, Move* m);
-void listPop(List* l);
+List* lInit(unsigned int num, Move* val[num]);
+void lFree(List* l);
+void lAppend(List* l, Move* m);
+void lPop(List* l);

@@ -1,6 +1,6 @@
 #include "list.h"
 
-List* listInit(unsigned int num, Move* val[num]) {
+List* lInit(unsigned int num, Move* val[num]) {
 	if (num <= 0) {
 		printf("%s - list length must be greater than zero (is %d)\n", __func__, num);
 		exit(1);
@@ -13,11 +13,11 @@ List* listInit(unsigned int num, Move* val[num]) {
 	l->last  = n;
 	l->count = 1;
 	for (unsigned int i = 1; i < num; i++)
-		listAppend(l, val[i]);
+		lAppend(l, val[i]);
 	return l;
 }
 
-void listFree(List* l) {
+void lFree(List* l) {
 	ListNode* pos = l->first;
 	while (1) {
 		if (pos == NULL) break;
@@ -31,7 +31,7 @@ void listFree(List* l) {
 	dfree(l);
 }
 
-void listAppend(List* l, Move* m) {
+void lAppend(List* l, Move* m) {
 	l->last->next = dmalloc(sizeof(ListNode)); // create new node at the end
 	l->last->next->next = NULL;
 	l->last->next->m = *m; // paste the value
@@ -39,7 +39,7 @@ void listAppend(List* l, Move* m) {
 	l->count++;
 }
 
-void listPop(List* l) { // deletes first element
+void lPop(List* l) { // deletes first element
 	ListNode* pop = l->first;
 	l->first = l->first->next;
 	l->count--;
