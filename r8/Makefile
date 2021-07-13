@@ -19,14 +19,18 @@ ifdef BUILDSYS
 include $(BUILDSYS)/Maketop
 
 # Add the detected flags to all the global flags
-CFLAGS+=$(LIBUCW_CFLAGS)
-LIBS+=$(LIBUCW_LIBS) $(shell pkg-config --libs raylib)
+CFLAGS+=$(LIBUCW_CFLAGS) $(RAYLIB_CCFLAGS)
+LIBS+=$(LIBUCW_LIBS) $(RAYLIB_LIBS)
+
+DIRS+=.
 
 # Programs we want to compile
 PROGS+=$(o)/r8
 
 # And how they are created
 $(o)/r8: $(o)/r8.o $(LIBUCW)
+
+include $(s)/assets/Makefile
 
 # And finally the default rules of the build system
 include $(BUILDSYS)/Makebottom
