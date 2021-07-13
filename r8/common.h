@@ -1,5 +1,20 @@
 // vim: filetype=c
 
+typedef enum GroupType {
+	gtUNION,
+	gtDIFF,
+	gtINTERS,
+	gtBLEND,
+	gtAVERAGE,
+	gtAPPROXIMATE
+} GroupType;
+
+typedef enum ShapeType {
+	stPRIMITIVE,
+	stGROUP,
+	stWRAPPER
+} ShapeType;
+
 typedef enum Primitive {
 	pSPHERE,
 	pCUBE,
@@ -20,23 +35,9 @@ typedef struct Wrapper {
 	ShapeType type;
 } Wrapper;
 
-typedef enum GroupType {
-	gtUNION,
-	gtDIFF,
-	gtINTERS,
-	gtBLEND,
-	gtAVERAGE,
-	gtAPPROXIMATE
-} GroupType;
-
-typedef enum ShapeType {
-	stPRIMITIVE,
-	stGROUP,
-	stWRAPPER
-} ShapeType;
-
 typedef struct Group {
-	void* a, b;
+	void* a;
+	void* b;
 	ShapeType aType, bType;
 	GroupType type;
 	double k; // group modificator (for approximations, blend and average)
@@ -46,3 +47,4 @@ typedef struct PortalBridge {
 	// TODO
 } PortalBridge;
 
+#define __commontesttmp "yes"

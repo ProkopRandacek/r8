@@ -1,6 +1,8 @@
-build
-r8_*.zip
+src
+run
 obj
-deps.gv.pdf
-deps.gv
 notes
+log
+
+# Makefile in repo root is generated automatically by `./configure`
+/Makefile
