@@ -10,15 +10,6 @@ BEGIN {
 	# Find the sources
 	#my $pkgfile = "test.c";
 	$srcdir="r8/";
-	#if (!defined ($srcdir = $ENV{"SRCDIR"})) {
-	#if (-f $pkgfile) {
-	#$srcdir=".";
-	#} elsif ($0 =~ m@^(.*)/configure$@ && -f "$1/$pkgfile") {
-	#$srcdir=$1;
-	#} else {
-	#die "Don't know how to find myself. Please set SRCDIR manually.\n";
-	#}
-	#}
 	# Ask pkg-config if libucw is installed and find its configure modules
 	`pkg-config libucw --atleast-version=6.5`;
 	!$? or die "Package `libucw' (version 6.5 or newer) not found. Is PKG_CONFIG_PATH set properly?\n";
@@ -42,7 +33,7 @@ require UCW::Configure::Pkg;
 
 # Get some libraries
 UCW::Configure::Pkg::PkgConfig("libucw") or Fail("libUCW is required");
-
+UCW::Configure::Pkg::PkgConfig("raylib") or Fail("raylib is required");
 
 Finish();
 

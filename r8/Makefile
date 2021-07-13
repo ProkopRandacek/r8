@@ -20,7 +20,7 @@ include $(BUILDSYS)/Maketop
 
 # Add the detected flags to all the global flags
 CFLAGS+=$(LIBUCW_CFLAGS)
-LIBS+=$(LIBUCW_LIBS)
+LIBS+=$(LIBUCW_LIBS) $(shell pkg-config --libs raylib)
 
 # Programs we want to compile
 PROGS+=$(o)/r8
