@@ -6,14 +6,9 @@ Rewrite from scratch wip
 - [ ] Docs
 
 ## Building
-R8 is build using the [libucw](http://www.ucw.cz/libucw/)'s build system so you need it installed to build R8. You can clone, compile and install it manually, or run the [`getucw`](./getucw) script to do it automatically.  
-R8 also requires raylib. Ideally, you would install raylib with `yay -S raylib`. Alternatively you can compile/download and install raylib from source manually.  
+The usual `./configure && make`. Binary is in `run/bin/`.
 
-### Build dependencies
-- make
-- libucw
-- pkg-config
+## Deps
+R8 depends on [libucw](http://www.ucw.cz/libucw/) and [raylib](https://github.com/raysan5/raylib).  
+You can install both of these if you have Arch: `yay -S raylib libucw --needed`. Alternatively you can download/compile and install them manually.
 
-## Runtime dependencies
-- raylib
-- libucw
