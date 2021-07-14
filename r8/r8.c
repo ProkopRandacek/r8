@@ -36,7 +36,7 @@ int main(int argc, char* argv[]) {
 	Shader shader = LoadShader(0, TextFormat("assets/shader.glsl", GLSL_VERSION));
 	int resolutionLoc = GetShaderLocation(shader, "iResolution");
 
-	SetTargetFPS(60);
+	//SetTargetFPS(60);
 
 	while (!WindowShouldClose()) {
 		if (IsWindowResized())
@@ -51,6 +51,7 @@ int main(int argc, char* argv[]) {
 			BeginShaderMode(shader); {
 				DrawRectangle(0, 0, screenWidth, screenHeight, WHITE);
 			} EndShaderMode();
+			DrawFPS(10, 10);
 		} EndDrawing();
 	}
 

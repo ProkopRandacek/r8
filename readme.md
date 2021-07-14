@@ -2,8 +2,12 @@ Rewrite from scratch wip
 
 # R8 Engine
 
+## [Docs](./docs.md)
+
 ## TODO
-- [ ] Docs
+- `[#...]` Docs
+  - `[###.]` Design
+  - `[....]` API
 
 ## Building
 The usual `./configure && make`. Binary is in `run/bin/`.

@@ -3,7 +3,7 @@
 # (c) 2008 Michal Vaner <vorner@ucw.cz>
 
 # The default target
-all: runtree programs
+all: runtree programs datafiles
 
 # Include configuration
 s=.
@@ -25,7 +25,7 @@ LIBS+=$(LIBUCW_LIBS) $(RAYLIB_LIBS)
 DIRS+=.
 
 # Programs we want to compile
-PROGS+=$(o)/r8
+PROGS+=$(o)/r8 
 
 # And how they are created
 $(o)/r8: $(o)/r8.o $(LIBUCW)
