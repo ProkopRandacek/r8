@@ -46,5 +46,3 @@ typedef struct Group {
 typedef struct PortalBridge {
 	// TODO
 } PortalBridge;
-
-#define __commontesttmp "yes"

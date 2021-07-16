@@ -1,8 +1,3 @@
-# Example Makefile for a stand-alone program using the libucw build system
-# (c) 2007 Martin Mares <mj@ucw.cz>
-# (c) 2008 Michal Vaner <vorner@ucw.cz>
-
-# The default target
 all: runtree programs datafiles
 
 # Include configuration
@@ -24,11 +19,14 @@ LIBS+=$(LIBUCW_LIBS) $(RAYLIB_LIBS)
 
 DIRS+=.
 
+R8_MODS=r8 log
+R8_MOD_PATHS=$(addprefix $(o)/,$(R8_MODS))
+
 # Programs we want to compile
-PROGS+=$(o)/r8 
+PROGS+=$(o)/r8
 
 # And how they are created
-$(o)/r8: $(o)/r8.o $(LIBUCW)
+$(o)/r8: $(o)/r8.o $(addsuffix .o,$(R8_MOD_PATHS)) $(LIBUCW)
 
 include $(s)/assets/Makefile
 
