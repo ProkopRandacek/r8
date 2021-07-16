@@ -6,6 +6,9 @@ Scene is defined as a tree of shapes.
 ### Shape
 The term shape can describe either a group, wrapper or a primitive.
 
+### Container
+The term container can describe eiter a group or a wrapper.
+
 ### Group
 Group always holds two shapes. Group can modify how the two shapes it holds are combined.  
 Some groups require a single float `k` to configure their behavior.  
@@ -38,3 +41,9 @@ Cube           | Cube has got a center point and a single 3D vector that defines
 Torus          | Torus has got a center point and a 2D vector, that defines the distance from the center of the tube to the center of the torus and the radius of the tube.
 Capsule        | Capsule has got a start and an end point and a radius.
 
+# Implementation
+
+## Primitives serialization
+
+Primitives are all serialized into array of 12 floats. Not all floats are always used.  
+[Primitives serialization and glsl functions lookup table](https://docs.google.com/spreadsheets/d/1u5eLoQ5e--L0BYsAkOEX2-lQDHC-FDW7x1jXfpOxG8Y/edit?usp=sharing)
