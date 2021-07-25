@@ -8,11 +8,16 @@ Rewrite from scratch wip
 - `[#...]` Docs
   - `[###.]` Design
   - `[....]` API
+- `[....]` Implementation
 
-## Building
-The usual `./configure && make`. Binary is in `run/bin/`.
+## Download
+appimage todo
 
-## Deps
+## Building from source
+`make -j$(nproc)`. Binary is in repo root.
+
+### Deps
 R8 depends on [libucw](http://www.ucw.cz/libucw/) and [raylib](https://www.raylib.com/).  
-You can install both of these if you have Arch: `yay -S raylib libucw --needed`. Alternatively you can download/compile and install them manually.
+You can install both of these if you have Arch: `yay -S raylib libucw --needed`. Alternatively you can download/compile and install them manually.  
+The `./check` script checks that all dependencies are installed and will be found be the build process.
 

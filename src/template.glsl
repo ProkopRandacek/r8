@@ -41,7 +41,9 @@
 
 uniform float prims[shapeSize * maxShapeNum];
 uniform ivec2 resolution;
-uniform vec3 lightPos, cam[5];
+uniform vec3 lightPos;
+uniform vec3 viewEye;
+uniform vec3 viewCenter;
 
 const vec3 smol = vec3(epsilon, 0.0, 0.0);
 const vec3 ones = vec3(1)
@@ -79,21 +81,16 @@ map avgM(float k, map a, map b) {
 }
 
 map mapWorld(vec3 pos) {
-	return
-cutM(map(sC(1), d2Sphere(pos, sP(1), sR(1))), map(sC(0), d2Cube(pos, sP(0), sS(0))));
+	return cutM(map(sC(1), d2Sphere(pos, sP(1), sR(1))), map(sC(0), d2Cube(pos, sP(0), sS(0))));
 }
 float mapWorldD(vec3 pos) {
-	return
-max(d2Sphere(pos, sP(1), sR(1)), -d2Cube(pos, sP(0), sS(0)));
+	return max(d2Sphere(pos, sP(1), sR(1)), -d2Cube(pos, sP(0), sS(0)));
 }
 
 // MAP WORLD END
 
 // END START
 vec3 calculateNormal(vec3 p){return normalize(vec3(mapWorldD(p+smol.xyy)-mapWorldD(p-smol.xyy),mapWorldD(p+smol.yxy)-mapWorldD(p-smol.yxy),mapWorldD(p+smol.yyx)-mapWorldD(p-smol.yyx)));}
-
-//bool intersection(vec3 ro,vec3 rd){const vec3 box=vec3(4,3,4);vec3 tMin=(-box-ro)/rd;vec3 tMax=(box-ro)/rd;vec3 t1=min(tMin,tMax);vec3 t2=max(tMin,tMax);return max(max(t1.x,t1.y),t1.z)<=min(min(t2.x,t2.y),t2.z);}
-bool intersection(vec3 ro,vec3 rd){return true;}
 
 rayHit rayMarch(vec3 ro, vec3 rd) {
 	float t = 0;
@@ -138,41 +135,39 @@ void main() {
 	vec2 uv = gl_FragCoord.xy / resolution.xy;
 
 	vec3 dir = normalize(mix(mix(cam[3], cam[1], uv.y), mix(cam[4], cam[2], uv.y), uv.x) - cam[0]);
-	vec3 pos = cam[0];
+	vec3 pos = viewEye;
 
-	// test if the ray is gonna intersect with the world box, if not, just render it as a sky box
-	if (!intersection(pos, dir)) {
-		outColor = vec4(1, 0, 0, 1);
-	} else {
-		vec3 finalClr = vec3(0);
-		float lastR = 1;
-		rayHit hit;
-		// cast main ray
-		for (int i = 0; i < BOUNCES + 1; i++) {
-			hit = rayMarch(pos, dir);
+	vec2 p = (-resolution.xy + 2.0*gl_FragCoord.xy)/resolution.y;
 
-			finalClr = mix(hit.surfaceClr.rgb, mix(finalClr, hit.surfaceClr.rgb, lastR), min(i, 1));
+	// camera from raylib magic
+	vec3 pos = viewEye;
+	vec3 dir = setCamera( ro, viewCenter, 0.0 ) * normalize( vec3(p.xy,2.0) );
 
-			if (hit.hitPos.w == 0.) break; // only reflect and shadown when hit a surface
+	vec3 finalClr = vec3(0);
+	float lastR = 1;
+	rayHit hit;
+	// cast main ray
+	for (int i = 0; i < BOUNCES + 1; i++) {
+		hit = rayMarch(pos, dir);
 
-			lastR = hit.surfaceClr.w;
+		finalClr = mix(hit.surfaceClr.rgb, mix(finalClr, hit.surfaceClr.rgb, lastR), min(i, 1));
 
-			vec3 normal = calculateNormal(hit.hitPos.xyz);
-			vec3 smolNormal = normal * BACK_STEP;
+		if (hit.hitPos.w == 0.) break; // only reflect and shadown when hit a surface
 
-			pos = hit.hitPos.xyz + smolNormal;
-			dir = reflect(dir, normal);
+		lastR = hit.surfaceClr.w;
 
-			if (hit.surfaceClr.w == 0.) { // shadow only 100% non reflective surfaces. shadows on reflective surfaces look weird.
-				finalClr *= rayMarchShadow(pos, normalize(lightPos - pos), length(lightPos - pos));
-				break;
-			}
+		vec3 normal = calculateNormal(hit.hitPos.xyz);
+		vec3 smolNormal = normal * BACK_STEP;
+
+		pos = hit.hitPos.xyz + smolNormal;
+		dir = reflect(dir, normal);
+
+		if (hit.surfaceClr.w == 0.) { // shadow only 100% non reflective surfaces. shadows on reflective surfaces look weird.
+			finalClr *= rayMarchShadow(pos, normalize(lightPos - pos), length(lightPos - pos));
+			break;
 		}
-
-		// output color
-		outColor = vec4(finalClr, 1.);
 	}
+
+	// output color
+	outColor = vec4(finalClr, 1.);
 }
-
-// END END
-

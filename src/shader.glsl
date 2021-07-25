@@ -1,5 +1,7 @@
 #version 330
-uniform vec2 iResolution;
+uniform vec2 resolution;
+uniform vec3 viewEye;
+uniform vec3 viewCenter;
 
 in vec2 fragTexCoord;
 in vec4 fragColor;
@@ -72,7 +74,7 @@ vec2 portalsdf(vec3 u, PortalFrame p, out vec3 a) {
 }
 
 void portalGroupSDF(inout vec2 d, vec3 u, PortalGroup pg, out vec3 p) {
-    vec3 q1, q2; // potals are structs that will tell you their "exit (*q*uit) coordinates
+    vec3 q1, q2; // potals are structs that will tell you their exit (*q*uit) coordinates
     vec2 d1 = portalsdf(u, pg.a, q1), d2 = portalsdf(u, pg.b, q2);
     if (d1.x < d2.x) { p = q1; d = d1; }
     else             { p = q2; d = vec2(d2.x, mPortal2); }
@@ -86,7 +88,7 @@ void bgw(inout vec2 d, inout vec3 p, vec3 q, float h, float m) {
     }
 }
 
-//p* and q* are "portal target bijectuive-switcheroo coordinates.
+//p* and q* are portal target bijectuive-switcheroo coordinates.
 //distance field gradient
 vec2 sdf(vec3 u, out vec3 p) {
     vec2 d;
@@ -134,16 +136,27 @@ void tp(inout vec3 ro, inout vec3 rd, inout vec3 c, PortalFrame p1, PortalFrame 
        +2.*epsRm*rd; //teleport ray origin
 }
 
+mat3 setCamera(in vec3 ro, in vec3 ta, float cr) {
+    vec3 cw = normalize(ta-ro);
+    vec3 cp = vec3(sin(cr), cos(cr),0.0);
+    vec3 cu = normalize( cross(cw,cp) );
+    vec3 cv = normalize( cross(cu,cw) );
+    return mat3( cu, cv, cw );
+}
+
 void main() {
     vec4 o = vec4(1);
-    vec3 ro = 5.0 * vec3(0, 0.5, 1); //camera rotation
-    vec3 w = normalize(-ro);
-    vec3 u = normalize(cross(w, vec3(0, 1, 0)));
-    vec3 v = cross(u, w);
 
-    vec3 rd = normalize(fov*w
-                 +(gl_FragCoord.x/iResolution.x-.5)*u
-                 +(gl_FragCoord.y/iResolution.x-.5*iResolution.y/iResolution.x)*v);
+    vec2 p = (-resolution.xy + 2.0*gl_FragCoord.xy)/resolution.y;
+
+    // camera from raylib
+    vec3 ro = viewEye;
+    vec3 ta = viewCenter;
+
+    // camera-to-world transformation
+    mat3 ca = setCamera( ro, ta, 0.0 );
+    // ray direction
+    vec3 rd = ca * normalize( vec3(p.xy,2.0) );
 
     for (int i = 0; i < iterTp; i++) {
         vec3 pos; // stores position along ray

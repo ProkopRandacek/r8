@@ -1,8 +1,6 @@
-src
-run
-obj
 notes
 log
+r8
 
-# Makefile in repo root is generated automatically by `./configure`
-/Makefile
+**/*.glsl.h
+**/*.o
