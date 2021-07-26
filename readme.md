@@ -1,4 +1,4 @@
-Rewrite from scratch wip
+Rewrite wip
 
 # R8 Engine
 
@@ -14,10 +14,15 @@ Rewrite from scratch wip
 appimage todo
 
 ## Building from source
-`make -j$(nproc)`. Binary is in repo root.
+```sh
+git clone https://github.com/ProkopRandacek/r8.git
+cd r8
+make -j$(nproc)
+./r8
+```
 
 ### Deps
-R8 depends on [libucw](http://www.ucw.cz/libucw/) and [raylib](https://www.raylib.com/).  
+R8 uses [libucw](http://www.ucw.cz/libucw/) and [raylib](https://www.raylib.com/).  
 You can install both of these if you have Arch: `yay -S raylib libucw --needed`. Alternatively you can download/compile and install them manually.  
 The `./check` script checks that all dependencies are installed and will be found be the build process.
 

@@ -1,173 +1,202 @@
 #version 330
-// SETTINGS START
-#define containerNum 16 // number of containers
-#define primsNum 4 // number of primitives
 
-#define eps 0.02
-
-#define maxStep 256
-
-#define collThreshold 0.001
-#define shadowCollThreshold 0.001
-
-#define backStep 0.100
-#define maxTrace 30.000
-
-#define bounces 1
-#define sunSize 2.000
-// SETTINGS END
-
-// CONSTANTS START
-#define shapeSize 8
-// CONSTANTS end
-
-// HEADER START
-#define dot2(v) dot(v,v)
-#define ndot(a, b) a.x*b.x-a.y*b.y
-
-// Functions to find information in shapes array
-#define sF(i, o) rawShapes[shapeSize * i + o]                // return float on position `o` from shape on index `i`
-#define sV2(i, o) vec2(sF(i, o), sF(i, o + 1))               // vec2 from 2 floats on position from o to o + 1 from shape on index `i`
-#define sV3(i, o) vec3(sF(i, o), sF(i, o + 1), sF(i, o + 2)) // vec3 from 3 floats on position from o to o + 2 from shape on index `i`
-
-#define sP(i)  sV3(i, 0) // position
-#define sP2(i) sV3(i, 7) // second position
-#define sS(i)  sV3(i, 7) // scale
-
-#define sR1(i) sF(i, 10) // first radius
-#define sR2(i) sF(i, 11) // second radius
-
-#define sC(i) vec4(sF(i, 3), sF(i, 4), sF(i, 5), sF(i, 6)) // Color
-
-uniform float prims[shapeSize * maxShapeNum];
-uniform ivec2 resolution;
-uniform vec3 lightPos;
+uniform vec2 resolution;
 uniform vec3 viewEye;
 uniform vec3 viewCenter;
 
-const vec3 smol = vec3(epsilon, 0.0, 0.0);
-const vec3 ones = vec3(1)
+in vec2 fragTexCoord;
+in vec4 fragColor;
 
-out vec4 outColor;
+out vec4 finalColor;
 
-struct rayHit{vec4 hitPos,surfaceClr;}; // hitPos.w == 0 -> didnt hit else hit
-struct map{vec4 clr;float d;};
-// HEADER END
+#define EPS 0.001
+#define MAX_DIST 64.0
+#define RM_ITERS 512
+#define MAIN_ITERS 8
 
-// SDFS START
 float d2Sphere(vec3 pos,vec3 sp,float r){return length(pos-sp)-r;}
-
 float d2Cube(vec3 pos,vec3 sp,vec3 b){vec3 p=pos-sp;vec3 q=abs(p)-b;return length(max(q,0.0))+min(max(q.x,max(q.y,q.z)),0.0);}
 
-// SDFS END
+float suv(vec2 a) { return a.x + a.y; }
+float suv(vec3 a) { return dot(a, vec3(1)); }
+float mav(vec2 a) { return max(a.x, a.y); }
+float mav(vec3 a) { return max(max(a.x, a.y), a.z); }
 
-// MAP WORLD START
-map maxM(map a, map b) {
-	if (a.d < b.d) return b;
-	return a;
+struct Portal {
+	vec3 c;    // center
+	vec3 dir;  // forward unit vector
+	vec3 up;   // up unit vector
+	vec2 dims; // scale
+};
+
+struct rayHit {
+	vec4 clr;
+	vec3 pos;
+	float dist;
+	int pi; // portal index, -1 if didn't hit portal
+	vec3 q; // portals exit thingie
+};
+
+struct clrd {
+	vec4 clr; // color of an object
+	float d; // distance to that object
+};
+
+struct portd {
+	int pi; // portal's index
+	float d; // distance to the portal
+	vec3 q; // portal's exit thingie
+};
+
+float portalSDF(vec3 u, Portal p, out vec3 a) {
+	vec3 r2c = u - p.c;
+	vec3 w = normalize(cross(p.dir, p.up)); // right vector?
+	vec3 v = cross(w, p.dir); // down vector?
+	a = vec3(dot(r2c, w), dot(r2c, v), dot(r2c, p.dir));
+	//p.dims = p.dims / 2.0;
+	float d = mav(vec3(abs(a.z), abs(a.xy) - p.dims.xy));
+	return d;
 }
 
-map minM(map a, map b) {
-	if (a.d > b.d) return b;
-	return a;
-}
-map cutM(map a, map b) {
-	b.d = -b.d;
-	if (a.d < b.d) return b;
-	return a;
-}
-map avgM(float k, map a, map b) {
-	return map(mix(a.clr, b.clr, k), mix(a.d, b.d, k));
+// teleport ro and rd trough a portal
+void tp(inout vec3 ro, inout vec3 rd, inout vec3 pos, Portal p1, Portal p2) {
+	vec3 u = normalize(cross(p1.dir, p1.up));
+	vec3 v = cross(u, p1.dir);
+	float x = dot(rd, u), y = dot(rd, v), z = dot(rd, p1.dir);
+	u = normalize(cross(p2.dir, p2.up));
+	v = cross(u, p2.dir);
+	vec2 s = p2.dims / p1.dims; // portal scaling
+	rd = normalize(x*u*s.x
+			+y*v*s.y
+			+z*p2.dir); // teleport ray direction
+	// above and below doesnt simplify, because u and v are vec3
+	ro = p2.c
+		+pos.x*u*s.x
+		+pos.y*v*s.y
+		-pos.z*p2.dir
+		+2.*EPS*rd; //teleport ray origin
 }
 
-map mapWorld(vec3 pos) {
-	return cutM(map(sC(1), d2Sphere(pos, sP(1), sR(1))), map(sC(0), d2Cube(pos, sP(0), sS(0))));
-}
-float mapWorldD(vec3 pos) {
-	return max(d2Sphere(pos, sP(1), sR(1)), -d2Cube(pos, sP(0), sS(0)));
+portd portalsSDF(inout vec3 pos) {
+	// This will be later taken from uniform
+	const int portalNum = 2;
+	Portal portals[portalNum];
+	portals[0] = Portal(
+			vec3( 2, 0, 3),
+			vec3( 0, 0, 1),
+			vec3( 0, 1, 0),
+			vec2( 1, 2   )
+		   );
+	portals[1] = Portal(
+			vec3(-2, 0, 3),
+			vec3( 1, 0, 0),
+			vec3( 0, 1, 0),
+			vec2( 1, 2   )
+		   );
+
+	float dist = 99999.9;
+	int pi;
+	vec3 q;
+
+	for (int i = 0; i < portalNum; i++) {
+		vec3 nq;
+		float ndist = portalSDF(pos, portals[i], nq);
+		if (ndist < dist) {
+			dist = ndist;
+			pi = i;
+			q = nq;
+		}
+	}
+	return portd(pi, dist, q);
 }
 
-// MAP WORLD END
-
-// END START
-vec3 calculateNormal(vec3 p){return normalize(vec3(mapWorldD(p+smol.xyy)-mapWorldD(p-smol.xyy),mapWorldD(p+smol.yxy)-mapWorldD(p-smol.yxy),mapWorldD(p+smol.yyx)-mapWorldD(p-smol.yyx)));}
+clrd sdf(vec3 pos) {
+	float d = min(
+			pos.y,
+			min(
+				d2Cube  (pos, vec3(-2, 1, 0), vec3(1.5)),
+				d2Sphere(pos, vec3( 2, 1, 0), 1.0)
+			   )
+		     );
+	// TODO colors
+	return clrd(vec4(0), d);
+}
 
 rayHit rayMarch(vec3 ro, vec3 rd) {
-	float t = 0;
 	vec3 pos;
-
-	for (int i = 0; i < STEPSNUM; i++) {
+	float t = 0.0;
+	for (int i = 0; i < RM_ITERS; i++) {
 		pos = ro + t * rd;
-		map hit = mapWorld(pos);
-		t += hit.d;
 
-		if (hit.d < COLLISION_THRESHOLD) { return rayHit(vec4(pos, 1), hit.clr               ); }
-		if (t > MAX_TRACE_DIST)          { return rayHit(vec4(0)     , vec4(0.1, 0.1, 0.1, 0)); }
+		clrd c = sdf(pos);
+		portd p = portalsSDF(pos);
+
+		if (c.d < p.d) {
+			t += c.d;
+			if (abs(c.d) < EPS) return rayHit(c.clr, pos, t, -1, vec3(0)); // hit a surface
+		} else {
+			t += p.d;
+			if (abs(p.d) < EPS) return rayHit(c.clr, pos, t, p.pi, p.q); // hit a surface
+		}
+		if (t > MAX_DIST) break; // too far from camera
 	}
-
-	return rayHit(vec4(0), vec4(1, 1, 1, 0)); // run out of stepsnum
+	return rayHit(vec4(0), pos, MAX_DIST, -1, vec3(0));
 }
 
-float rayMarchShadow(vec3 ro, vec3 rd, float tmax) {
-	float res = 1.0;
-	float t = 0.01;
-	float ph = 1e10; // big, such that y = 0 on the first iteration
-
-	for (int i=0; i<32; i++) {
-		float h = mapWorld(ro + rd*t).d;
-
-		float y = h * h / (2.0 * ph);
-		float d = sqrt(h*h-y*y);
-		res = min(res, SUN_SIZE * d / max(0.0, t - y));
-		ph = h;
-
-		t += h;
-
-		if(res < 0.0001 || t > tmax) break;
-
-	}
-	res = clamp(res, 0.0, 1.0);
-	return res * res * (3.0 - 2.0 * res);
+mat3 setCamera(in vec3 ro, in vec3 ta, float cr) {
+	vec3 cw = normalize(ta - ro);
+	vec3 cp = vec3(sin(cr), cos(cr), 0.0);
+	vec3 cu = normalize(cross(cw, cp));
+	vec3 cv = normalize(cross(cu, cw));
+	return mat3(cu, cv, cw);
 }
 
 void main() {
-	// calculate ray direction
-	vec2 uv = gl_FragCoord.xy / resolution.xy;
+	const int portalNum = 2;
+	Portal portals[portalNum];
+	portals[0] = Portal(
+			vec3( 2, 0, 3),
+			vec3( 0, 0, 1),
+			vec3( 0, 1, 0),
+			vec2( 1, 2   )
+		   );
+	portals[1] = Portal(
+			vec3(-2, 0, 3),
+			vec3( 1, 0, 0),
+			vec3( 0, 1, 0),
+			vec2( 1, 2   )
+		   );
 
-	vec3 dir = normalize(mix(mix(cam[3], cam[1], uv.y), mix(cam[4], cam[2], uv.y), uv.x) - cam[0]);
-	vec3 pos = viewEye;
+	vec2 p = (2.0 * gl_FragCoord.xy - resolution.xy) / resolution.y;
 
-	vec2 p = (-resolution.xy + 2.0*gl_FragCoord.xy)/resolution.y;
+	vec3 ro = viewEye;
+	vec3 ta = viewCenter;
 
-	// camera from raylib magic
-	vec3 pos = viewEye;
-	vec3 dir = setCamera( ro, viewCenter, 0.0 ) * normalize( vec3(p.xy,2.0) );
+	vec3 clr = vec3(0);
 
-	vec3 finalClr = vec3(0);
-	float lastR = 1;
-	rayHit hit;
-	// cast main ray
-	for (int i = 0; i < BOUNCES + 1; i++) {
-		hit = rayMarch(pos, dir);
+	mat3 ca = setCamera(ro, ta, 0.0);
+	const float fl = 2.5; // focal length
+	vec3 rd = ca * normalize(vec3(p, fl));
 
-		finalClr = mix(hit.surfaceClr.rgb, mix(finalClr, hit.surfaceClr.rgb, lastR), min(i, 1));
-
-		if (hit.hitPos.w == 0.) break; // only reflect and shadown when hit a surface
-
-		lastR = hit.surfaceClr.w;
-
-		vec3 normal = calculateNormal(hit.hitPos.xyz);
-		vec3 smolNormal = normal * BACK_STEP;
-
-		pos = hit.hitPos.xyz + smolNormal;
-		dir = reflect(dir, normal);
-
-		if (hit.surfaceClr.w == 0.) { // shadow only 100% non reflective surfaces. shadows on reflective surfaces look weird.
-			finalClr *= rayMarchShadow(pos, normalize(lightPos - pos), length(lightPos - pos));
+	for (int i = 0; i < MAIN_ITERS; i++) {
+		rayHit hit = rayMarch(ro, rd);
+		if (hit.pi < 0) { // didn't hit a portal
+			clr = vec3(hit.dist / MAX_DIST); // render depth texture
 			break;
+		} else { // did hit a portal
+			int b;
+
+			if (hit.pi % 2 == 1) {
+				b = hit.pi - 1;
+			} else {
+				b = hit.pi + 1;
+			}
+
+			tp(ro, rd, hit.q, portals[hit.pi], portals[b]);
+			continue;
 		}
 	}
 
-	// output color
-	outColor = vec4(finalClr, 1.);
+	finalColor = vec4(clr, 1.0);
 }
+

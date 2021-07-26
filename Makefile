@@ -17,6 +17,8 @@ include src/Makefile
 clean::
 	rm -f $(TARGET)
 
+clear: clean
+
 install: $(TARGET)
 	install -m 755 -D $(TARGET) $(DESTDIR)/usr/bin/r8
 

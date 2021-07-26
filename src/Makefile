@@ -1,6 +1,6 @@
-#included from ../Makefile
+# included from ../Makefile
 _:
-	@echo run make from repo root && false
+	@echo run make from parent directory && false
 
 DEPS = $(wildcard src/*.h)
 SRCS = $(wildcard src/*.c)

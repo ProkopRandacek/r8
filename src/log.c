@@ -13,3 +13,4 @@ void raylib_log_to_libucw_log(int raylib_log_level, const char *text, va_list ar
 	}
 	vmsg(libucw_log_level, text, args);
 }
+
