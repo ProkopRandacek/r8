@@ -1,5 +1,5 @@
-#ifndef __SHADERCODE_H
-#define __SHADERCODE_H
+#ifndef SHADERCODE_H
+#define SHADERCODE_H
 
 #include "template.glsl.h"
 

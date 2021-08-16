@@ -1,6 +1,10 @@
-// vim: filetype=c
+// vim: ft=c
+#ifndef COMMON_H
+#define COMMON_H
 
-typedef enum GroupType {
+#include <raymath.h>
+
+typedef enum {
 	gtUNION,
 	gtDIFF,
 	gtINTERS,
@@ -9,13 +13,13 @@ typedef enum GroupType {
 	gtAPPROXIMATE
 } GroupType;
 
-typedef enum ShapeType {
+typedef enum {
 	stPRIMITIVE,
 	stGROUP,
 	stWRAPPER
 } ShapeType;
 
-typedef enum Primitive {
+typedef enum {
 	pSPHERE,
 	pCUBE,
 	pTORUS,
@@ -24,18 +28,18 @@ typedef enum Primitive {
 	pCCONE
 } Primitive;
 
-typedef struct Shape {
+typedef struct {
 	double f[8];
 	Primitive type;
 } Shape;
 
-typedef struct Wrapper {
+typedef struct {
 	void* shape;
 	char* glslMod; // TODO document this
 	ShapeType type;
 } Wrapper;
 
-typedef struct Group {
+typedef struct {
 	void* a;
 	void* b;
 	ShapeType aType, bType;
@@ -43,6 +47,15 @@ typedef struct Group {
 	double k; // group modificator (for approximations, blend and average)
 } Group;
 
-typedef struct PortalBridge {
-	// TODO
-} PortalBridge;
+typedef struct {
+	Vector3 c;    // center
+	Vector3 dir;  // forward unit vector
+	Vector3 up;   // up unit vector
+	Vector2 dims; // scale
+} Portal;
+
+typedef struct {
+	Portal a, b;
+} PortalGroup;
+
+#endif

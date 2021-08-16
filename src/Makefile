@@ -15,8 +15,9 @@ clean::
 
 
 %.o: %.c
-	$(CC) $(CFLAGS) -MM -MG -MF $(patsubst %.o,%.d,$@) -c $<
-	$(CC) $(CFLAGS) -o $@ -c $<
+	@echo CC $@
+	@$(CC) $(CFLAGS) -MM -MG -MF $(patsubst %.o,%.d,$@) -c $<
+	@$(CC) $(CFLAGS) -o $@ -c $<
 
 -include $(DEPS)
 
@@ -28,5 +29,5 @@ clean::
 
 $(TARGET): $(SHDH) $(OBJS)
 	@echo LD $@
-	$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(OBJS) -o $@
+	@$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(OBJS) -o $@
 

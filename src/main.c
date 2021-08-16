@@ -1,12 +1,9 @@
+#include <raylib.h>
+#include <stdio.h>
 #include <ucw/lib.h>
 
-#include <raylib.h>
-
-#include <stdio.h>
-
-#include "log.h"
 #include "common.h"
-
+#include "log.h"
 #include "shadercode.h"
 
 #define GLSL_VERSION 330

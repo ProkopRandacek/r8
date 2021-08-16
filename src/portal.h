@@ -1,12 +1,9 @@
-#include <raymath.h>
+// vim: ft=c
+#ifndef PORTAL_H
+#define PORTAL_H
 
-typedef struct {
-	Vector3 c;    // center
-	Vector3 dir;  // forward unit vector
-	Vector3 up;   // up unit vector
-	Vector2 dims; // scale
-} Portal;
+#include "common.h"
 
-typedef struct {
-	Portal a, b;
-} PortalGroup;
+void portal_serialize(float* arr, Portal p);
+
+#endif
