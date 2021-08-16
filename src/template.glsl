@@ -1,5 +1,14 @@
 #version 330
 
+#define EPS 0.001
+#define MAX_DIST 64.0
+#define RM_ITERS 512
+#define MAIN_ITERS 8
+
+#define PORTAL_SIZE 11
+#define PORTAL_NUM 1
+
+uniform float portals[PORTAL_SIZE * PORTAL_NUM * 2];
 uniform vec2 resolution;
 uniform vec3 viewEye;
 uniform vec3 viewCenter;
@@ -9,17 +18,9 @@ in vec4 fragColor;
 
 out vec4 finalColor;
 
-#define EPS 0.001
-#define MAX_DIST 64.0
-#define RM_ITERS 512
-#define MAIN_ITERS 8
-
 float d2Sphere(vec3 pos,vec3 sp,float r){return length(pos-sp)-r;}
 float d2Cube(vec3 pos,vec3 sp,vec3 b){vec3 p=pos-sp;vec3 q=abs(p)-b;return length(max(q,0.0))+min(max(q.x,max(q.y,q.z)),0.0);}
 
-float suv(vec2 a) { return a.x + a.y; }
-float suv(vec3 a) { return dot(a, vec3(1)); }
-float mav(vec2 a) { return max(a.x, a.y); }
 float mav(vec3 a) { return max(max(a.x, a.y), a.z); }
 
 struct Portal {
@@ -82,13 +83,13 @@ portd portalsSDF(inout vec3 pos) {
 	const int portalNum = 2;
 	Portal portals[portalNum];
 	portals[0] = Portal(
-			vec3( 2, 0, 3),
+			vec3( 2, 1, 3),
 			vec3( 0, 0, 1),
 			vec3( 0, 1, 0),
 			vec2( 1, 2   )
 		   );
 	portals[1] = Portal(
-			vec3(-2, 0, 3),
+			vec3(-2, 1, 3),
 			vec3( 1, 0, 0),
 			vec3( 0, 1, 0),
 			vec2( 1, 2   )
@@ -155,13 +156,13 @@ void main() {
 	const int portalNum = 2;
 	Portal portals[portalNum];
 	portals[0] = Portal(
-			vec3( 2, 0, 3),
+			vec3( 2, 1, 3),
 			vec3( 0, 0, 1),
 			vec3( 0, 1, 0),
 			vec2( 1, 2   )
 		   );
 	portals[1] = Portal(
-			vec3(-2, 0, 3),
+			vec3(-2, 1, 3),
 			vec3( 1, 0, 0),
 			vec3( 0, 1, 0),
 			vec2( 1, 2   )
@@ -175,7 +176,7 @@ void main() {
 	vec3 clr = vec3(0);
 
 	mat3 ca = setCamera(ro, ta, 0.0);
-	const float fl = 2.5; // focal length
+	const float fl = 2.0; // focal length
 	vec3 rd = ca * normalize(vec3(p, fl));
 
 	for (int i = 0; i < MAIN_ITERS; i++) {

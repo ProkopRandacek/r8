@@ -4,7 +4,7 @@ LDLIBS += -lm
 WARNS  += -Wall -Wunused-parameter -Wshadow -Wundef -Wfloat-equal -Wunreachable-code -Wno-misleading-indentation
 
 LDLIBS += $(shell pkg-config --libs   raylib libucw)
-CFLAGS += $(shell pkg-config --cflags raylib libucw)
+CFLAGS += $(shell pkg-config --cflags raylib libucw) $(WARNS)
 
 TARGET = r8
 
@@ -14,11 +14,13 @@ all: $(TARGET)
 
 include src/Makefile
 
+.PHONY : clean
+
 clean::
 	rm -f $(TARGET)
 
 clear: clean
 
-install: $(TARGET)
-	install -m 755 -D $(TARGET) $(DESTDIR)/usr/bin/r8
+#install: $(TARGET)
+#	install -m 755 -D $(TARGET) $(DESTDIR)/usr/bin/r8
 
