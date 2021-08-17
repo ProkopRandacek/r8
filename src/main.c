@@ -2,9 +2,10 @@
 #include <stdio.h>
 #include <ucw/lib.h>
 
-#include "common.h"
 #include "log.h"
+#include "main.h"
 #include "shadercode.h"
+//#include "shader.h"
 
 #define GLSL_VERSION 330
 
@@ -21,7 +22,7 @@ int main(int argc, char* argv[]) {
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "r8");
 
-	Shader shader = LoadShaderFromMemory(0, template_glsl);
+	Shader shader = LoadShaderFromMemory(0, filled_template_glsl);
 
 	int resolutionLoc = GetShaderLocation(shader, "resolution");
 	int viewEyeLoc    = GetShaderLocation(shader, "viewEye");

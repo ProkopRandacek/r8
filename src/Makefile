@@ -13,7 +13,6 @@ clean::
 	$(RM) $(SHDH)
 	$(RM) $(DEPS)
 
-
 %.o: %.c
 	@echo CC $@
 	@$(CC) $(CFLAGS) -MM -MG -MF $(patsubst %.o,%.d,$@) -c $<
@@ -23,11 +22,15 @@ clean::
 
 %.glsl.h: %.glsl
 	@echo SD $@
-	@echo -n "const char* $(notdir $(basename $^))_glsl = " > $@
+	@echo "#ifndef $(notdir $(basename $^))_H" >  $@
+	@echo "#define $(notdir $(basename $^))_H" >> $@
+	@echo "const unsigned int $(notdir $(basename $^))_glsl_len = $(shell wc -c $^ | awk '{print $$1}');" >> $@
+	@echo -n "const char* $(notdir $(basename $^))_glsl = " >> $@
 	@sed 's/^/"/; s/$$/\\n"/' $< >> $@
 	@echo ";" >> $@
+	@echo "#endif" >> $@
 
-$(TARGET): $(SHDH) $(OBJS)
+$(TARGET): $(SHDH) $(OBJS) $(LIBUCW_LIBRARY) $(RAYLIB_LIBRARY)
 	@echo LD $@
-	@$(CC) $(CFLAGS) $(LDFLAGS) $(LDLIBS) $(OBJS) -o $@
+	@$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)
 

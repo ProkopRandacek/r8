@@ -1,12 +1,12 @@
 #version 330
 
-#define EPS <@>
-#define MAX_DIST <@>
-#define RM_ITERS <@>
-#define MAIN_ITERS <@>
+#define EPS 0.001
+#define MAX_DIST 64.0
+#define RM_ITERS 512
+#define MAIN_ITERS 8
 
 #define PORTAL_SIZE 11
-#define PORTAL_NUM <@>
+#define PORTAL_NUM 1
 
 uniform float portals[PORTAL_SIZE * PORTAL_NUM * 2];
 uniform vec2 resolution;
@@ -110,6 +110,7 @@ portd portalsSDF(inout vec3 pos) {
 	}
 	return portd(pi, dist, q);
 }
+
 clrd sdf(vec3 pos) {
 	float d = min(
 			pos.y,

@@ -58,4 +58,13 @@ typedef struct {
 	Portal a, b;
 } PortalGroup;
 
+typedef struct {
+	double eps; // epsilon, for collision detection
+	double max_dist; // max render distance
+	int rm_iters; // ray march iterations
+	int main_iters; // ray bounces / teleports limit
+
+	int portal_num; // number of portals
+} Scene;
+
 #endif

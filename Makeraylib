@@ -1,0 +1,19 @@
+# vim: ft=make
+
+RAYLIB_DIR     ?= ./raylib
+RAYLIB_LIBRARY ?= $(RAYLIB_DIR)/libraylib.a
+
+raylib: $(RAYLIB_LIBRARY)
+
+$(RAYLIB_LIBRARY):
+	cd $(RAYLIB_DIR)/src && $(MAKE) \
+		PLATFORM=PLATFORM_DESKTOP \
+		RAYLIB_LIBTYPE=STATIC \
+		-j$(shell nproc)
+
+deepclean::
+	cd $(RAYLIB_DIR)/src && $(MAKE) clean
+
+LDLIBS += $(RAYLIB_LIBRARY)
+CFLAGS += -I$(RAYLIB_DIR)/src/
+

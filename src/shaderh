@@ -3,4 +3,6 @@
 
 #include "common.h"
 
+char* shader_build(Scene scene);
+
 #endif

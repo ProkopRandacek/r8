@@ -1,0 +1,19 @@
+# vim: ft=make
+
+LIBUCW_DIR     ?= ./libucw
+LIBUCW_LIBRARY ?= $(LIBUCW_DIR)/run/lib/libucw-6.5.a
+
+libucw: $(LIBUCW_LIBRARY)
+
+$(LIBUCW_LIBRARY):
+	cd $(LIBUCW_DIR)/ && \
+		./configure -CONFIG_UCW_PERL -CONFIG_XML -CONFIG_JSON CONFIG_DEBUG CONFIG_LOCAL \
+		-CONFIG_SHARED -CONFIG_DOC -CONFIG_CHARSET && \
+		$(MAKE) runtree libs api -j$(shell nproc)
+
+deepclean::
+	cd $(LIBUCW_DIR)/ && $(MAKE) clean
+
+LDLIBS += $(LIBUCW_LIBRARY)
+CFLAGS += -I$(LIBUCW_DIR)/run/include/
+

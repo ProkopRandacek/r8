@@ -1,0 +1,9 @@
+#include <stdlib.h>
+
+#include "shader.h"
+#include "shadercode.h"
+
+char* shader_build(Scene scene) {
+	char* shader = malloc(template_glsl_len + 256);
+}
+
