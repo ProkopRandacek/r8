@@ -4,7 +4,12 @@
 
 #include "log.h"
 #include "main.h"
-#include "shadercode.h"
+
+#include "shaders/filled_template.glsl.h"
+#include "shaders/template.glsl.h"
+
+#include "shapes/portal.h"
+
 //#include "shader.h"
 
 #define GLSL_VERSION 330

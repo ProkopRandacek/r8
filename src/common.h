@@ -20,18 +20,18 @@ typedef enum {
 } ShapeType;
 
 typedef enum {
-	pSPHERE,
-	pCUBE,
-	pTORUS,
-	pCTORUS,
-	pCYL,
-	pCCONE
-} Primitive;
+	ptSPHERE,
+	ptCUBE,
+	ptTORUS,
+	ptCTORUS,
+	ptCYL,
+	ptCCONE
+} PrimitiveType;
 
 typedef struct {
-	double f[8];
-	Primitive type;
-} Shape;
+	double d[12];
+	PrimitiveType type;
+} Primitive;
 
 typedef struct {
 	void* shape;
@@ -47,16 +47,15 @@ typedef struct {
 	double k; // group modificator (for approximations, blend and average)
 } Group;
 
+struct Portal;
+
 typedef struct {
-	Vector3 c;    // center
+	Vector3 pos;  // center
 	Vector3 dir;  // forward unit vector
 	Vector3 up;   // up unit vector
 	Vector2 dims; // scale
+	struct Portal* link; // the other portal
 } Portal;
-
-typedef struct {
-	Portal a, b;
-} PortalGroup;
 
 typedef struct {
 	double eps; // epsilon, for collision detection
@@ -68,3 +67,4 @@ typedef struct {
 } Scene;
 
 #endif
+

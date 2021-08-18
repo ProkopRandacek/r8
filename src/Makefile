@@ -2,8 +2,8 @@
 _:
 	@echo run make from repository root && false
 
-SRCS = $(wildcard src/*.c)     # c sources
-SHDS = $(wildcard src/*.glsl)  # shader sources
+SRCS = $(shell find src/ -name \*.c -print)  # c sources
+SHDS = $(wildcard src/shaders/*.glsl)  # shader sources
 OBJS = $(sort $(SRCS:.c=.o))   # object files
 SHDH = $(addsuffix .h,$(SHDS)) # shader headers
 DEPS = $(OBJS:.o=.d)

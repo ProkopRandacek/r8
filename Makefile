@@ -11,6 +11,9 @@ TARGET = r8
 
 all: $(TARGET)
 
+run: $(TARGET)
+	./r8
+
 include Makelibucw
 	
 include Makeraylib

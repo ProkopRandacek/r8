@@ -15,7 +15,7 @@ appimage todo
 
 ## Building from source
 ```sh
-git clone https://github.com/ProkopRandacek/r8.git
+git clone --recursive https://github.com/ProkopRandacek/r8.git
 cd r8
 make -j$(nproc) && ./r8
 ```
