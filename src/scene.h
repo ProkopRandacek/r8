@@ -1,10 +1,13 @@
+// vim: ft=c
 #ifndef SCENE_H
 #define SCENE_H
 
 #include "common.h"
 
-Scene *scene_new();
+Scene *scene_new(); // constructor
 
-char *scene_compile(Scene* s);
+void scene_compile(Scene* s); // compile shader
+void scene_update (Scene* s); // sends data to gpu (called each tick)
+void scene_destroy(Scene* s); // destructor
 
 #endif

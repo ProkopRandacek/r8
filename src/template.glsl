@@ -8,7 +8,11 @@
 #define PORTAL_SIZE 11
 #define PORTAL_NUM 2
 
-uniform float portals[PORTAL_SIZE * PORTAL_NUM * 2];
+#define SHAPE_SIZE 11
+#define SHAPE_NUM 2
+
+uniform float portals[PORTAL_SIZE * PORTAL_NUM];
+uniform float shapes[SHAPE_SIZE * SHAPE_NUM];
 uniform vec2 resolution;
 uniform vec3 viewEye;
 uniform vec3 viewCenter;
@@ -73,7 +77,7 @@ clrd average(float k, clrd a, clrd b) { // mix(a, b, k)
 	return clrd(
 			mix(a.clr, b.clr, k),
 			mix(a.d  , b.d  , k)
-		);
+		   );
 }
 
 clrd blend(float k, clrd a, clrd b) { // smin(a, b, k)
@@ -85,7 +89,7 @@ clrd blend(float k, clrd a, clrd b) { // smin(a, b, k)
 				smin(a.clr.w, b.clr.w, k)
 			    ),
 			smin(a.d, b.d, k)
-		  );
+		   );
 }
 
 clrd approximate(float k, clrd a, clrd b) {

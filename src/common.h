@@ -72,7 +72,13 @@ typedef struct {
 	int rm_iters; // ray march iterations
 	int main_iters; // ray bounces / teleports limit
 
-	Shape* root_shape;
+	Shape* root_shape; // root shape of this scene
+
+	Camera cam;
+	Shader shader; // the shader if compiled
+	int resLoc;
+	int roLoc;
+	int taLoc;
 } Scene;
 
 #endif

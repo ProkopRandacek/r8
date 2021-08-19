@@ -3,7 +3,7 @@ _:
 	@echo run make from repository root && false
 
 SRCS = $(shell find src/ -name \*.c -print)  # c sources
-SHDS = $(wildcard src/shaders/*.glsl)  # shader sources
+SHDS = $(wildcard src/*.glsl)  # shader sources
 OBJS = $(sort $(SRCS:.c=.o))   # object files
 SHDH = $(addsuffix .h,$(SHDS)) # shader headers
 DEPS = $(OBJS:.o=.d)
@@ -13,7 +13,7 @@ clean::
 	$(RM) $(SHDH)
 	$(RM) $(DEPS)
 
-%.o: %.c
+%.o: %.c $(SHDH)
 	@echo CC $@
 	@$(CC) $(CFLAGS) -MM -MG -MF $(patsubst %.o,%.d,$@) -c $<
 	@$(CC) $(CFLAGS) -o $@ -c $<

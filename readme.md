@@ -15,7 +15,7 @@ appimage todo
 ```sh
 git clone --recursive https://github.com/ProkopRandacek/r8.git
 cd r8
-make -j1 && ./r8
+make run -j$(nproc)
 ```
 
 ### Deps
