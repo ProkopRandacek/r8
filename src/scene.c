@@ -1,4 +1,5 @@
 #define _GNU_SOURCE
+#include <ucw/lib.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -17,6 +18,26 @@ Scene *scene_new() {
 	s->root_shape = NULL;
 
 	return s;
+}
+
+void sdf_gen(char* sdf, Shape *pos) {
+	switch (pos->type) {
+		case stPRIMITIVE:
+			break;
+		case stGROUP:
+			break;
+		case stWRAPPER:
+			die("wrappers not implemented");
+			break;
+	}
+}
+
+char* scene_create_sdf(Scene *s) {
+	char* sdf = malloc(8192);
+
+	sdf_gen(sdf, s->root_shape);
+
+	return sdf;
 }
 
 char* scene_compile(Scene* s) {

@@ -1,17 +1,14 @@
+#include <ucw/lib.h>
+
 #include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ucw/lib.h>
 
 #include "log.h"
 #include "main.h"
 #include "scene.h"
 #include "shapes/portal.h"
-
-#include "shaders/filled_template.glsl.h"
-
-//#include "shader.h"
 
 #define GLSL_VERSION 330
 
@@ -22,14 +19,10 @@ int main(int argc, char* argv[]) {
 
 	Scene *s = scene_new();
 
-	char* shader = scene_compile(s);
-
-	printf("%s", shader);
-
-	free(shader);
+	char* shader_code = scene_compile(s);
 	free(s);
 
-	/*SetTraceLogCallback(raylib_log_to_libucw_log);
+	SetTraceLogCallback(raylib_log_to_libucw_log);
 
 	int screenWidth = 800;
 	int screenHeight = 450;
@@ -37,7 +30,8 @@ int main(int argc, char* argv[]) {
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	InitWindow(screenWidth, screenHeight, "r8");
 
-	Shader shader = LoadShaderFromMemory(0, filled_template_glsl);
+	Shader shader = LoadShaderFromMemory(0, shader_code);
+	free(shader_code);
 
 	int resolutionLoc = GetShaderLocation(shader, "resolution");
 	int viewEyeLoc    = GetShaderLocation(shader, "viewEye");
@@ -77,8 +71,9 @@ int main(int argc, char* argv[]) {
 		} EndDrawing();
 	}
 
+
 	UnloadShader(shader);
-	CloseWindow();*/
+	CloseWindow();
 
 	return 0;
 }

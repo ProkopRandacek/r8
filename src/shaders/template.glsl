@@ -21,6 +21,11 @@ out vec4 finalColor;
 float d2Sphere(vec3 pos,vec3 sp,float r){return length(pos-sp)-r;}
 float d2Cube(vec3 pos,vec3 sp,vec3 b){vec3 p=pos-sp;vec3 q=abs(p)-b;return length(max(q,0.0))+min(max(q.x,max(q.y,q.z)),0.0);}
 
+float smin(float a, float b, float k) {
+	float h = max(k - abs(a - b), 0.0) / k;
+	return min(a, b) - h * h * h * k * (1.0 / 6.0);
+}
+
 float mav(vec3 a) { return max(max(a.x, a.y), a.z); }
 
 struct Portal {
@@ -48,6 +53,45 @@ struct portd {
 	float d; // distance to the portal
 	vec3 q; // portal's exit thingie
 };
+
+clrd unin(clrd a, clrd b) { // min(a, b)
+	if (a.d < b.d) return a;
+	return b;
+}
+
+clrd diff(clrd a, clrd b) { // min(a, -b)
+	if (a.d < -b.d) return a;
+	return b;
+}
+
+clrd inters(clrd a, clrd b) { // max(a, b)
+	if (a.d > b.d) return a;
+	return b;
+}
+
+clrd average(float k, clrd a, clrd b) { // mix(a, b, k)
+	return clrd(
+			mix(a.clr, b.clr, k),
+			mix(a.d  , b.d  , k)
+		);
+}
+
+clrd blend(float k, clrd a, clrd b) { // smin(a, b, k)
+	return clrd(
+			vec4(
+				smin(a.clr.r, b.clr.r, k),
+				smin(a.clr.g, b.clr.g, k),
+				smin(a.clr.b, b.clr.b, k),
+				smin(a.clr.w, b.clr.w, k)
+			    ),
+			smin(a.d, b.d, k)
+		  );
+}
+
+clrd approximate(float k, clrd a, clrd b) {
+	// TODO
+	return a;
+}
 
 float portalSDF(vec3 u, Portal p, out vec3 a) {
 	vec3 r2c = u - p.c;
@@ -87,13 +131,13 @@ portd portalsSDF(inout vec3 pos) {
 			vec3( 0, 0, 1),
 			vec3( 0, 1, 0),
 			vec2( 1, 2   )
-		   );
+			);
 	portals[1] = Portal(
 			vec3(-2, 1, 3),
 			vec3( 1, 0, 0),
 			vec3( 0, 1, 0),
 			vec2( 1, 2   )
-		   );
+			);
 
 	float dist = 99999.9;
 	int pi;
@@ -110,16 +154,15 @@ portd portalsSDF(inout vec3 pos) {
 	}
 	return portd(pi, dist, q);
 }
+
 clrd sdf(vec3 pos) {
-	float d = min(
-			pos.y,
-			min(
-				d2Cube  (pos, vec3(-2, 1, 0), vec3(1.5)),
-				d2Sphere(pos, vec3( 2, 1, 0), 1.0)
-			   )
-		     );
-	// TODO colors
-	return clrd(vec4(0), d);
+	return unin(
+			clrd(vec4(0, 0, 1, 1), pos.y),
+			unin(
+				clrd(vec4(1, 0, 0, 1), d2Cube  (pos, vec3(-2, 1, 0), vec3(1.5))),
+				clrd(vec4(0, 1, 0, 1), d2Sphere(pos, vec3( 2, 1, 0), 1.5))
+			    )
+		   );
 }
 
 rayHit rayMarch(vec3 ro, vec3 rd) {
@@ -143,6 +186,16 @@ rayHit rayMarch(vec3 ro, vec3 rd) {
 	return rayHit(vec4(0), pos, MAX_DIST, -1, vec3(0));
 }
 
+vec3 calcNormal(vec3 pos) {
+	float c = sdf(pos).d;
+	vec2 eps_zero = vec2(EPS, 0.0);
+	return normalize(vec3(
+				sdf(pos + eps_zero.xyy).d,
+				sdf(pos + eps_zero.yxy).d,
+				sdf(pos + eps_zero.yyx).d
+			     ) - c);
+}
+
 mat3 setCamera(in vec3 ro, in vec3 ta, float cr) {
 	vec3 cw = normalize(ta - ro);
 	vec3 cp = vec3(sin(cr), cos(cr), 0.0);
@@ -159,13 +212,13 @@ void main() {
 			vec3( 0, 0, 1),
 			vec3( 0, 1, 0),
 			vec2( 1, 2   )
-		   );
+			);
 	portals[1] = Portal(
 			vec3(-2, 1, 3),
 			vec3( 1, 0, 0),
 			vec3( 0, 1, 0),
 			vec2( 1, 2   )
-		   );
+			);
 
 	vec2 p = (2.0 * gl_FragCoord.xy - resolution.xy) / resolution.y;
 
@@ -181,16 +234,22 @@ void main() {
 	for (int i = 0; i < MAIN_ITERS; i++) {
 		rayHit hit = rayMarch(ro, rd);
 		if (hit.pi < 0) { // didn't hit a portal
-			clr = vec3(hit.dist / MAX_DIST); // render depth texture
+			vec3 n = calcNormal(hit.pos);
+			vec3 l = normalize(vec3(1, 0.5, 1));
+
+			float NoL = max(dot(n, l), 0.0);
+			vec3 LDirectional = vec3(1.80, 1.27, 0.99) * NoL;
+			vec3 LAmbient = vec3(0.03, 0.04, 0.1);
+			vec3 diffuse = hit.clr.rgb * (LDirectional + LAmbient);
+
+			clr = diffuse;
+
 			break;
 		} else { // did hit a portal
 			int b;
 
-			if (hit.pi % 2 == 1) {
-				b = hit.pi - 1;
-			} else {
-				b = hit.pi + 1;
-			}
+			if (hit.pi % 2 == 1) { b = hit.pi - 1; }
+			else { b = hit.pi + 1; }
 
 			tp(ro, rd, hit.q, portals[hit.pi], portals[b]);
 			continue;
