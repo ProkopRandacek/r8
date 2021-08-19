@@ -4,7 +4,7 @@
 
 #include "../common.h"
 
-inline Portal* new_portal(Vector3 pos, Vector3 up, Vector3 dir, Vector2 dims);
+Portal* portal_new(Vector3 pos, Vector3 up, Vector3 dir, Vector2 dims);
 
 #endif
 

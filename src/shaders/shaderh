@@ -1,8 +1,0 @@
-#ifndef SHADER_H
-#define SHADER_H
-
-#include "common.h"
-
-char* shader_build(Scene scene);
-
-#endif

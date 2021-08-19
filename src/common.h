@@ -5,6 +5,15 @@
 #include <raymath.h>
 
 typedef enum {
+	ptSPHERE,
+	ptCUBE,
+	ptTORUS,
+	ptCTORUS,
+	ptCYL,
+	ptCCONE
+} PrimitiveType;
+
+typedef enum {
 	gtUNION,
 	gtDIFF,
 	gtINTERS,
@@ -18,15 +27,6 @@ typedef enum {
 	stGROUP,
 	stWRAPPER
 } ShapeType;
-
-typedef enum {
-	ptSPHERE,
-	ptCUBE,
-	ptTORUS,
-	ptCTORUS,
-	ptCYL,
-	ptCCONE
-} PrimitiveType;
 
 typedef struct {
 	double d[12];
@@ -47,6 +47,15 @@ typedef struct {
 	double k; // group modificator (for approximations, blend and average)
 } Group;
 
+typedef struct {
+	union {
+		Group     group;
+		Wrapper   wrapper;
+		Primitive primitive;
+	};
+	ShapeType type;
+} Shape;
+
 struct Portal;
 
 typedef struct {
@@ -63,7 +72,7 @@ typedef struct {
 	int rm_iters; // ray march iterations
 	int main_iters; // ray bounces / teleports limit
 
-	int portal_num; // number of portals
+	Shape* root_shape;
 } Scene;
 
 #endif

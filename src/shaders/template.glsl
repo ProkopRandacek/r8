@@ -1,12 +1,12 @@
 #version 330
 
-#define EPS <@>
-#define MAX_DIST <@>
-#define RM_ITERS <@>
-#define MAIN_ITERS <@>
+#define EPS @
+#define MAX_DIST @
+#define RM_ITERS @
+#define MAIN_ITERS @
 
 #define PORTAL_SIZE 11
-#define PORTAL_NUM <@>
+#define PORTAL_NUM 2
 
 uniform float portals[PORTAL_SIZE * PORTAL_NUM * 2];
 uniform vec2 resolution;
@@ -199,4 +199,3 @@ void main() {
 
 	finalColor = vec4(clr, 1.0);
 }
-

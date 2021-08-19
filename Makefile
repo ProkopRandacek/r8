@@ -1,6 +1,6 @@
 .PHONY : all clean deepclean libucw raylib
 
-CFLAGS ?= -O3 -march=native -pipe
+CFLAGS ?= -O3 -march=native -pipe -std=gnu18
 
 LDLIBS += -lm -ldl -lpthread
 override WARNS  += -Wall -Wunused-parameter -Wshadow -Wundef -Wunreachable-code -Wno-misleading-indentation

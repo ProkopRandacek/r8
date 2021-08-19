@@ -1,14 +1,15 @@
 #include <raylib.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <ucw/lib.h>
 
 #include "log.h"
 #include "main.h"
+#include "scene.h"
+#include "shapes/portal.h"
 
 #include "shaders/filled_template.glsl.h"
-#include "shaders/template.glsl.h"
-
-#include "shapes/portal.h"
 
 //#include "shader.h"
 
@@ -19,7 +20,16 @@ int main(int argc, char* argv[]) {
 	msg(L_INFO, "START");
 	if (argc != 1) die("usage: `./r8`");
 
-	SetTraceLogCallback(raylib_log_to_libucw_log);
+	Scene *s = scene_new();
+
+	char* shader = scene_compile(s);
+
+	printf("%s", shader);
+
+	free(shader);
+	free(s);
+
+	/*SetTraceLogCallback(raylib_log_to_libucw_log);
 
 	int screenWidth = 800;
 	int screenHeight = 450;
@@ -68,7 +78,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	UnloadShader(shader);
-	CloseWindow();
+	CloseWindow();*/
 
 	return 0;
 }
