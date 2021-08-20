@@ -1,4 +1,4 @@
-#define _GNU_SOURCE
+#define _GNU_SOURCE // i like asprintf
 #include <ucw/lib.h>
 
 #include <raylib.h>
@@ -17,7 +17,7 @@ Scene *scene_new() {
 	s->rm_iters = 256;
 	s->main_iters = 8;
 
-	s->root_shape = NULL;
+	s->root = NULL;
 
 	// default camera settings
 	s->cam.position = (Vector3){ 0.0f, 2.0f, 0.0f };
@@ -32,32 +32,66 @@ Scene *scene_new() {
 	return s;
 }
 
-/*
 char* build_primitive(Primitive p) {
+	char *c;
+	switch (p.type) {
+		case ptSPHERE:
+			asprintf(&c, "clrd(vec4(),d2Shape(pos,vec3(-2, 1, 0),vec3(1.5))");
+			break;
+		case ptCUBE:
+			asprintf(&c, "clrd(vec4(),d2Cube(pos,vec3(2, 1, 0),1.5)");
+			break;
+		case ptTORUS:
+		case ptCTORUS:
+		case ptCYL:
+		case ptCCONE:
+			die("primitive type %d not implemented", p.type);
+			break;
+	}
+	return c;
+}
+
+char* build_group(Group g) {
+	char *c;
+	switch (g.type) {
+		case gtUNION:       asprintf(&c, "unin(");              break;
+		case gtDIFF:        asprintf(&c, "diff(");              break;
+		case gtINTERS:      asprintf(&c, "inters(");            break;
+		case gtBLEND:       asprintf(&c, "blend(%.9f,", g.k);   break;
+		case gtAVERAGE:     asprintf(&c, "average(%.9f,", g.k); break;
+		case gtAPPROXIMATE: asprintf(&c, "approximate(");       break;
+	}
+	return c;
 }
 
 void sdf_gen(char* sdf, Shape *pos) {
 	switch (pos->type) {
 		case stPRIMITIVE:
-			char* p = build_primitive(pos->primitive);
+			char* p = build_primitive(pos->p);
 			strcat(sdf, p);
 			free(p);
 			break;
 		case stGROUP:
+			char* g = build_group(pos->g);
+			strcat(sdf, g);
+			free(g);
+
+			sdf_gen(sdf, pos->g.a);
+			strcat(sdf, ",");
+			sdf_gen(sdf, pos->g.b);
+			strcat(sdf, ")");
 			break;
 		case stWRAPPER:
-			die("wrappers not implemented");
+			die("wrappers are not implemented");
 			break;
 	}
 }
 
 char* scene_create_sdf(Scene *s) {
 	char* sdf = malloc(8192);
-
-	sdf_gen(sdf, s->root_shape);
-
+	sdf_gen(sdf, s->root);
 	return sdf;
-}*/
+}
 
 void scene_compile(Scene* s) {
 	char* shader_code = calloc(sizeof(char), template_glsl_len + 1024);
@@ -93,6 +127,65 @@ void scene_compile(Scene* s) {
 	SetShaderValue(s->shader, s->resLoc, res, SHADER_UNIFORM_VEC2);
 }
 
+void scene_print(Shape *pos, int depth) {
+	for (int i = 0; i < depth * 4; i++) printf(" ");
+	if (pos == NULL) {
+		printf("NULL\n");
+		return;
+	}
+	switch (pos->type) {
+		case stPRIMITIVE:
+			printf("primt\n");
+			break;
+		case stGROUP:
+			printf("group\n");
+			scene_print(pos->g.a, depth + 1);
+			scene_print(pos->g.b, depth + 1);
+			break;
+		case stWRAPPER:
+			printf("wrapp\n");
+			scene_print(pos->w.shape, depth + 1);
+			break;
+	}
+}
+
+void scene_count_shapes(Shape *pos, int *shape_count, int *group_count) {
+	switch (pos->type) {
+		case stPRIMITIVE:
+			(*shape_count)++;
+			break;
+		case stGROUP:
+			(*group_count)++;
+			scene_count_shapes(pos->g.a, shape_count, group_count);
+			scene_count_shapes(pos->g.b, shape_count, group_count);
+			break;
+		case stWRAPPER:
+			scene_count_shapes(pos->w.shape, shape_count, group_count);
+			break;
+		default:
+			die("invalid shape type %d", pos->type);
+	}
+}
+
+void scene_write_shapes(Shape *pos, float *shapes, float *groups, int *shapei, int *groupi) {
+	switch (pos->type) {
+		case stPRIMITIVE:
+			for (int i = 0; i < SHAPE_SIZE; i++)
+				shapes[*shapei + i] = pos->p.d[i];
+			*shapei += SHAPE_SIZE;
+			break;
+		case stGROUP:
+			groups[*groupi] = pos->g.k;
+			*groupi += 1;
+			scene_write_shapes(pos->g.a, shapes, groups, shapei, groupi);
+			scene_write_shapes(pos->g.b, shapes, groups, shapei, groupi);
+			break;
+		case stWRAPPER:
+			scene_write_shapes(pos->w.shape, shapes, groups, shapei, groupi);
+			break;
+	}
+}
+
 void scene_update(Scene* s) {
 	UpdateCamera(&(s->cam));
 
@@ -106,6 +199,29 @@ void scene_update(Scene* s) {
 		float res[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 		SetShaderValue(s->shader, s->resLoc, res, SHADER_UNIFORM_VEC2);
 	}
+
+	int shape_count = 0, group_count = 0;
+	// first walk the tree to count shapes and groups
+	scene_count_shapes(s->root, &shape_count, &group_count);
+
+	float shapes[shape_count * SHAPE_SIZE];
+	float groups[group_count * 1         ];
+	for (int i = 0; i < shape_count * SHAPE_SIZE; i++) shapes[i] = 0.0f;
+	for (int i = 0; i < group_count * 1         ; i++) groups[i] = 0.0f;
+
+	int shapei = 0, groupi = 0;
+	// second walk the tree to write shapes and groups into float arrays
+	scene_write_shapes(s->root, shapes, groups, &shapei, &groupi);
+	printf("%d shapes %d groups\n", shape_count, group_count);
+
+	for (int i = 0; i < shape_count; i++) {
+		for (int j = 0; j < SHAPE_SIZE; j++) {
+			printf("%.1f \t", shapes[i * SHAPE_SIZE + j]);
+		}
+		printf("\n");
+	}
+
+	scene_print(s->root, 0);
 }
 
 void scene_destroy(Scene* s) {

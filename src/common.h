@@ -4,6 +4,8 @@
 
 #include <raymath.h>
 
+#define SHAPE_SIZE 12
+
 typedef enum PrimitiveType {
 	ptSPHERE,
 	ptCUBE,
@@ -29,7 +31,7 @@ typedef enum ShapeType {
 } ShapeType;
 
 typedef struct Primitive {
-	double d[12];
+	float d[12];
 	PrimitiveType type;
 } Primitive;
 
@@ -44,7 +46,7 @@ typedef struct Wrapper {
 typedef struct Group {
 	struct Shape *a, *b;
 	GroupType type;
-	double k; // group modificator (for approximations, blend and average)
+	float k; // group modificator (for approximations, blend and average)
 } Group;
 
 typedef struct Shape {
@@ -65,12 +67,12 @@ typedef struct Portal {
 } Portal;
 
 typedef struct Scene {
-	double eps; // epsilon, for collision detection
-	double max_dist; // max render distance
+	float eps; // epsilon, for collision detection
+	float max_dist; // max render distance
 	int rm_iters; // ray march iterations
 	int main_iters; // ray bounces / teleports limit
 
-	Shape* root_shape; // root shape of this scene
+	Shape* root; // root shape of this scene
 
 	Camera cam;
 	Shader shader; // the shader if compiled

@@ -1,6 +1,7 @@
 #include <ucw/lib.h>
 
 #include <raylib.h>
+#include <stdlib.h>
 
 #include "log.h"
 #include "main.h"
@@ -40,7 +41,10 @@ int main(int argc, char* argv[]) {
 	Shape *group_a = group_new(cube, sphere, gtUNION, 1.0f);
 	Shape *root = group_new(group_a, floor, gtUNION, 1.0f);
 
-	s->root_shape = root;
+	s->root = root;
+
+	scene_update(s);
+	exit(0);
 
 	while (!WindowShouldClose()) {
 		scene_update(s);

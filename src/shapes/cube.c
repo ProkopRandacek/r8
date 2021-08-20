@@ -12,6 +12,9 @@ Shape* cube_new(Vector3 pos, Vector4 clr, Vector3 scl) {
 	s->p.d[3] = clr.x; s->p.d[4] = clr.y; s->p.d[5] = clr.z; s->p.d[6] = clr.w;
 	s->p.d[7] = scl.x; s->p.d[8] = scl.y; s->p.d[9] = scl.z;
 
+	s->p.d[10] = 0.0f;
+	s->p.d[11] = 0.0f;
+
 	return s;
 }
 
