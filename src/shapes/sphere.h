@@ -4,7 +4,7 @@
 
 #include "../common.h"
 
-inline Primitive* sphere_new(Vector3 pos, Vector4 clr, float r);
+Shape* sphere_new(Vector3 pos, Vector4 clr, float r);
 
 #endif
 

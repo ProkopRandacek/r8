@@ -88,6 +88,9 @@ void scene_compile(Scene* s) {
 	s->resLoc = GetShaderLocation(s->shader, "resolution");
 	s->roLoc  = GetShaderLocation(s->shader, "viewEye");
 	s->taLoc  = GetShaderLocation(s->shader, "viewCenter");
+
+	float res[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
+	SetShaderValue(s->shader, s->resLoc, res, SHADER_UNIFORM_VEC2);
 }
 
 void scene_update(Scene* s) {

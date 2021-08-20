@@ -4,7 +4,7 @@
 
 #include <raymath.h>
 
-typedef enum {
+typedef enum PrimitiveType {
 	ptSPHERE,
 	ptCUBE,
 	ptTORUS,
@@ -13,7 +13,7 @@ typedef enum {
 	ptCCONE
 } PrimitiveType;
 
-typedef enum {
+typedef enum GroupType {
 	gtUNION,
 	gtDIFF,
 	gtINTERS,
@@ -22,43 +22,41 @@ typedef enum {
 	gtAPPROXIMATE
 } GroupType;
 
-typedef enum {
+typedef enum ShapeType {
 	stPRIMITIVE,
 	stGROUP,
 	stWRAPPER
 } ShapeType;
 
-typedef struct {
+typedef struct Primitive {
 	double d[12];
 	PrimitiveType type;
 } Primitive;
 
-typedef struct {
-	void* shape;
+typedef struct Shape Shape;
+
+typedef struct Wrapper {
+	struct Shape *shape;
 	char* glslMod; // TODO document this
 	ShapeType type;
 } Wrapper;
 
-typedef struct {
-	void* a;
-	void* b;
-	ShapeType aType, bType;
+typedef struct Group {
+	struct Shape *a, *b;
 	GroupType type;
 	double k; // group modificator (for approximations, blend and average)
 } Group;
 
-typedef struct {
+typedef struct Shape {
 	union {
-		Group     group;
-		Wrapper   wrapper;
-		Primitive primitive;
+		Group     g;
+		Wrapper   w;
+		Primitive p;
 	};
 	ShapeType type;
 } Shape;
 
-struct Portal;
-
-typedef struct {
+typedef struct Portal {
 	Vector3 pos;  // center
 	Vector3 dir;  // forward unit vector
 	Vector3 up;   // up unit vector
@@ -66,7 +64,7 @@ typedef struct {
 	struct Portal* link; // the other portal
 } Portal;
 
-typedef struct {
+typedef struct Scene {
 	double eps; // epsilon, for collision detection
 	double max_dist; // max render distance
 	int rm_iters; // ray march iterations

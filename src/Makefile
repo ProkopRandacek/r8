@@ -8,10 +8,6 @@ OBJS = $(sort $(SRCS:.c=.o))   # object files
 SHDH = $(addsuffix .h,$(SHDS)) # shader headers
 DEPS = $(OBJS:.o=.d)
 
-clean::
-	$(RM) $(OBJS)
-	$(RM) $(SHDH)
-	$(RM) $(DEPS)
 
 %.o: %.c $(SHDH)
 	@echo CC $@
@@ -33,4 +29,9 @@ clean::
 $(TARGET): $(SHDH) $(OBJS) $(LIBUCW_LIBRARY) $(RAYLIB_LIBRARY)
 	@echo LD $@
 	@$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)
+
+clean::
+	$(RM) $(OBJS)
+	$(RM) $(SHDH)
+	$(RM) $(DEPS)
 

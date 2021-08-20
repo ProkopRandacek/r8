@@ -4,7 +4,7 @@
 
 #include "../common.h"
 
-inline Primitive* cube_new(Vector3 pos, Vector4 clr, Vector3 scl);
+Shape* cube_new(Vector3 pos, Vector4 clr, Vector3 scl);
 
 #endif
 
