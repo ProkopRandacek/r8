@@ -1,8 +1,6 @@
-#include <ucw/lib.h>
+#include "log.h"
 
 #include <raylib.h>
-
-#include "log.h"
 
 void raylib_log_to_libucw_log(int raylib_log_level, const char *text, va_list args) {
 	int libucw_log_level;
@@ -13,6 +11,6 @@ void raylib_log_to_libucw_log(int raylib_log_level, const char *text, va_list ar
 		case LOG_ERROR:   libucw_log_level = L_ERROR; break;
 		default:          libucw_log_level = L_ERROR; break;
 	}
-	vmsg(libucw_log_level, text, args);
+	vmsg((unsigned int)libucw_log_level, text, args);
 }
 

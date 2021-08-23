@@ -3,7 +3,7 @@
 #include "sphere.h"
 
 Shape* sphere_new(Vector3 pos, Vector4 clr, float r) {
-	Shape *s = malloc(sizeof(Shape));
+	Shape *s = xmalloc(sizeof(Shape));
 	s->type = stPRIMITIVE;
 
 	s->p.type = ptSPHERE;

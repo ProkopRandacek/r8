@@ -1,10 +1,9 @@
-#include <ucw/lib.h>
-
 #include <raylib.h>
 #include <stdlib.h>
 
-#include "log.h"
 #include "main.h"
+
+#include "log.h"
 #include "scene.h"
 #include "shapes/shapes.h"
 

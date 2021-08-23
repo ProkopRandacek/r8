@@ -1,11 +1,20 @@
 .PHONY : all clean deepclean libucw raylib
 
-CFLAGS ?= -O3 -march=native -pipe -std=gnu17
-
+CFLAGS ?= -O3 -march=native -pipe -std=gnu11
 LDLIBS += -lm -ldl -lpthread
-override WARNS  += -Wall -Wunused-parameter -Wshadow -Wundef -Wunreachable-code -Wno-misleading-indentation
 
-CFLAGS += $(WARNS)
+override WARNS += \
+	-Wall -Wextra -Wunused-parameter -Wshadow -Wundef -Wunreachable-code \
+	-Wno-misleading-indentation -Wenum-conversion -Waggregate-return \
+	-Wconversion -Wswitch-enum -Wenum-compare -Wswitch -Wswitch-enum \
+	-Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn \
+	-Walloc-zero -Wduplicated-branches -Wduplicated-cond \
+	-Wno-free-nonheap-object -Wunused-macros -Wdangling-else \
+	-Wstrict-prototypes -Wmissing-field-initializers -Wno-multichar
+
+FFLAGS = -fanalyzer -fmerge-all-constants -funroll-loops
+
+CFLAGS += $(WARNS) $(FFLAGS)
 
 TARGET = r8
 
@@ -15,7 +24,7 @@ run: $(TARGET)
 	./r8
 
 include Makelibucw
-	
+
 include Makeraylib
 
 #include Makeraygui

@@ -4,6 +4,6 @@
 
 #include "../common.h"
 
-Shape *group_new(Shape *a, Shape *b, GroupType gt, float k);
+Shape *group_new(Shape *a, Shape *b, GroupType gt, float k) LIKE_MALLOC;
 
 #endif

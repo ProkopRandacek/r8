@@ -4,7 +4,7 @@
 
 #include "common.h"
 
-Scene *scene_new(); // constructor
+Scene *scene_new(void) LIKE_MALLOC; // constructor
 
 void scene_compile(Scene* s); // compile shader
 void scene_update (Scene* s); // sends data to gpu (called each tick)

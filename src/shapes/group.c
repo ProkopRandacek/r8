@@ -3,7 +3,7 @@
 #include "cube.h"
 
 Shape *group_new(Shape *a, Shape *b, GroupType gt, float k) {
-	Shape *s = malloc(sizeof(Shape));
+	Shape *s = xmalloc(sizeof(Shape));
 	s->type = stGROUP;
 
 	s->g.a = a;

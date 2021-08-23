@@ -1,6 +1,4 @@
-#define _GNU_SOURCE // i like asprintf
-#include <ucw/lib.h>
-
+#define _GNU_SOURCE
 #include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -10,10 +8,10 @@
 #include "template.glsl.h"
 
 Scene *scene_new() {
-	Scene *s = calloc(1, sizeof(Scene));
+	Scene *s = xmalloc_zero(sizeof(Scene));
 
-	s->eps = 0.01;
-	s->max_dist = 64.0;
+	s->eps = 0.01f;
+	s->max_dist = 64.0f;
 	s->rm_iters = 256;
 	s->main_iters = 8;
 
@@ -66,15 +64,15 @@ char* build_group(Group g) {
 
 void sdf_gen(char* sdf, Shape *pos) {
 	switch (pos->type) {
-		case stPRIMITIVE:
+		case stPRIMITIVE: ;
 			char* p = build_primitive(pos->p);
 			strcat(sdf, p);
-			free(p);
+			xfree(p);
 			break;
-		case stGROUP:
+		case stGROUP: ;
 			char* g = build_group(pos->g);
 			strcat(sdf, g);
-			free(g);
+			xfree(g);
 
 			sdf_gen(sdf, pos->g.a);
 			strcat(sdf, ",");
@@ -88,13 +86,13 @@ void sdf_gen(char* sdf, Shape *pos) {
 }
 
 char* scene_create_sdf(Scene *s) {
-	char* sdf = malloc(8192);
+	char* sdf = xmalloc(8192);
 	sdf_gen(sdf, s->root);
 	return sdf;
 }
 
 void scene_compile(Scene* s) {
-	char* shader_code = calloc(sizeof(char), template_glsl_len + 1024);
+	char* shader_code = xmalloc_zero(template_glsl_len + 1024);
 	char* inserts[4] = {0};
 
 	asprintf(&(inserts[0]), "%.9f", s->eps       );
@@ -103,7 +101,7 @@ void scene_compile(Scene* s) {
 	asprintf(&(inserts[3]), "%d"  , s->main_iters);
 
 	int i = 0;
-	for (int j = 0; j < template_glsl_len; j++) {
+	for (unsigned int j = 0; j < template_glsl_len; j++) {
 		if (template_glsl[j] == '@') {
 			strcat(shader_code, inserts[i]);
 			i++;
@@ -113,11 +111,11 @@ void scene_compile(Scene* s) {
 		}
 	}
 
-	for (int k = 0; k < 4; k++) free(inserts[k]);
+	for (int k = 0; k < 4; k++) xfree(inserts[k]);
 
 	UnloadShader(s->shader);
 	s->shader = LoadShaderFromMemory(0, shader_code);
-	free(shader_code);
+	xfree(shader_code);
 
 	s->resLoc = GetShaderLocation(s->shader, "resolution");
 	s->roLoc  = GetShaderLocation(s->shader, "viewEye");
@@ -226,6 +224,6 @@ void scene_update(Scene* s) {
 
 void scene_destroy(Scene* s) {
 	UnloadShader(s->shader);
-	free(s);
+	xfree(s);
 }
 

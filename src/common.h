@@ -1,8 +1,13 @@
 // vim: ft=c
+// This file should be included from every other source in R8
 #ifndef COMMON_H
 #define COMMON_H
 
+#include <ucw/lib.h>
 #include <raymath.h>
+
+// use only the x versions from libucw
+#pragma GCC poison malloc calloc realloc free
 
 #define SHAPE_SIZE 12
 

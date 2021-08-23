@@ -3,7 +3,7 @@
 #include "cube.h"
 
 Shape* cube_new(Vector3 pos, Vector4 clr, Vector3 scl) {
-	Shape *s = malloc(sizeof(Shape));
+	Shape *s = xmalloc(sizeof(Shape));
 	s->type = stPRIMITIVE;
 
 	s->p.type = ptCUBE;
