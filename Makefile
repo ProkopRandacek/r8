@@ -1,4 +1,4 @@
-.PHONY : all clean deepclean libucw raylib
+.PHONY : all clean deepclean libucw raylib docs
 
 CFLAGS ?= -O3 -march=native -pipe -std=gnu11
 LDLIBS += -lm -ldl -lpthread
@@ -24,7 +24,15 @@ TARGET = r8
 
 all: $(TARGET)
 
+.ONESHELL : docs
 docs:
+	f="docmain.md"
+	h="$(shell git rev-parse HEAD)"
+	r="https://github.com/ProkopRandacek/r8"
+	$(RM) $$f
+	cp readme.md $$f
+	echo -n "Generated at \` $(shell date) \` from [$${h:0:10}]($$r/tree/$$h)" >> $$f
+	git diff --quiet || echo " (dirty)" >> $$f
 	doxygen
 
 run: $(TARGET)
@@ -39,8 +47,9 @@ include Makeraylib
 include src/Makefile
 
 deepclean:: clean
-	$(RM) doxydocs -r
+	$(RM) doxydocs/ -r
 
 clean::
+	m [${h:0:10}]($r/src/commit/$h)" >> $f
 	$(RM) $(TARGET)
 

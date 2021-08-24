@@ -2,6 +2,7 @@ notes
 log
 r8
 doxydocs
+docmain.md
 
 **/*.glsl.h
 **/*.o
