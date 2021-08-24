@@ -51,7 +51,7 @@ typedef struct Wrapper {
 typedef struct Group {
 	struct Shape *a, *b;
 	GroupType type;
-	float k; // group modificator (for approximations, blend and average)
+	float k; //!< group modificator (for approximations, blend and average)
 } Group;
 
 typedef struct Shape {
@@ -64,23 +64,23 @@ typedef struct Shape {
 } Shape;
 
 typedef struct Portal {
-	Vector3 pos;  // center
-	Vector3 dir;  // forward unit vector
-	Vector3 up;   // up unit vector
-	Vector2 dims; // scale
-	struct Portal* link; // the other portal
+	Vector3 pos;  //!< position of the portal
+	Vector3 dir;  //!< forward unit vector
+	Vector3 up;   //!< up unit vector
+	Vector2 dims; //!< portal scale
+	struct Portal* link; //!< linked portal
 } Portal;
 
 typedef struct Scene {
-	float eps; // epsilon, for collision detection
-	float max_dist; // max render distance
-	int rm_iters; // ray march iterations
-	int main_iters; // ray bounces / teleports limit
+	float eps; //!< epsilon, for collision detection
+	float max_dist; //!< max render distance
+	int rm_iters; //!< ray march iterations
+	int main_iters; //!< ray bounces / teleports limit
 
-	Shape* root; // root shape of this scene
+	Shape* root; //!< root shape of this scene
 
 	Camera cam;
-	Shader shader; // the shader if compiled
+	Shader shader; //!< the shader (if compiled)
 	int resLoc;
 	int roLoc;
 	int taLoc;

@@ -4,11 +4,11 @@
 
 #include "common.h"
 
-Scene *scene_new(void) LIKE_MALLOC; // constructor
+Scene *scene_new(void) LIKE_MALLOC; //!< constructor
 
-void scene_compile(Scene* s); // compile shader
-void scene_print  (Scene* s); // sends data to gpu (called each tick)
-void scene_update (Scene* s); // sends data to gpu (called each tick)
-void scene_destroy(Scene* s); // destructor
+void scene_compile(Scene* s); //!< compile shader
+void scene_print  (Scene* s); //!< print the scene to stdout
+void scene_update (Scene* s); //!< sends data to gpu (called each tick)
+void scene_destroy(Scene* s); //!< destructor
 
 #endif
