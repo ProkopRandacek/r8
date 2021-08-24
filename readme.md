@@ -1,6 +1,8 @@
 # R8 Engine
 
-## [Docs](./docs.md)
+## Docs
+Generated doxygen website is [available online](https://rdck.dev/r8doc/).  
+You can generate it yourself with `make docs`.
 
 ## TODO
 - `[#...]` Docs
