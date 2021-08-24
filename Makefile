@@ -12,13 +12,20 @@ override WARNS += \
 	-Wno-free-nonheap-object -Wunused-macros -Wdangling-else \
 	-Wstrict-prototypes -Wmissing-field-initializers -Wno-multichar
 
-FFLAGS = -fanalyzer -fmerge-all-constants -funroll-loops
+FFLAGS = -fmerge-all-constants -funroll-loops
+
+ifeq ($(word 2, $(shell $(CC) --version)), "(GCC)") # are we using gcc?
+	FFLAGS += -fanalyzer # clang doesn't support -fanalyzer flag
+endif
 
 CFLAGS += $(WARNS) $(FFLAGS)
 
 TARGET = r8
 
 all: $(TARGET)
+
+docs:
+	doxygen
 
 run: $(TARGET)
 	./r8
@@ -32,6 +39,7 @@ include Makeraylib
 include src/Makefile
 
 deepclean:: clean
+	$(RM) doxydocs -r
 
 clean::
 	$(RM) $(TARGET)

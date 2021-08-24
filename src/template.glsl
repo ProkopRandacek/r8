@@ -58,29 +58,29 @@ struct portd {
 	vec3 q; // portal's exit thingie
 };
 
-clrd unin(clrd a, clrd b) { // min(a, b)
+clrd u(clrd a, clrd b) { // min(a, b)
 	if (a.d < b.d) return a;
 	return b;
 }
 
-clrd diff(clrd a, clrd b) { // min(a, -b)
+clrd d(clrd a, clrd b) { // min(a, -b)
 	if (a.d < -b.d) return a;
 	return b;
 }
 
-clrd inters(clrd a, clrd b) { // max(a, b)
+clrd i(clrd a, clrd b) { // max(a, b)
 	if (a.d > b.d) return a;
 	return b;
 }
 
-clrd average(float k, clrd a, clrd b) { // mix(a, b, k)
+clrd a(float k, clrd a, clrd b) { // mix(a, b, k)
 	return clrd(
 			mix(a.clr, b.clr, k),
 			mix(a.d  , b.d  , k)
 		   );
 }
 
-clrd blend(float k, clrd a, clrd b) { // smin(a, b, k)
+clrd b(float k, clrd a, clrd b) { // smin(a, b, k)
 	return clrd(
 			vec4(
 				smin(a.clr.r, b.clr.r, k),
@@ -92,7 +92,7 @@ clrd blend(float k, clrd a, clrd b) { // smin(a, b, k)
 		   );
 }
 
-clrd approximate(float k, clrd a, clrd b) {
+clrd x(float k, clrd a, clrd b) {
 	// TODO
 	return a;
 }
@@ -160,9 +160,9 @@ portd portalsSDF(inout vec3 pos) {
 }
 
 clrd sdf(vec3 pos) {
-	return unin(
+	return u(
 			clrd(vec4(0, 0, 1, 1), pos.y),
-			unin(
+			u(
 				clrd(vec4(1, 0, 0, 1), d2Cube  (pos, vec3(-2, 1, 0), vec3(1.5))),
 				clrd(vec4(0, 1, 0, 1), d2Sphere(pos, vec3( 2, 1, 0), 1.5))
 			    )

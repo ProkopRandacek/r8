@@ -1,6 +1,7 @@
 notes
 log
 r8
+doxydocs
 
 **/*.glsl.h
 **/*.o

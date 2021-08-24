@@ -32,7 +32,9 @@ Scene *scene_new() {
 
 // WIP
 char* scene_create_sdf(Scene *s) {
-	void sdf_gen(char* sdf, Shape *pos) {
+	char* sdf = xmalloc(8192);
+
+	void sdf_gen(Shape *pos) {
 		char* build_primitive(Primitive p) {
 			char *c;
 			switch (p.type) {
@@ -55,40 +57,43 @@ char* scene_create_sdf(Scene *s) {
 		char* build_group(Group g) {
 			char *c;
 			switch (g.type) {
-				case gtUNION:       asprintf(&c, "unin(");              break;
-				case gtDIFF:        asprintf(&c, "diff(");              break;
-				case gtINTERS:      asprintf(&c, "inters(");            break;
-				case gtBLEND:       asprintf(&c, "blend(%.9f,", g.k);   break;
-				case gtAVERAGE:     asprintf(&c, "average(%.9f,", g.k); break;
-				case gtAPPROXIMATE: asprintf(&c, "approximate(");       break;
+				case gtUNION:       asprintf(&c, "u(");           break;
+				case gtDIFF:        asprintf(&c, "d(");           break;
+				case gtINTERS:      asprintf(&c, "i(");           break;
+				case gtBLEND:       asprintf(&c, "b(%.9f,", g.k); break;
+				case gtAVERAGE:     asprintf(&c, "a(%.9f,", g.k); break;
+				//case gtAPPROXIMATE: asprintf(&c, "x(");           break;
+				case gtAPPROXIMATE: die("group type approximate not implemented");
 			}
 			return c;
 		}
 
+		char *c;
 		switch (pos->type) {
-			case stPRIMITIVE: ;
-					  char* p = build_primitive(pos->p);
-					  strcat(sdf, p);
-					  xfree(p);
-					  break;
-			case stGROUP: ;
-				      char* g = build_group(pos->g);
-				      strcat(sdf, g);
-				      xfree(g);
+			case stPRIMITIVE:
+				c = build_primitive(pos->p);
+				strcat(sdf, c);
+				xfree(c);
+				break;
+			case stGROUP:
+				c = build_group(pos->g);
+				strcat(sdf, c);
+				xfree(c);
 
-				      sdf_gen(sdf, pos->g.a);
-				      strcat(sdf, ",");
-				      sdf_gen(sdf, pos->g.b);
-				      strcat(sdf, ")");
-				      break;
+				sdf_gen(pos->g.a);
+				strcat(sdf, ",");
+				sdf_gen(pos->g.b);
+				strcat(sdf, ")");
+				break;
 			case stWRAPPER:
-				      die("wrappers are not implemented");
-				      break;
+				die("wrappers are not implemented");
+				break;
 		}
 	}
-	char* sdf = xmalloc(8192);
-	sdf_gen(sdf, s->root);
-	return sdf;
+
+	sdf_gen(s->root);
+
+	return xrealloc(sdf, strlen(sdf) + 1);
 }
 
 void scene_compile(Scene* s) {
