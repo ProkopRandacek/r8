@@ -50,6 +50,5 @@ deepclean:: clean
 	$(RM) doxydocs/ -r
 
 clean::
-	m [${h:0:10}]($r/src/commit/$h)" >> $f
 	$(RM) $(TARGET)
 
