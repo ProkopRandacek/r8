@@ -4,6 +4,7 @@
 
 #include "../common.h"
 
+/** @brief Cube Shape constructor */
 Shape* cube_new(Vector3 pos, Vector4 clr, Vector3 scl) LIKE_MALLOC;
 
 #endif

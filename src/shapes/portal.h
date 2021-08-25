@@ -4,6 +4,7 @@
 
 #include "../common.h"
 
+/** @brief Portal constructor */
 Portal* portal_new(Vector3 pos, Vector3 up, Vector3 dir, Vector2 dims) LIKE_MALLOC;
 
 #endif

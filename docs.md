@@ -47,3 +47,4 @@ Capsule        | Capsule has got a start and an end point and a radius.
 
 Primitives are all serialized into array of 12 floats. Not all floats are always used.  
 [Primitives serialization and glsl functions lookup table](https://docs.google.com/spreadsheets/d/1u5eLoQ5e--L0BYsAkOEX2-lQDHC-FDW7x1jXfpOxG8Y/edit?usp=sharing)
+
