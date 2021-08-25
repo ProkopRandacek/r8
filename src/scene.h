@@ -6,7 +6,7 @@
 
 /**
  * Contains all scene settings (There is no global scene setting),
- * Shape hiearchy, Camera and Portals.
+ * Shape hiearchy, Portals and a single Camera
  */
 typedef struct Scene {
 	// Settings
@@ -23,9 +23,10 @@ typedef struct Scene {
 
 	// Internal shape stuff
 	bool tree_changed;        //!< internal - did the tree hiearchy change since last frame?
-	bool primt_changed;       //!< internal - did a shape change since last frame?
-	bool group_changed;       //!< internal - did a group change since last frame?
+	bool primt_changed;       //!< internal - was any shape changed since the last frame?
+	bool group_changed;       //!< internal - was any group changed since the last frame?
 	Shape **flat_prims;       //!< internal - cached array of primitives in the tree
+	Shape **flat_groups;      //!< internal - cached array of groups in the tree
 	unsigned int primt_count; //!< internal - number of primitives
 	unsigned int group_count; //!< internal - number of groups
 
@@ -34,7 +35,8 @@ typedef struct Scene {
 	int resLoc;    //!< internal - the location of resolution vector in shader
 	int roLoc;     //!< internal - the location of Camera position vector in shader
 	int taLoc;     //!< internal - the location of Camera target vector in shader
-	int primsLoc;  //!< internal - the location of Camera target vector in shader
+	int primsLoc;  //!< internal - the location of the primitives float array in shader
+	int groupsLoc; //!< internal - the location of the groups float array in shader
 } Scene;
 
 Scene *scene_new(void) LIKE_MALLOC; //!< constructor

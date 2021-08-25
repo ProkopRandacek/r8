@@ -11,7 +11,9 @@
 #define PRIM_SIZE 12
 #define PRIM_NUM @
 
-// Functions to find information in shapes array
+#define GROUP_NUM @
+
+// Functions to find information in the float arrays
 #define sF(i, o) prims[PRIM_SIZE * i + o]                  // return float on position `o` from shape on index `i`
 #define sV2(i, o) vec2(sF(i, o), sF(i, o + 1))               // vec2 from 2 floats on position from o to o + 1 from shape on index `i`
 #define sV3(i, o) vec3(sF(i, o), sF(i, o + 1), sF(i, o + 2)) // vec3 from 3 floats on position from o to o + 2 from shape on index `i`
@@ -25,8 +27,11 @@
 
 #define sC(i) vec4(sF(i, 3), sF(i, 4), sF(i, 5), sF(i, 6)) // Color
 
+#define gK(i) groups[i]
+
 uniform float portals[PORTAL_SIZE * PORTAL_NUM];
 uniform float prims[PRIM_SIZE * PRIM_NUM];
+uniform float groups[GROUP_NUM];
 uniform vec2 resolution;
 uniform vec3 viewEye;
 uniform vec3 viewCenter;

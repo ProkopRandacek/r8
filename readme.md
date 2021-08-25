@@ -17,7 +17,7 @@ appimage todo
 ```sh
 git clone --recursive https://github.com/ProkopRandacek/r8.git
 cd r8
-make run -j$(nproc)
+make run CC=gcc -j$(nproc)
 ```
 Compile with `gcc`. The code seems to have issues with `clang` and `tcc` doesn't support the `-M` flags.
 

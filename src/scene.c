@@ -36,6 +36,7 @@ char* scene_create_sdf(Scene *s) {
 	char* sdf = xmalloc_zero(8192);
 
 	int s_pos = 0;
+	int g_pos = 0;
 	void sdf_gen(Shape *pos) {
 		char* build_primitive(Primitive p) {
 			char *c;
@@ -63,8 +64,8 @@ char* scene_create_sdf(Scene *s) {
 				case gtUNION:       asprintf(&c, "u(");           break;
 				case gtDIFF:        asprintf(&c, "d(");           break;
 				case gtINTERS:      asprintf(&c, "i(");           break;
-				case gtBLEND:       asprintf(&c, "b(%.9f,", g.k); break;
-				case gtAVERAGE:     asprintf(&c, "a(%.9f,", g.k); break;
+				case gtBLEND:       asprintf(&c, "b(gK(%d),", g_pos++); break;
+				case gtAVERAGE:     asprintf(&c, "a(gK(%d),", g_pos++); break;
 				//case gtAPPROXIMATE: asprintf(&c, "x(");           break;
 				case gtAPPROXIMATE: die("group type approximate not implemented");
 			}
@@ -101,14 +102,15 @@ char* scene_create_sdf(Scene *s) {
 
 void scene_compile(Scene* s) {
 	char* shader_code = xmalloc_zero(template_glsl_len + 1024);
-	char* inserts[6] = {0};
+	char* inserts[7] = {0};
 
 	asprintf(&(inserts[0]), "%.9f", s->eps       );
 	asprintf(&(inserts[1]), "%.9f", s->max_dist  );
 	asprintf(&(inserts[2]), "%d"  , s->rm_iters  );
 	asprintf(&(inserts[3]), "%d"  , s->main_iters);
 	asprintf(&(inserts[4]), "%d"  , s->primt_count);
-	inserts[5] = scene_create_sdf(s);
+	asprintf(&(inserts[5]), "%d"  , s->group_count);
+	inserts[6] = scene_create_sdf(s);
 
 	int i = 0;
 	for (unsigned int j = 0; j < template_glsl_len; j++) {
@@ -125,12 +127,14 @@ void scene_compile(Scene* s) {
 
 	UnloadShader(s->shader);
 	s->shader = LoadShaderFromMemory(0, shader_code);
+	printf("%s\n", shader_code);
 	xfree(shader_code);
 
 	s->resLoc = GetShaderLocation(s->shader, "resolution");
 	s->roLoc  = GetShaderLocation(s->shader, "viewEye");
 	s->taLoc  = GetShaderLocation(s->shader, "viewCenter");
 	s->primsLoc  = GetShaderLocation(s->shader, "prims");
+	s->groupsLoc = GetShaderLocation(s->shader, "groups");
 
 	float res[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 	SetShaderValue(s->shader, s->resLoc, res, SHADER_UNIFORM_VEC2);
@@ -205,17 +209,19 @@ void scene_on_tree_update(Scene *s) {
 	}
 	count_shapes(s->root);
 	s->primt_count = prim_count;
+	s->group_count = group_count;
 
-	// === Update flat_prims ===
-	Shape **nflat_prims = xrealloc(s->flat_prims, sizeof(Shape*) * s->primt_count);
-	int i = 0;
+	// === Update flat_{prims,groups} ===
+	Shape **nflat_prims  = xrealloc(s->flat_prims , sizeof(Shape*) * s->primt_count);
+	Shape **nflat_groups = xrealloc(s->flat_groups, sizeof(Shape*) * s->group_count);
+	int pi = 0, gi = 0;
 	void iter_shapes(Shape *pos) {
 		switch (pos->type) {
 			case stPRIMITIVE:
-				nflat_prims[i] = pos;
-				i++;
+				nflat_prims[pi++] = pos;
 				break;
 			case stGROUP:
+				nflat_groups[gi++] = pos;
 				iter_shapes(pos->g.a);
 				iter_shapes(pos->g.b);
 				break;
@@ -227,10 +233,12 @@ void scene_on_tree_update(Scene *s) {
 		}
 	}
 	iter_shapes(s->root);
-	s->flat_prims = nflat_prims;
+	s->flat_prims  = nflat_prims;
+	s->flat_groups = nflat_groups;
 
 	s->tree_changed  = true;
 	s->primt_changed = true;
+	s->group_changed = true;
 }
 
 void scene_tick(Scene* s) {
@@ -260,6 +268,16 @@ void scene_tick(Scene* s) {
 		SetShaderValueV(s->shader, s->primsLoc, primts, SHADER_UNIFORM_FLOAT, (int)(s->primt_count * PRIMT_SIZE));
 
 		s->primt_changed = false;
+	}
+
+	// === Update groups ===
+	if (s->group_changed) {
+		float groups[s->group_count];
+		for (unsigned int i = 0; i < s->group_count; i++)
+			groups[i] = s->flat_groups[i]->g.k;
+		SetShaderValueV(s->shader, s->groupsLoc, groups, SHADER_UNIFORM_FLOAT, (int)(s->group_count));
+
+		s->group_changed = false;
 	}
 }
 
