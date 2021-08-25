@@ -46,7 +46,9 @@ include Makeraylib
 
 include src/Makefile
 
-deepclean:: clean
+deepclean:: clean docclean
+
+docclean:
 	$(RM) docmain.md doxydocs/ -r
 
 clean::

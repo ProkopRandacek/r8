@@ -9,7 +9,7 @@
 // use only the x versions from libucw
 #pragma GCC poison malloc calloc realloc free
 
-#define SHAPE_SIZE 12
+#define PRIMT_SIZE 12
 
 /** @brief type of a Primitive */
 typedef enum PrimitiveType {
@@ -104,32 +104,6 @@ typedef struct Portal {
 	Vector2 dims; //!< portal scale
 	struct Portal* link; //!< linked portal
 } Portal;
-
-/**
- * @brief Representation of a single Scene.
- *
- * Contains all scene settings (There is no global scene setting),
- * Shape hiearchy, Camera and Portals.
- */
-typedef struct Scene {
-	// Settings
-	float eps;      //!< epsilon, for collision detection
-	float max_dist; //!< max render distance
-	int rm_iters;   //!< ray march iterations
-	int main_iters; //!< ray bounces / teleports limit
-
-	// Shape hiearchy
-	Shape* root; //!< root shape of this scene
-
-	// Camera
-	Camera cam;
-
-	// Internal shader stuff
-	Shader shader; //!< the shader (if compiled)
-	int resLoc;    //!< the location of resolution vector in shader
-	int roLoc;     //!< the location of Camera position vector in shader
-	int taLoc;     //!< the location of Camera target vector in shader
-} Scene;
 
 #endif
 

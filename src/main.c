@@ -41,12 +41,12 @@ int main(int argc, char* argv[]) {
 	Shape *root = group_new(group_a, floor, gtUNION, 1.0f);
 
 	s->root = root;
+	scene_on_tree_update(s);
 
-	scene_update(s);
-	exit(0);
+	scene_compile(s);
 
 	while (!WindowShouldClose()) {
-		scene_update(s);
+		scene_tick(s);
 
 		BeginDrawing(); {
 			BeginShaderMode(s->shader); {

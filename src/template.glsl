@@ -8,11 +8,25 @@
 #define PORTAL_SIZE 11
 #define PORTAL_NUM 2
 
-#define SHAPE_SIZE 11
-#define SHAPE_NUM 2
+#define PRIM_SIZE 12
+#define PRIM_NUM @
+
+// Functions to find information in shapes array
+#define sF(i, o) prims[PRIM_SIZE * i + o]                  // return float on position `o` from shape on index `i`
+#define sV2(i, o) vec2(sF(i, o), sF(i, o + 1))               // vec2 from 2 floats on position from o to o + 1 from shape on index `i`
+#define sV3(i, o) vec3(sF(i, o), sF(i, o + 1), sF(i, o + 2)) // vec3 from 3 floats on position from o to o + 2 from shape on index `i`
+
+#define sP(i)  sV3(i, 0) // position
+#define sP2(i) sV3(i, 7) // second position
+#define sS(i)  sV3(i, 7) // scale
+
+#define sR1(i) sF(i, 10) // first radius
+#define sR2(i) sF(i, 11) // second radius
+
+#define sC(i) vec4(sF(i, 3), sF(i, 4), sF(i, 5), sF(i, 6)) // Color
 
 uniform float portals[PORTAL_SIZE * PORTAL_NUM];
-uniform float shapes[SHAPE_SIZE * SHAPE_NUM];
+uniform float prims[PRIM_SIZE * PRIM_NUM];
 uniform vec2 resolution;
 uniform vec3 viewEye;
 uniform vec3 viewCenter;
@@ -160,13 +174,7 @@ portd portalsSDF(inout vec3 pos) {
 }
 
 clrd sdf(vec3 pos) {
-	return u(
-			clrd(vec4(0, 0, 1, 1), pos.y),
-			u(
-				clrd(vec4(1, 0, 0, 1), d2Cube  (pos, vec3(-2, 1, 0), vec3(1.5))),
-				clrd(vec4(0, 1, 0, 1), d2Sphere(pos, vec3( 2, 1, 0), 1.5))
-			    )
-		   );
+	return @;
 }
 
 rayHit rayMarch(vec3 ro, vec3 rd) {

@@ -25,24 +25,26 @@ Scene *scene_new() {
 
 	SetCameraMode(s->cam, CAMERA_FIRST_PERSON);
 
-	scene_compile(s);
+	s->tree_changed  = true;
+	s->primt_changed = true;
+	s->group_changed = true;
 
 	return s;
 }
 
-// WIP
 char* scene_create_sdf(Scene *s) {
-	char* sdf = xmalloc(8192);
+	char* sdf = xmalloc_zero(8192);
 
+	int s_pos = 0;
 	void sdf_gen(Shape *pos) {
 		char* build_primitive(Primitive p) {
 			char *c;
 			switch (p.type) {
 				case ptSPHERE:
-					asprintf(&c, "clrd(vec4(),d2Shape(pos,vec3(-2, 1, 0),vec3(1.5))");
+					asprintf(&c, "clrd(sC(%d),d2Sphere(pos,sP(%d),sR1(%d)))", s_pos, s_pos, s_pos);
 					break;
 				case ptCUBE:
-					asprintf(&c, "clrd(vec4(),d2Cube(pos,vec3(2, 1, 0),1.5)");
+					asprintf(&c, "clrd(sC(%d),d2Cube(pos,sP(%d),sS(%d)))", s_pos, s_pos, s_pos);
 					break;
 				case ptTORUS:
 				case ptCTORUS:
@@ -51,6 +53,7 @@ char* scene_create_sdf(Scene *s) {
 					die("primitive type %d not implemented", p.type);
 					break;
 			}
+			s_pos++;
 			return c;
 		}
 
@@ -98,12 +101,14 @@ char* scene_create_sdf(Scene *s) {
 
 void scene_compile(Scene* s) {
 	char* shader_code = xmalloc_zero(template_glsl_len + 1024);
-	char* inserts[4] = {0};
+	char* inserts[6] = {0};
 
 	asprintf(&(inserts[0]), "%.9f", s->eps       );
 	asprintf(&(inserts[1]), "%.9f", s->max_dist  );
 	asprintf(&(inserts[2]), "%d"  , s->rm_iters  );
 	asprintf(&(inserts[3]), "%d"  , s->main_iters);
+	asprintf(&(inserts[4]), "%d"  , s->primt_count);
+	inserts[5] = scene_create_sdf(s);
 
 	int i = 0;
 	for (unsigned int j = 0; j < template_glsl_len; j++) {
@@ -125,6 +130,7 @@ void scene_compile(Scene* s) {
 	s->resLoc = GetShaderLocation(s->shader, "resolution");
 	s->roLoc  = GetShaderLocation(s->shader, "viewEye");
 	s->taLoc  = GetShaderLocation(s->shader, "viewCenter");
+	s->primsLoc  = GetShaderLocation(s->shader, "prims");
 
 	float res[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 	SetShaderValue(s->shader, s->resLoc, res, SHADER_UNIFORM_VEC2);
@@ -157,44 +163,78 @@ void scene_print(Scene* s) {
 	rec(s->root, 0);
 }
 
-void scene_update(Scene* s) {
-	void count_shapes(Shape *pos, int *shape_count, int *group_count) {
+void write_shapes(Shape *pos, float *shapes, float *groups, int *shapei, int *groupi) {
+	switch (pos->type) {
+		case stPRIMITIVE:
+			for (int i = 0; i < PRIMT_SIZE; i++)
+				shapes[*shapei + i] = pos->p.d[i];
+			*shapei += PRIMT_SIZE;
+			break;
+		case stGROUP:
+			groups[*groupi] = pos->g.k;
+			*groupi += 1;
+			write_shapes(pos->g.a, shapes, groups, shapei, groupi);
+			write_shapes(pos->g.b, shapes, groups, shapei, groupi);
+			break;
+		case stWRAPPER:
+			write_shapes(pos->w.shape, shapes, groups, shapei, groupi);
+			break;
+	}
+}
+
+void scene_on_tree_update(Scene *s) {
+	// === Count shapes ===
+	unsigned int wrapper_count = 0, group_count = 0, prim_count = 0;
+	void count_shapes(Shape *pos) {
 		switch (pos->type) {
 			case stPRIMITIVE:
-				(*shape_count)++;
+				prim_count++;
 				break;
 			case stGROUP:
-				(*group_count)++;
-				count_shapes(pos->g.a, shape_count, group_count);
-				count_shapes(pos->g.b, shape_count, group_count);
+				group_count++;
+				count_shapes(pos->g.a);
+				count_shapes(pos->g.b);
 				break;
 			case stWRAPPER:
-				count_shapes(pos->w.shape, shape_count, group_count);
+				wrapper_count++;
+				count_shapes(pos->w.shape);
 				break;
 			default:
 				die("invalid shape type %d", pos->type);
 		}
 	}
+	count_shapes(s->root);
+	s->primt_count = prim_count;
 
-	void write_shapes(Shape *pos, float *shapes, float *groups, int *shapei, int *groupi) {
+	// === Update flat_prims ===
+	Shape **nflat_prims = xrealloc(s->flat_prims, sizeof(Shape*) * s->primt_count);
+	int i = 0;
+	void iter_shapes(Shape *pos) {
 		switch (pos->type) {
 			case stPRIMITIVE:
-				for (int i = 0; i < SHAPE_SIZE; i++)
-					shapes[*shapei + i] = pos->p.d[i];
-				*shapei += SHAPE_SIZE;
+				nflat_prims[i] = pos;
+				i++;
 				break;
 			case stGROUP:
-				groups[*groupi] = pos->g.k;
-				*groupi += 1;
-				write_shapes(pos->g.a, shapes, groups, shapei, groupi);
-				write_shapes(pos->g.b, shapes, groups, shapei, groupi);
+				iter_shapes(pos->g.a);
+				iter_shapes(pos->g.b);
 				break;
 			case stWRAPPER:
-				write_shapes(pos->w.shape, shapes, groups, shapei, groupi);
+				iter_shapes(pos->w.shape);
 				break;
+			default:
+				die("invalid shape type %d", pos->type);
 		}
 	}
+	iter_shapes(s->root);
+	s->flat_prims = nflat_prims;
 
+	s->tree_changed  = true;
+	s->primt_changed = true;
+}
+
+void scene_tick(Scene* s) {
+	// === Update camera ===
 	UpdateCamera(&(s->cam));
 
 	float ro[3] = { s->cam.position.x, s->cam.position.y, s->cam.position.z };
@@ -203,33 +243,24 @@ void scene_update(Scene* s) {
 	SetShaderValue(s->shader, s->roLoc, ro, SHADER_UNIFORM_VEC3);
 	SetShaderValue(s->shader, s->taLoc, ta, SHADER_UNIFORM_VEC3);
 
+	// === Update window size ===
 	if (IsWindowResized()) {
 		float res[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 		SetShaderValue(s->shader, s->resLoc, res, SHADER_UNIFORM_VEC2);
 	}
 
-	int shape_count = 0, group_count = 0;
-	// first walk the tree to count shapes and groups
-	count_shapes(s->root, &shape_count, &group_count);
-
-	float shapes[shape_count * SHAPE_SIZE];
-	float groups[group_count * 1         ];
-	for (int i = 0; i < shape_count * SHAPE_SIZE; i++) shapes[i] = 0.0f;
-	for (int i = 0; i < group_count * 1         ; i++) groups[i] = 0.0f;
-
-	int shapei = 0, groupi = 0;
-	// second walk the tree to write shapes and groups into float arrays
-	write_shapes(s->root, shapes, groups, &shapei, &groupi);
-	printf("%d shapes %d groups\n", shape_count, group_count);
-
-	for (int i = 0; i < shape_count; i++) {
-		for (int j = 0; j < SHAPE_SIZE; j++) {
-			printf("%.1f \t", shapes[i * SHAPE_SIZE + j]);
+	// === Update primitives ===
+	if (s->primt_changed) {
+		float primts[s->primt_count * PRIMT_SIZE];
+		for (unsigned int i = 0; i < s->primt_count; i++) {
+			for (unsigned int j = 0; j < PRIMT_SIZE; j++) {
+				primts[i * PRIMT_SIZE + j] = s->flat_prims[i]->p.d[j];
+			}
 		}
-		printf("\n");
-	}
+		SetShaderValueV(s->shader, s->primsLoc, primts, SHADER_UNIFORM_FLOAT, (int)(s->primt_count * PRIMT_SIZE));
 
-	scene_print(s);
+		s->primt_changed = false;
+	}
 }
 
 void scene_destroy(Scene* s) {
