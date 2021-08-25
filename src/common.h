@@ -6,9 +6,10 @@
 #include <ucw/lib.h>
 #include <raymath.h>
 
-// use only the x versions from libucw
+// use only the x versions from libucw!
 #pragma GCC poison malloc calloc realloc free
 
+/** @brief number of floats needed to represent any Primitive */
 #define PRIMT_SIZE 12
 
 /** @brief type of a Primitive */
@@ -23,10 +24,10 @@ typedef enum PrimitiveType {
 
 /** @brief type of a Group */
 typedef enum GroupType {
-	gtUNION,      //!< Simply join the two Shapes.
-	gtDIFF,       //!< Inverse the second Shape and join the two Shapes.
-	gtINTERS,     //!< Resulting Shape exists on the intersection of the two Shapes.
-	gtBLEND,      //!< Smoothly join the two Shapes. Smoothnes is set by the k.
+	gtUNION,      //!< Resulting Shape exists on the union of the two sub-shapes.
+	gtDIFF,       //!< Resulting Shape exists on the union of the first shape and negated second shape.
+	gtINTERS,     //!< Resulting Shape exists on the intersection of the two sub-shapes.
+	gtBLEND,      //!< Smooth gtUNION. Smoothness set by Group's k value.
 	gtAVERAGE,    //!< Average out the two distance fields.
 	gtAPPROXIMATE //!< Only calculates the second distance field if the first one resulted in a value less than k.
 } GroupType;
@@ -39,7 +40,7 @@ typedef enum ShapeType {
 } ShapeType;
 
 /**
- * @brief a primitive shape representation
+ * @brief signle simple geometric shape.
  *
  * R8 can render these natively.
  * @see PrimitiveType
@@ -52,7 +53,7 @@ typedef struct Primitive {
 typedef struct Shape Shape;
 
 /**
- * @brief wraps a single other Shape
+ * @brief wraps a single other Shape.
  *
  * Wrapping is used to transform distance fields of the sub shape.
  */
@@ -62,7 +63,7 @@ typedef struct Wrapper {
 } Wrapper;
 
 /**
- * @brief group of two shapes
+ * @brief group of two shapes.
  *
  * Combines two shapes of any kind. The result depends on type of the group.
  * @see GroupType
@@ -74,6 +75,8 @@ typedef struct Group {
 } Group;
 
 /**
+ * @brief single or a tree of objects in a Scene.
+ *
  * A general shape in the scene.
  *
  * Can be either a Group, a Wrapper or a Primitive.
@@ -95,10 +98,17 @@ typedef struct Shape {
  * They have no hierarchy like Shapes e.g. you can't
  * create a Group of two portals and blend them together.
  *
- * Portals without a valid linked portal are rendered purple
+ * Portals without a valid linked portal are not rendered at all.
+ *
+ * If you link two portals of different scales, the shapes visible
+ * through the portal bridge will appear scaled in the same way.
  */
 typedef struct Portal {
-	Vector3 pos;  //!< position of the portal
+	/**
+	 * @brief position of the portal.
+	 * more precisely the center of it.
+	 */
+	Vector3 pos;
 	Vector3 dir;  //!< forward unit vector
 	Vector3 up;   //!< up unit vector
 	Vector2 dims; //!< portal scale
