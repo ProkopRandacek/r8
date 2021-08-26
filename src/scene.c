@@ -167,25 +167,6 @@ void scene_print(Scene* s) {
 	rec(s->root, 0);
 }
 
-void write_shapes(Shape *pos, float *shapes, float *groups, int *shapei, int *groupi) {
-	switch (pos->type) {
-		case stPRIMITIVE:
-			for (int i = 0; i < PRIMT_SIZE; i++)
-				shapes[*shapei + i] = pos->p.d[i];
-			*shapei += PRIMT_SIZE;
-			break;
-		case stGROUP:
-			groups[*groupi] = pos->g.k;
-			*groupi += 1;
-			write_shapes(pos->g.a, shapes, groups, shapei, groupi);
-			write_shapes(pos->g.b, shapes, groups, shapei, groupi);
-			break;
-		case stWRAPPER:
-			write_shapes(pos->w.shape, shapes, groups, shapei, groupi);
-			break;
-	}
-}
-
 void scene_on_tree_update(Scene *s) {
 	// === Count shapes ===
 	unsigned int wrapper_count = 0, group_count = 0, prim_count = 0;
