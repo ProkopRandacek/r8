@@ -3,6 +3,7 @@
 #include <raylib.h>
 
 void raylib_log_to_libucw_log(int raylib_log_level, const char *text, va_list args) {
+#ifdef R8_DEBUG
 	int libucw_log_level;
 	switch (raylib_log_level) {
 		case LOG_DEBUG:   libucw_log_level = L_DEBUG; break;
@@ -12,5 +13,6 @@ void raylib_log_to_libucw_log(int raylib_log_level, const char *text, va_list ar
 		default:          libucw_log_level = L_ERROR; break;
 	}
 	vmsg((unsigned int)libucw_log_level, text, args);
+#endif
 }
 

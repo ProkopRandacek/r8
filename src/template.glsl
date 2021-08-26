@@ -14,7 +14,7 @@
 #define GROUP_NUM @
 
 // Functions to find information in the float arrays
-#define sF(i, o) prims[PRIM_SIZE * i + o]                  // return float on position `o` from shape on index `i`
+#define sF(i, o) prims[PRIM_SIZE * i + o]                    // return float on position `o` from shape on index `i`
 #define sV2(i, o) vec2(sF(i, o), sF(i, o + 1))               // vec2 from 2 floats on position from o to o + 1 from shape on index `i`
 #define sV3(i, o) vec3(sF(i, o), sF(i, o + 1), sF(i, o + 2)) // vec3 from 3 floats on position from o to o + 2 from shape on index `i`
 
@@ -25,7 +25,7 @@
 #define sR1(i) sF(i, 10) // first radius
 #define sR2(i) sF(i, 11) // second radius
 
-#define sC(i) vec4(sF(i, 3), sF(i, 4), sF(i, 5), sF(i, 6)) // Color
+#define sC(i) vec4(sV3(i, 3), sF(i, 6)) // Color
 
 #define gK(i) groups[i]
 
@@ -36,6 +36,8 @@ uniform vec2 resolution;
 uniform vec3 viewEye;
 uniform vec3 viewCenter;
 
+//uniform float time;
+
 in vec2 fragTexCoord;
 in vec4 fragColor;
 
@@ -43,11 +45,6 @@ out vec4 finalColor;
 
 float d2Sphere(vec3 pos,vec3 sp,float r){return length(pos-sp)-r;}
 float d2Cube(vec3 pos,vec3 sp,vec3 b){vec3 p=pos-sp;vec3 q=abs(p)-b;return length(max(q,0.0))+min(max(q.x,max(q.y,q.z)),0.0);}
-
-float smin(float a, float b, float k) {
-	float h = max(k - abs(a - b), 0.0) / k;
-	return min(a, b) - h * h * h * k * (1.0 / 6.0);
-}
 
 float mav(vec3 a) { return max(max(a.x, a.y), a.z); }
 
@@ -100,15 +97,11 @@ clrd a(float k, clrd a, clrd b) { // mix(a, b, k)
 }
 
 clrd b(float k, clrd a, clrd b) { // smin(a, b, k)
-	return clrd(
-			vec4(
-				smin(a.clr.r, b.clr.r, k),
-				smin(a.clr.g, b.clr.g, k),
-				smin(a.clr.b, b.clr.b, k),
-				smin(a.clr.w, b.clr.w, k)
-			    ),
-			smin(a.d, b.d, k)
-		   );
+	float h = max(k - abs(a.d - b.d), 0.0) / k;
+	float blendDist = min(a.d, b.d) - h * h * h * k * (1.0 / 6.0);
+	vec4 blendClr = vec4(mix(a.clr.rgb, b.clr.rgb, k), 1.0);
+
+	return clrd(blendClr, blendDist);
 }
 
 clrd x(float k, clrd a, clrd b) {
@@ -196,11 +189,11 @@ rayHit rayMarch(vec3 ro, vec3 rd) {
 			if (abs(c.d) < EPS) return rayHit(c.clr, pos, t, -1, vec3(0)); // hit a surface
 		} else {
 			t += p.d;
-			if (abs(p.d) < EPS) return rayHit(c.clr, pos, t, p.pi, p.q); // hit a surface
+			if (abs(p.d) < EPS) return rayHit(c.clr, pos, t, p.pi, p.q); // hit a portal
 		}
 		if (t > MAX_DIST) break; // too far from camera
 	}
-	return rayHit(vec4(0), pos, MAX_DIST, -1, vec3(0));
+	return rayHit(vec4(0, 0.2, 0.4, 0.0), pos, MAX_DIST, -2, vec3(0));
 }
 
 vec3 calcNormal(vec3 pos) {
@@ -250,7 +243,7 @@ void main() {
 
 	for (int i = 0; i < MAIN_ITERS; i++) {
 		rayHit hit = rayMarch(ro, rd);
-		if (hit.pi < 0) { // didn't hit a portal
+		if (hit.pi == -1) { // didn't hit a portal
 			vec3 n = calcNormal(hit.pos);
 			vec3 l = normalize(vec3(1, 0.5, 1));
 
@@ -261,6 +254,9 @@ void main() {
 
 			clr = diffuse;
 
+			break;
+		} else if (hit.pi == -2) { // hit a sky
+			clr = hit.clr.rgb;
 			break;
 		} else { // did hit a portal
 			int b;

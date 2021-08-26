@@ -7,6 +7,8 @@
 #include "scene.h"
 #include "template.glsl.h"
 
+// TODO group modifiers are transfered even for groups without a paramterer.
+
 Scene *scene_new() {
 	Scene *s = xmalloc_zero(sizeof(Scene));
 
@@ -64,11 +66,12 @@ char* scene_create_sdf(Scene *s) {
 				case gtUNION:       asprintf(&c, "u(");           break;
 				case gtDIFF:        asprintf(&c, "d(");           break;
 				case gtINTERS:      asprintf(&c, "i(");           break;
-				case gtBLEND:       asprintf(&c, "b(gK(%d),", g_pos++); break;
-				case gtAVERAGE:     asprintf(&c, "a(gK(%d),", g_pos++); break;
+				case gtBLEND:       asprintf(&c, "b(gK(%d),", g_pos); break;
+				case gtAVERAGE:     asprintf(&c, "a(gK(%d),", g_pos); break;
 				//case gtAPPROXIMATE: asprintf(&c, "x(");           break;
 				case gtAPPROXIMATE: die("group type approximate not implemented");
 			}
+			g_pos++;
 			return c;
 		}
 
@@ -141,6 +144,7 @@ void scene_compile(Scene* s) {
 	s->taLoc  = GetShaderLocation(s->shader, "viewCenter");
 	s->primsLoc  = GetShaderLocation(s->shader, "prims");
 	s->groupsLoc = GetShaderLocation(s->shader, "groups");
+	//s->timeLoc = GetShaderLocation(s->shader, "time");
 
 	float res[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
 	SetShaderValue(s->shader, s->resLoc, res, SHADER_UNIFORM_VEC2);
@@ -250,7 +254,9 @@ void scene_tick(Scene* s) {
 		for (unsigned int i = 0; i < s->primt_count; i++) {
 			for (unsigned int j = 0; j < PRIMT_SIZE; j++) {
 				primts[i * PRIMT_SIZE + j] = s->flat_prims[i]->p.d[j];
+				//printf("%.2f ", s->flat_prims[i]->p.d[j]);
 			}
+			//printf("\n");
 		}
 		SetShaderValueV(s->shader, s->primsLoc, primts, SHADER_UNIFORM_FLOAT, (int)(s->primt_count * PRIMT_SIZE));
 
@@ -260,8 +266,12 @@ void scene_tick(Scene* s) {
 	// === Update groups ===
 	if (s->group_changed) {
 		float groups[s->group_count];
-		for (unsigned int i = 0; i < s->group_count; i++)
+		for (unsigned int i = 0; i < s->group_count; i++) {
 			groups[i] = s->flat_groups[i]->g.k;
+			//printf("%.2f ", groups[i]);
+		}
+		//printf("\n");
+
 		SetShaderValueV(s->shader, s->groupsLoc, groups, SHADER_UNIFORM_FLOAT, (int)(s->group_count));
 
 		s->group_changed = false;

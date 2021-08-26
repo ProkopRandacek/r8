@@ -37,6 +37,7 @@ typedef struct Scene {
 	int taLoc;     //!< internal - the location of Camera target vector in shader
 	int primsLoc;  //!< internal - the location of the primitives float array in shader
 	int groupsLoc; //!< internal - the location of the groups float array in shader
+	//int timeLoc;   //!< internal - the location of the time float in shader
 } Scene;
 
 Scene *scene_new(void) LIKE_MALLOC; //!< constructor

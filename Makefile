@@ -1,7 +1,7 @@
 .PHONY : all clean deepclean libucw raylib docs
 
-CFLAGS ?= -O3 -march=native -pipe -std=gnu11 -g
-LDLIBS += -lm -ldl -lpthread
+CFLAGS = -O3 -pipe -std=gnu11 -s -g -DR8_DEBUG
+LDLIBS = -lm -ldl -lpthread
 
 override WARNS += \
 	-Wall -Wextra -Wunused-parameter -Wshadow -Wundef -Wunreachable-code \
@@ -31,7 +31,7 @@ docs:
 	r="https://github.com/ProkopRandacek/r8"
 	$(RM) $$f
 	cp readme.md $$f
-	echo -n "Generated at \` $(shell date) \` from [$${h:0:10}]($$r/tree/$$h)" >> $$f
+	echo -n "Generated at \`$(shell date)\` from [$${h:0:10}]($$r/tree/$$h)" >> $$f
 	git diff --quiet || echo " (dirty)" >> $$f
 	doxygen
 
