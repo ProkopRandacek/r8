@@ -123,11 +123,17 @@ void scene_compile(Scene* s) {
 		}
 	}
 
-	for (int k = 0; k < 4; k++) xfree(inserts[k]);
+	for (int k = 0; k < 7; k++) xfree(inserts[k]);
 
 	UnloadShader(s->shader);
 	s->shader = LoadShaderFromMemory(0, shader_code);
-	printf("%s\n", shader_code);
+
+#ifdef R8_DEBUG
+	FILE *fp = fopen("shader.glsl", "w+");
+	fputs(shader_code, fp);
+	fclose(fp);
+#endif
+
 	xfree(shader_code);
 
 	s->resLoc = GetShaderLocation(s->shader, "resolution");
@@ -263,7 +269,26 @@ void scene_tick(Scene* s) {
 }
 
 void scene_destroy(Scene* s) {
+	void free_shapes(Shape *pos) {
+		switch (pos->type) {
+			case stPRIMITIVE:
+				break;
+			case stGROUP:
+				free_shapes(pos->g.a);
+				free_shapes(pos->g.b);
+				break;
+			case stWRAPPER:
+				free_shapes(pos->w.shape);
+				break;
+			default:
+				die("invalid shape type %d", pos->type);
+		}
+		xfree(pos);
+	}
+	free_shapes(s->root); // TODO: maybe use the cached arrays?
 	UnloadShader(s->shader);
+	xfree(s->flat_prims);
+	xfree(s->flat_groups);
 	xfree(s);
 }
 

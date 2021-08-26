@@ -1,6 +1,6 @@
 .PHONY : all clean deepclean libucw raylib docs
 
-CFLAGS ?= -O3 -march=native -pipe -std=gnu11
+CFLAGS ?= -O3 -march=native -pipe -std=gnu11 -g
 LDLIBS += -lm -ldl -lpthread
 
 override WARNS += \

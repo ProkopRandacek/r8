@@ -58,6 +58,7 @@ int main(int argc, char* argv[]) {
 
 	scene_destroy(s);
 	CloseWindow();
+	msg(L_INFO, "bye");
 
 	return 0;
 }

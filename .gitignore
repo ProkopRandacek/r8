@@ -3,6 +3,7 @@ log
 r8
 doxydocs
 docmain.md
+shader.glsl
 
 **/*.glsl.h
 **/*.o
