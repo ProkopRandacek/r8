@@ -1,12 +1,12 @@
 .PHONY : all clean deepclean libucw raylib docs
 
-CFLAGS = -O3 -pipe -std=gnu11 -s -g -DR8_DEBUG
+CFLAGS = -O0 -pipe -std=gnu11 -g -DR8_DEBUG
 LDLIBS = -lm -ldl -lpthread
 
 override WARNS += \
 	-Wall -Wextra -Wunused-parameter -Wshadow -Wundef -Wunreachable-code \
 	-Wno-misleading-indentation -Wenum-conversion -Waggregate-return \
-	-Wconversion -Wswitch-enum -Wenum-compare -Wswitch -Wswitch-enum \
+	-Wswitch-enum -Wenum-compare -Wswitch -Wswitch-enum \
 	-Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn \
 	-Walloc-zero -Wduplicated-branches -Wduplicated-cond \
 	-Wno-free-nonheap-object -Wunused-macros -Wdangling-else \

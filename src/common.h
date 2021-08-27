@@ -11,6 +11,15 @@
 
 /** @brief number of floats needed to represent any Primitive */
 #define PRIMT_SIZE 12
+/** @brief number of floats needed to represent a Portal */
+#define PORTAL_SIZE 12
+/**
+ * @brief maximum number of Portals that can exist in a single Scene
+ *
+ * Because I don't feel like making something dynamic right now...
+ * TODO
+ * */
+#define MAX_PORTALS_PER_SCENE 64
 
 /** @brief type of a Primitive */
 typedef enum PrimitiveType {
@@ -90,30 +99,6 @@ typedef struct Shape {
 	};
 	ShapeType type; //!< The type of this shape.
 } Shape;
-
-/**
- * @brief A rectangle that teleports rays to it's linked rectangle
- *
- * Portals are rendered separately from other shapes.
- * They have no hierarchy like Shapes e.g. you can't
- * create a Group of two portals and blend them together.
- *
- * Portals without a valid linked portal are not rendered at all.
- *
- * If you link two portals of different scales, the shapes visible
- * through the portal bridge will appear scaled in the same way.
- */
-typedef struct Portal {
-	/**
-	 * @brief position of the portal.
-	 * more precisely the center of it.
-	 */
-	Vector3 pos;
-	Vector3 dir;  //!< forward unit vector
-	Vector3 up;   //!< up unit vector
-	Vector2 dims; //!< portal scale
-	struct Portal* link; //!< linked portal
-} Portal;
 
 #endif
 

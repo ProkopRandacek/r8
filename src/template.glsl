@@ -5,7 +5,7 @@
 #define RM_ITERS @
 #define MAIN_ITERS @
 
-#define PORTAL_SIZE 11
+#define PORTAL_SIZE 4
 #define PORTAL_NUM 2
 
 #define PRIM_SIZE 12
@@ -15,8 +15,8 @@
 
 // Functions to find information in the float arrays
 #define sF(i, o) prims[PRIM_SIZE * i + o]                    // return float on position `o` from shape on index `i`
-#define sV2(i, o) vec2(sF(i, o), sF(i, o + 1))               // vec2 from 2 floats on position from o to o + 1 from shape on index `i`
-#define sV3(i, o) vec3(sF(i, o), sF(i, o + 1), sF(i, o + 2)) // vec3 from 3 floats on position from o to o + 2 from shape on index `i`
+#define sV2(i, o) vec2(sF(i, o), sF(i, o + 1))               // vec2 from 2 floats on positions from o to o + 1 from shape on index `i`
+#define sV3(i, o) vec3(sF(i, o), sF(i, o + 1), sF(i, o + 2)) // vec3 from 3 floats on positions from o to o + 2 from shape on index `i`
 
 #define sP(i)  sV3(i, 0) // position
 #define sP2(i) sV3(i, 7) // second position
@@ -29,7 +29,7 @@
 
 #define gK(i) groups[i]
 
-uniform float portals[PORTAL_SIZE * PORTAL_NUM];
+uniform vec3 portals[PORTAL_SIZE * PORTAL_NUM];
 uniform float prims[PRIM_SIZE * PRIM_NUM];
 uniform float groups[GROUP_NUM];
 uniform vec2 resolution;
@@ -60,7 +60,7 @@ struct rayHit {
 	vec3 pos;
 	float dist;
 	int pi; // portal index, -1 if didn't hit portal
-	vec3 q; // portals exit thingie
+	vec3 q; // portal's exit thingie
 };
 
 struct clrd {
@@ -109,6 +109,15 @@ clrd x(float k, clrd a, clrd b) {
 	return a;
 }
 
+Portal getPortal(int i) {
+	return Portal(
+			portals[i * PORTAL_SIZE + 0],
+			portals[i * PORTAL_SIZE + 1],
+			portals[i * PORTAL_SIZE + 2],
+			portals[i * PORTAL_SIZE + 3].xy
+		     );
+}
+
 float portalSDF(vec3 u, Portal p, out vec3 a) {
 	vec3 r2c = u - p.c;
 	vec3 w = normalize(cross(p.dir, p.up)); // right vector?
@@ -139,29 +148,12 @@ void tp(inout vec3 ro, inout vec3 rd, inout vec3 pos, Portal p1, Portal p2) {
 }
 
 portd portalsSDF(inout vec3 pos) {
-	// This will be later taken from uniform
-	const int portalNum = 2;
-	Portal portals[portalNum];
-	portals[0] = Portal(
-			vec3( 2, 1, 3),
-			vec3( 0, 0, 1),
-			vec3( 0, 1, 0),
-			vec2( 1, 2   )
-			);
-	portals[1] = Portal(
-			vec3(-2, 1, 3),
-			vec3( 1, 0, 0),
-			vec3( 0, 1, 0),
-			vec2( 1, 2   )
-			);
-
 	float dist = 99999.9;
 	int pi;
 	vec3 q;
-
-	for (int i = 0; i < portalNum; i++) {
+	for (int i = 0; i < PORTAL_NUM; i++) {
 		vec3 nq;
-		float ndist = portalSDF(pos, portals[i], nq);
+		float ndist = portalSDF(pos, getPortal(i), nq);
 		if (ndist < dist) {
 			dist = ndist;
 			pi = i;
@@ -182,6 +174,7 @@ rayHit rayMarch(vec3 ro, vec3 rd) {
 		pos = ro + t * rd;
 
 		clrd c = sdf(pos);
+		//portd p = portd(1, 9999999.9, vec3(0));
 		portd p = portalsSDF(pos);
 
 		if (c.d < p.d) {
@@ -215,21 +208,6 @@ mat3 setCamera(in vec3 ro, in vec3 ta, float cr) {
 }
 
 void main() {
-	const int portalNum = 2;
-	Portal portals[portalNum];
-	portals[0] = Portal(
-			vec3( 2, 1, 3),
-			vec3( 0, 0, 1),
-			vec3( 0, 1, 0),
-			vec2( 1, 2   )
-			);
-	portals[1] = Portal(
-			vec3(-2, 1, 3),
-			vec3( 1, 0, 0),
-			vec3( 0, 1, 0),
-			vec2( 1, 2   )
-			);
-
 	vec2 p = (2.0 * gl_FragCoord.xy - resolution.xy) / resolution.y;
 
 	vec3 ro = viewEye;
@@ -264,10 +242,13 @@ void main() {
 			if (hit.pi % 2 == 1) { b = hit.pi - 1; }
 			else { b = hit.pi + 1; }
 
-			tp(ro, rd, hit.q, portals[hit.pi], portals[b]);
+			tp(ro, rd, hit.q, getPortal(hit.pi), getPortal(b));
 			continue;
+			//clr = vec3(0, 1, 1);
+			//break;
 		}
 	}
 
 	finalColor = vec4(clr, 1.0);
 }
+

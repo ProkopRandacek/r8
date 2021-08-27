@@ -5,6 +5,11 @@ doxydocs
 docmain.md
 shader.glsl
 
+compile_commands.json
+**/.ccls-cache/
+
 **/*.glsl.h
 **/*.o
 **/*.d
+**/tags
+.idea

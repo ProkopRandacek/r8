@@ -1,6 +1,4 @@
 #include <raylib.h>
-#include <stdlib.h>
-#include <stdio.h>
 
 #include "main.h"
 
@@ -38,22 +36,47 @@ int main(int argc, char* argv[]) {
 			1.0f
 			);
 
+	Portal *p1 = portal_new(
+			(Vector3){2.0f, 1.0f, 3.0f},
+			(Vector3){0.0f, 0.0f, 1.0f},
+			(Vector3){0.0f, 1.0f, 0.0f},
+			(Vector2){1.0f, 2.0f}
+			);
+
+	Portal *p2 = portal_new(
+			(Vector3){-2.0f, 1.0f, 3.0f},
+			(Vector3){ 1.0f, 0.0f, 0.0f},
+			(Vector3){ 0.0f, 1.0f, 0.0f},
+			(Vector2){ 1.0f, 2.0f}
+			);
+
+	p2->link = p1;
+	p1->link = p2;
+
 	Shape *group_a = group_new(cube, sphere, gtAVERAGE, 0.5f);
 	Shape *root = group_new(group_a, floor, gtUNION, 0.5f);
 
 	s->root = root;
 	scene_on_tree_update(s);
 
+	s->portals[0] = p1;
+	s->portals[1] = p2;
+	s->portal_count = 2;
+
 	scene_compile(s);
 
 	float time = 0.0f;
 
 	while (!WindowShouldClose()) {
+	//for (int i = 0; i < 10; i++) {
 		scene_tick(s);
 
 		time += GetFrameTime();
 		s->root->g.a->g.k = sinf(time) * 0.5f + 0.5f;
 		s->group_changed = true;
+
+		s->portals[0]->pos.x = sinf(time);
+		s->portal_changed = true;
 
 		BeginDrawing(); {
 			BeginShaderMode(s->shader); {

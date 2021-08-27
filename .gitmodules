@@ -1,9 +1,6 @@
 [submodule "libucw"]
 	path = libucw
 	url = git://git.ucw.cz/libucw.git
-[submodule "raygui"]
-	path = raygui
-	url = https://github.com/raysan5/raygui.git
 [submodule "raylib"]
 	path = raylib
 	url = https://github.com/raysan5/raylib.git

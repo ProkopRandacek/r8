@@ -1,13 +1,19 @@
 #define _GNU_SOURCE
+
 #include <raylib.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "scene.h"
+#include "shapes/shapes.h"
 #include "template.glsl.h"
 
 // TODO group modifiers are transfered even for groups without a paramterer.
+// TODO child position relative to parent shape
+// object that are only visible after the first bounce?
+//  -> player camera can be inside the player character but only visible
+//     in mirrors and through portals and such
 
 Scene *scene_new() {
 	Scene *s = xmalloc_zero(sizeof(Scene));
@@ -17,19 +23,26 @@ Scene *scene_new() {
 	s->rm_iters = 256;
 	s->main_iters = 8;
 
-	s->root = NULL;
+	s->root        = NULL;
+	s->flat_prims  = NULL;
+	s->flat_groups = NULL;
+
+	s->portals = xmalloc(sizeof(Portal) * MAX_PORTALS_PER_SCENE);
+	for (int i = 0; i < MAX_PORTALS_PER_SCENE; i++)
+		s->portals[i] = NULL;
 
 	// default camera settings
 	s->cam.position = (Vector3){ 0.0f, 2.0f, 0.0f };
-	s->cam.target   = (Vector3){ 0.0f, 2.0f, 1.0f };
+	s->cam.target   = (Vector3){ 0.0f, -2.0f, 1.0f };
 	s->cam.up       = (Vector3){ 0.0f, 1.0f, 0.0f };
 	s->cam.fovy     = 65.0f;
 
 	SetCameraMode(s->cam, CAMERA_FIRST_PERSON);
 
-	s->tree_changed  = true;
-	s->primt_changed = true;
-	s->group_changed = true;
+	s->tree_changed   = true;
+	s->primt_changed  = true;
+	s->group_changed  = true;
+	s->portal_changed = true;
 
 	return s;
 }
@@ -40,50 +53,38 @@ char* scene_create_sdf(Scene *s) {
 	int s_pos = 0;
 	int g_pos = 0;
 	void sdf_gen(Shape *pos) {
-		char* build_primitive(Primitive p) {
-			char *c;
-			switch (p.type) {
-				case ptSPHERE:
-					asprintf(&c, "clrd(sC(%d),d2Sphere(pos,sP(%d),sR1(%d)))", s_pos, s_pos, s_pos);
-					break;
-				case ptCUBE:
-					asprintf(&c, "clrd(sC(%d),d2Cube(pos,sP(%d),sS(%d)))", s_pos, s_pos, s_pos);
-					break;
-				case ptTORUS:
-				case ptCTORUS:
-				case ptCYL:
-				case ptCCONE:
-					die("primitive type %d not implemented", p.type);
-					break;
-			}
-			s_pos++;
-			return c;
-		}
-
-		char* build_group(Group g) {
-			char *c;
-			switch (g.type) {
-				case gtUNION:       asprintf(&c, "u(");           break;
-				case gtDIFF:        asprintf(&c, "d(");           break;
-				case gtINTERS:      asprintf(&c, "i(");           break;
-				case gtBLEND:       asprintf(&c, "b(gK(%d),", g_pos); break;
-				case gtAVERAGE:     asprintf(&c, "a(gK(%d),", g_pos); break;
-				//case gtAPPROXIMATE: asprintf(&c, "x(");           break;
-				case gtAPPROXIMATE: die("group type approximate not implemented");
-			}
-			g_pos++;
-			return c;
-		}
-
 		char *c;
 		switch (pos->type) {
 			case stPRIMITIVE:
-				c = build_primitive(pos->p);
+				switch (pos->p.type) {
+					case ptSPHERE:
+						asprintf(&c, "clrd(sC(%d),d2Sphere(pos,sP(%d),sR1(%d)))", s_pos, s_pos, s_pos);
+						break;
+					case ptCUBE:
+						asprintf(&c, "clrd(sC(%d),d2Cube(pos,sP(%d),sS(%d)))", s_pos, s_pos, s_pos);
+						break;
+					case ptTORUS:
+					case ptCTORUS:
+					case ptCYL:
+					case ptCCONE:
+						die("primitive type %d not implemented", pos->p.type);
+						break;
+				}
+				s_pos++;
 				strcat(sdf, c);
 				xfree(c);
 				break;
 			case stGROUP:
-				c = build_group(pos->g);
+				switch (pos->g.type) {
+					case gtUNION:       asprintf(&c, "u(");           break;
+					case gtDIFF:        asprintf(&c, "d(");           break;
+					case gtINTERS:      asprintf(&c, "i(");           break;
+					case gtBLEND:       asprintf(&c, "b(gK(%d),", g_pos); break;
+					case gtAVERAGE:     asprintf(&c, "a(gK(%d),", g_pos); break;
+							    //case gtAPPROXIMATE: asprintf(&c, "x(");           break;
+					case gtAPPROXIMATE: die("group type approximate not implemented");
+				}
+				g_pos++;
 				strcat(sdf, c);
 				xfree(c);
 
@@ -139,17 +140,17 @@ void scene_compile(Scene* s) {
 
 	xfree(shader_code);
 
-	s->resLoc = GetShaderLocation(s->shader, "resolution");
-	s->roLoc  = GetShaderLocation(s->shader, "viewEye");
-	s->taLoc  = GetShaderLocation(s->shader, "viewCenter");
-	s->primsLoc  = GetShaderLocation(s->shader, "prims");
-	s->groupsLoc = GetShaderLocation(s->shader, "groups");
-	//s->timeLoc = GetShaderLocation(s->shader, "time");
+	s->res_loc     = GetShaderLocation(s->shader, "resolution");
+	s->ro_loc      = GetShaderLocation(s->shader, "viewEye");
+	s->ta_loc      = GetShaderLocation(s->shader, "viewCenter");
+	s->prims_loc   = GetShaderLocation(s->shader, "prims");
+	s->groups_loc  = GetShaderLocation(s->shader, "groups");
+	s->portals_loc = GetShaderLocation(s->shader, "portals");
+	//s->time_loc = GetShaderLocation(s->shader, "time");
 
 	float res[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
-	SetShaderValue(s->shader, s->resLoc, res, SHADER_UNIFORM_VEC2);
+	SetShaderValue(s->shader, s->res_loc, res, SHADER_UNIFORM_VEC2);
 }
-
 
 void scene_print(Scene* s) {
 	void rec(Shape *pos, int depth) {
@@ -239,13 +240,13 @@ void scene_tick(Scene* s) {
 	float ro[3] = { s->cam.position.x, s->cam.position.y, s->cam.position.z };
 	float ta[3] = { s->cam.target.x,   s->cam.target.y,   s->cam.target.z };
 
-	SetShaderValue(s->shader, s->roLoc, ro, SHADER_UNIFORM_VEC3);
-	SetShaderValue(s->shader, s->taLoc, ta, SHADER_UNIFORM_VEC3);
+	SetShaderValue(s->shader, s->ro_loc, ro, SHADER_UNIFORM_VEC3);
+	SetShaderValue(s->shader, s->ta_loc, ta, SHADER_UNIFORM_VEC3);
 
 	// === Update window size ===
 	if (IsWindowResized()) {
 		float res[2] = { (float)GetScreenWidth(), (float)GetScreenHeight() };
-		SetShaderValue(s->shader, s->resLoc, res, SHADER_UNIFORM_VEC2);
+		SetShaderValue(s->shader, s->res_loc, res, SHADER_UNIFORM_VEC2);
 	}
 
 	// === Update primitives ===
@@ -258,7 +259,7 @@ void scene_tick(Scene* s) {
 			}
 			//printf("\n");
 		}
-		SetShaderValueV(s->shader, s->primsLoc, primts, SHADER_UNIFORM_FLOAT, (int)(s->primt_count * PRIMT_SIZE));
+		SetShaderValueV(s->shader, s->prims_loc, primts, SHADER_UNIFORM_FLOAT, (int)(s->primt_count * PRIMT_SIZE));
 
 		s->primt_changed = false;
 	}
@@ -267,14 +268,54 @@ void scene_tick(Scene* s) {
 	if (s->group_changed) {
 		float groups[s->group_count];
 		for (unsigned int i = 0; i < s->group_count; i++) {
+			//printf("%p ", s->flat_groups[i]);
 			groups[i] = s->flat_groups[i]->g.k;
-			//printf("%.2f ", groups[i]);
 		}
 		//printf("\n");
 
-		SetShaderValueV(s->shader, s->groupsLoc, groups, SHADER_UNIFORM_FLOAT, (int)(s->group_count));
+		SetShaderValueV(s->shader, s->groups_loc, groups, SHADER_UNIFORM_FLOAT, (int)(s->group_count));
 
 		s->group_changed = false;
+	}
+
+	// === Update portals ===
+	if (s->portal_changed) {
+		// a valid portals is a portal that links to another portal that links back to this portal
+		Portal **valid_portals = xmalloc_zero(sizeof(Portal) * MAX_PORTALS_PER_SCENE);
+
+		int j = 0;
+		for (int i = 0; i < MAX_PORTALS_PER_SCENE; i++) { // iterate over all portals
+			Portal *p = s->portals[i];
+			if (p == NULL) continue;
+			if (p->link->link == p) { // check that it is a valid portal
+				bool seen = false; // check that we did not add this pair yet
+				for (int k = 0; k < MAX_PORTALS_PER_SCENE; k++) {
+					if (valid_portals[k] == p) {
+						seen = true;
+						break;
+					}
+				}
+				if (seen) continue;
+				// add this pair
+				valid_portals[j] = p;
+				valid_portals[j + 1] = p->link;
+				j += 2;
+			}
+		}
+		float *portals = portal_write_bulk(valid_portals, j);
+		xfree(valid_portals);
+
+		/*for (unsigned int i = 0; i < j; i++) {
+			for (unsigned int k = 0; k < PORTAL_SIZE; k++) {
+				printf("%.2f ", portals[i * PORTAL_SIZE + k]);
+			}
+			printf("\n");
+		}*/
+
+		SetShaderValueV(s->shader, s->portals_loc, portals, SHADER_UNIFORM_VEC3, j * 4);
+		xfree(portals);
+
+		s->portal_changed = false;
 	}
 }
 
@@ -299,6 +340,10 @@ void scene_destroy(Scene* s) {
 	UnloadShader(s->shader);
 	xfree(s->flat_prims);
 	xfree(s->flat_groups);
+	for (int i = 0; i < MAX_PORTALS_PER_SCENE; i++)
+		if (s->portals[i])
+			xfree(s->portals[i]);
+	xfree(s->portals);
 	xfree(s);
 }
 
