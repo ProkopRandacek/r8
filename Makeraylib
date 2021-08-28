@@ -3,6 +3,8 @@
 RAYLIB_DIR     ?= ./raylib
 RAYLIB_LIBRARY ?= $(RAYLIB_DIR)/libraylib.a
 
+LIBRARIES += $(RAYLIB_LIBRARY)
+
 raylib: $(RAYLIB_LIBRARY)
 
 $(RAYLIB_LIBRARY):

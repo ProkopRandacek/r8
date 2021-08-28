@@ -22,6 +22,8 @@ CFLAGS += $(WARNS) $(FFLAGS)
 
 TARGET = r8
 
+LIBRARIES =
+
 all: $(TARGET)
 
 .ONESHELL : docs
@@ -42,7 +44,7 @@ include Makelibucw
 
 include Makeraylib
 
-#include Makeraygui
+include Makeumka
 
 include src/Makefile
 

@@ -3,6 +3,8 @@
 LIBUCW_DIR     ?= ./libucw
 LIBUCW_LIBRARY ?= $(LIBUCW_DIR)/run/lib/libucw-6.5.a
 
+LIBRARIES += $(LIBUCW_LIBRARY)
+
 libucw: $(LIBUCW_LIBRARY)
 
 $(LIBUCW_LIBRARY):

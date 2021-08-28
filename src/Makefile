@@ -17,7 +17,7 @@ DEPS = $(OBJS:.o=.d)
 -include $(DEPS)
 
 %.glsl.h: %.glsl
-	@echo SD $@
+	@echo EM $@
 	@echo "#ifndef $(notdir $(basename $^))_H" >  $@
 	@echo "#define $(notdir $(basename $^))_H" >> $@
 	@echo "const unsigned int $(notdir $(basename $^))_glsl_len = $(shell wc -c $^ | awk '{print $$1}');" >> $@
@@ -26,7 +26,7 @@ DEPS = $(OBJS:.o=.d)
 	@echo ";" >> $@
 	@echo "#endif" >> $@
 
-$(TARGET): $(SHDH) $(OBJS) $(LIBUCW_LIBRARY) $(RAYLIB_LIBRARY)
+$(TARGET): $(LIBRARIES) $(SHDH) $(OBJS)
 	@echo LD $@
 	@$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)
 
