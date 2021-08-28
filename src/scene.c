@@ -8,6 +8,8 @@
 #include "scene.h"
 #include "shapes/shapes.h"
 #include "template.glsl.h"
+#include "alloc.h"
+#include "util.h"
 
 // TODO group modifiers are transfered even for groups without a paramterer.
 // TODO child position relative to parent shape

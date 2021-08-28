@@ -1,0 +1,39 @@
+// taken from the libucw
+// http://www.ucw.cz/gitweb/?p=libucw.git;f=ucw/alloc.c;hb=HEAD
+#include <stdlib.h>
+#include <string.h>
+
+#include "alloc.h"
+#include "util.h"
+
+void *xmalloc(size_t size) {
+	void *x = unsafe_malloc(size);
+	if (!x)
+		die("Cannot allocate %zu bytes of memory", size);
+	return x;
+}
+
+void *xmalloc_zero(size_t size) {
+	void *x = xmalloc(size);
+	memset(x, 0, size);
+	//bzero(x, size);
+	return x;
+}
+
+void xfree(void *ptr) {
+	/*
+	 * Maybe it is a little waste of resources to make this a function instead
+	 * of a macro, but xmalloc() is not used for anything critical anyway,
+	 * so let's prefer simplicity.
+	 */
+	unsafe_free(ptr);
+}
+
+void *xrealloc(void *old, size_t size) {
+	/* We assume that realloc(NULL, x) works like malloc(x), which is true with the glibc. */
+	void *x = unsafe_realloc(old, size);
+	if (!x && size)
+		die("Cannot reallocate %zu bytes of memory", size);
+	return x;
+}
+

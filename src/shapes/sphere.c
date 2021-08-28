@@ -1,6 +1,7 @@
 #include <stdlib.h>
 
 #include "sphere.h"
+#include "../alloc.h"
 
 Shape* sphere_new(Vector3 pos, Vector4 clr, float r) {
 	Shape *s = xmalloc(sizeof(Shape));

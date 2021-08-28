@@ -1,4 +1,4 @@
-.PHONY : all clean deepclean libucw raylib docs
+.PHONY : all clean deepclean raylib docs
 
 CFLAGS = -O0 -pipe -std=gnu11 -g -DR8_DEBUG
 LDLIBS = -lm -ldl -lpthread
@@ -39,8 +39,6 @@ docs:
 
 run: $(TARGET)
 	./r8
-
-include Makelibucw
 
 include Makeraylib
 

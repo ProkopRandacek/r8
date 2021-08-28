@@ -2,15 +2,12 @@
 
 #include "main.h"
 
-#include "log.h"
 #include "scene.h"
 #include "shapes/shapes.h"
+#include "util.h"
 
-int main(int argc, char* argv[]) {
-	log_init(argv[0]);
-	msg(L_INFO, "START");
-	if (argc != 1) die("usage: `./r8`");
-	SetTraceLogCallback(raylib_log_to_libucw_log);
+int main() {
+	msg("START");
 
 	InitWindow(800, 450, "r8");
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
@@ -88,7 +85,7 @@ int main(int argc, char* argv[]) {
 
 	scene_destroy(s);
 	CloseWindow();
-	msg(L_INFO, "bye");
+	msg("bye");
 
 	return 0;
 }
