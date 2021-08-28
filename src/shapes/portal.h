@@ -2,8 +2,7 @@
 #ifndef PORTAL_H
 #define PORTAL_H
 
-#include <ucw/slists.h>
-#include "../common.h"
+#include "shapes.h"
 
 /**
  * @brief A rectangle that teleports rays to it's linked rectangle
