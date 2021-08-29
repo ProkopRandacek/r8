@@ -8,13 +8,12 @@ OBJS = $(sort $(SRCS:.c=.o))   # object files
 SHDH = $(addsuffix .h,$(SHDS)) # shader headers
 DEPS = $(OBJS:.o=.d)
 
+-include $(DEPS)
 
 %.o: %.c $(SHDH)
 	@echo CC $@
 	@$(CC) $(CFLAGS) -MM -MG -MF $(patsubst %.o,%.d,$@) -c $<
 	@$(CC) $(CFLAGS) -o $@ -c $<
-
--include $(DEPS)
 
 %.glsl.h: %.glsl
 	@echo EM $@
@@ -29,12 +28,6 @@ DEPS = $(OBJS:.o=.d)
 $(TARGET): $(LIBRARIES) $(SHDH) $(OBJS)
 	@echo LD $@
 	@$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)
-
-UMKA_SRC = $(filter-out umka-lang/src/umka.c,$(wildcard umka-lang/src/*.c))
-RAYLIB_SRC = libraylib.a
-cross: $(SHDH)
-	@curl https://rdck.dev/dl/raylib/libraylib.a -O
-	$(CROSS_CC) -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 $(CFLAGS) -o r8.exe $(SRCS) $(UMKA_SRC) $(RAYLIB_SRC) $(CROSS_FLAGS) -s
 
 clean::
 	$(RM) $(OBJS)

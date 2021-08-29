@@ -1,0 +1,15 @@
+# vim: ft=make
+# im keeping the cross compile mess away from the rest of the makefiles
+# I don't know how to cross compile raylib so I have to download the precompiled library
+
+CROSS_CC = x86_64-w64-mingw32-gcc
+CROSS_FLAGS = -lm -lwinmm -Ldl -lopengl32 -lgdi32 -Wl,-Bstatic -lpthread $(WARNS)
+
+UMKA_SRC = $(filter-out umka-lang/src/umka.c,$(wildcard umka-lang/src/*.c))
+RAYLIB_SRC = libraylib.a
+
+
+cross: $(SHDH)
+	@curl https://rdck.dev/dl/raylib/libraylib.a -O
+	$(CROSS_CC) -DPLATFORM_DESKTOP -DGRAPHICS_API_OPENGL_33 $(CFLAGS) -o r8.exe $(SRCS) $(UMKA_SRC) $(RAYLIB_SRC) $(CROSS_FLAGS) -s
+

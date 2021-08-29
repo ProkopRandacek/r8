@@ -1,11 +1,8 @@
 .PHONY : all clean deepclean raylib docs
 
-CROSS_CC = x86_64-w64-mingw32-gcc
-CROSS_FLAGS = -lm -lwinmm -Ldl -lopengl32 -lgdi32 -Wl,-Bstatic -lpthread $(WARNS)
-
 TARGET = r8
 
-CFLAGS += -O3 -pipe -std=gnu11 -g -DR8_DEBUG
+CFLAGS += -O3 -pipe -std=gnu11 -g -DR8_DEBUG -DR8_VR
 LDLIBS += -lm -ldl -lpthread
 
 override WARNS += \
@@ -52,8 +49,9 @@ clean::
 	$(RM) $(TARGET)
 
 include Makeraylib
-
 include Makeumka
+include Makeopenvr
 
+include Makecross
 include src/Makefile
 
