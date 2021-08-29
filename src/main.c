@@ -9,7 +9,7 @@
 int main() {
 	msg("START");
 
-	InitWindow(800, 450, "r8");
+	InitWindow(800, 800, "r8");
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
 	SetTargetFPS(60);
 
@@ -65,7 +65,6 @@ int main() {
 	float time = 0.0f;
 
 	while (!WindowShouldClose()) {
-	//for (int i = 0; i < 10; i++) {
 		scene_tick(s);
 
 		time += GetFrameTime();
