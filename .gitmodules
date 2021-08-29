@@ -7,3 +7,6 @@
 [submodule "umka-lang"]
 	path = umka-lang
 	url = https://github.com/vtereshkov/umka-lang.git
+[submodule "openvr"]
+	path = openvr
+	url = git@github.com:ValveSoftware/openvr.git

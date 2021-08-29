@@ -153,10 +153,11 @@ FILE_PATTERNS          = *.c \
                          *.ice
 RECURSIVE              = YES
 EXCLUDE                = libucw \
-                         doxygen-awesome-css \
-                         doxydocs \
-                         raylib \
-                         raygui
+						 doxygen-awesome-css \
+						 doxydocs \
+						 raylib \
+						 umka-lang \
+						 openvr
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = *.glsl.h
 EXCLUDE_SYMBOLS        =
