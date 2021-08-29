@@ -22,5 +22,17 @@ make run CC=gcc -j$(nproc)
 Compile with `gcc`. The code seems to have issues with `clang` and `tcc` doesn't support the `-M` flags. I didn't test any others.
 
 ### Deps
-R8 uses [libucw](http://www.ucw.cz/libucw/), [raylib](https://www.raylib.com/) and [umka-lang](https://github.com/vtereshkov/umka-lang/tree/master). All are included and statically linked.
+R8 uses:
+- [raylib](https://www.raylib.com/) - math and opengl abstraction
+- [umka-lang](https://github.com/vtereshkov/umka-lang) - scripting language
+- [openvr](https://github.com/ValveSoftware/openvr) - VR support
 
+(all are compiled automatically and linked statically. Result of compiling R8 is a single portable executable)
+
+### Build deps
+You need:
+- `gcc` -
+- `make` -
+- `cmake` - openvr compile
+- `doxygen` - if you want to generate docs
+- `sed` - coverts glsl code into a header
