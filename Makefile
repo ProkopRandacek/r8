@@ -1,7 +1,12 @@
 .PHONY : all clean deepclean raylib docs
 
-CFLAGS = -O0 -pipe -std=gnu11 -g -DR8_DEBUG
-LDLIBS = -lm -ldl -lpthread
+CROSS_CC = x86_64-w64-mingw32-gcc
+CROSS_FLAGS = -lm -lwinmm -Ldl -lopengl32 -lgdi32 -Wl,-Bstatic -lpthread $(WARNS)
+
+TARGET = r8
+
+CFLAGS += -O3 -pipe -std=gnu11 -g -DR8_DEBUG
+LDLIBS += -lm -ldl -lpthread
 
 override WARNS += \
 	-Wall -Wextra -Wunused-parameter -Wshadow -Wundef -Wunreachable-code \
@@ -19,8 +24,6 @@ ifeq ($(word 2, $(shell $(CC) --version)), "(GCC)") # are we using gcc?
 endif
 
 CFLAGS += $(WARNS) $(FFLAGS)
-
-TARGET = r8
 
 LIBRARIES =
 
@@ -40,12 +43,6 @@ docs:
 run: $(TARGET)
 	./r8
 
-include Makeraylib
-
-include Makeumka
-
-include src/Makefile
-
 deepclean:: clean docclean
 
 docclean:
@@ -53,4 +50,10 @@ docclean:
 
 clean::
 	$(RM) $(TARGET)
+
+include Makeraylib
+
+include Makeumka
+
+include src/Makefile
 
