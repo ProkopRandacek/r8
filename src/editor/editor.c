@@ -25,7 +25,7 @@ void editor_draw(Editor *e) {
 	DrawRectangleRec(scene_tree_box, (Color){ 200, 200, 200, 128 });
 
 	int x = 0, y = 0, p = 0;
-	stack *s = stack_new();
+	Stack *s = stack_new();
 	stack_push(s, e->scene->root);
 	while (s->top != 0) {
 		Shape *pos = stack_pop(s);

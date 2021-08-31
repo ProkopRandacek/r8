@@ -3,17 +3,17 @@
 
 #include "common.h"
 
-#define STACK_MAX_LEN 8
-
-typedef struct stack {
-	void *data[STACK_MAX_LEN];
+typedef struct Stack {
 	int top;
-} stack;
+	int cap;
+	void **data;
+} Stack;
 
-stack* stack_new();
-void stack_destroy(stack *s);
-void stack_print(stack *s);
-void stack_push(stack *s, void *d);
-void *stack_pop(stack *s);
+Stack* stack_new(void);
+void stack_destroy(Stack *s);
+void stack_print(Stack *s);
+void stack_push(Stack *s, void *d);
+void *stack_pop(Stack *s);
+void stack_resize(Stack *s, int new_size);
 
 #endif
