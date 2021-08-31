@@ -49,6 +49,7 @@ clean::
 	$(RM) $(TARGET)
 
 include Makeraylib
+include Makeraygui
 include Makeumka
 include Makeopenvr
 

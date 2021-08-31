@@ -4,10 +4,10 @@
 #include <string.h>
 
 #include "alloc.h"
-#include "util.h"
+#include "log.h"
 
 void *xmalloc(size_t size) {
-	void *x = unsafe_malloc(size);
+	void *x = malloc(size);
 	if (!x)
 		die("Cannot allocate %zu bytes of memory", size);
 	return x;
@@ -26,12 +26,12 @@ void xfree(void *ptr) {
 	 * of a macro, but xmalloc() is not used for anything critical anyway,
 	 * so let's prefer simplicity.
 	 */
-	unsafe_free(ptr);
+	free(ptr);
 }
 
 void *xrealloc(void *old, size_t size) {
 	/* We assume that realloc(NULL, x) works like malloc(x), which is true with the glibc. */
-	void *x = unsafe_realloc(old, size);
+	void *x = realloc(old, size);
 	if (!x && size)
 		die("Cannot reallocate %zu bytes of memory", size);
 	return x;

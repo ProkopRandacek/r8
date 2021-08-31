@@ -1,12 +1,15 @@
 [submodule "raylib"]
 	path = raylib
 	url = https://github.com/raysan5/raylib.git
-[submodule "doxygen-awesome-css"]
-	path = doxygen-awesome-css
-	url = https://github.com/jothepro/doxygen-awesome-css.git
+[submodule "raygui"]
+	path = raygui
+	url = https://github.com/raysan5/raygui.git
+[submodule "openvr"]
+	path = openvr
+	url = https://github.com/ValveSoftware/openvr.git
 [submodule "umka-lang"]
 	path = umka-lang
 	url = https://github.com/vtereshkov/umka-lang.git
-[submodule "openvr"]
-	path = openvr
-	url = git@github.com:ValveSoftware/openvr.git
+[submodule "doxygen-awesome-css"]
+	path = doxygen-awesome-css
+	url = https://github.com/jothepro/doxygen-awesome-css.git

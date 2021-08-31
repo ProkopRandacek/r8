@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include "cube.h"
-#include "../alloc.h"
+#include "alloc.h"
 
 Shape *group_new(Shape *a, Shape *b, GroupType gt, float k) {
 	Shape *s = xmalloc(sizeof(Shape));

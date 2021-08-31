@@ -10,14 +10,6 @@
 #define FORMAT_CHECK(x,y,z) __attribute__((format(x,y,z)))
 #define LIKE_MALLOC         __attribute__((malloc))
 
-// use only the x versions from alloc.h!
-#define unsafe_malloc malloc
-#define unsafe_realloc realloc
-#define unsafe_free free
-#pragma GCC poison malloc calloc realloc free
-
-
-
 /** @brief number of floats needed to represent any Primitive */
 #define PRIMT_SIZE 12
 

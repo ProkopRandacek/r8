@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "util.h"
+#include "log.h"
 
 void vmsg(const char *fmt, va_list args) {
 	vprintf(fmt, args);

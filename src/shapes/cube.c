@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include "cube.h"
-#include "../alloc.h"
+#include "alloc.h"
 
 Shape* cube_new(Vector3 pos, Vector4 clr, Vector3 scl) {
 	Shape *s = xmalloc(sizeof(Shape));

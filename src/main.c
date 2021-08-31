@@ -1,10 +1,13 @@
 #include <raylib.h>
+#include <stdio.h>
 
-#include "main.h"
+#include "common.h"
 
 #include "scene.h"
-#include "shapes/shapes.h"
-#include "util.h"
+#include "editor.h"
+#include "shapes.h"
+#include "log.h"
+#include "stack.h"
 
 int main() {
 	msg("START");
@@ -64,6 +67,8 @@ int main() {
 
 	float time = 0.0f;
 
+	Editor *editor = editor_new(s);
+
 	while (!WindowShouldClose()) {
 		scene_tick(s);
 
@@ -78,6 +83,9 @@ int main() {
 			BeginShaderMode(s->shader); {
 				DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), WHITE);
 			} EndShaderMode();
+
+			editor_draw(editor);
+
 			DrawFPS(10, 10);
 		} EndDrawing();
 	}

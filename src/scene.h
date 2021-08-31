@@ -3,7 +3,7 @@
 #define SCENE_H
 
 #include "common.h"
-#include "shapes/shapes.h"
+#include "shapes.h"
 
 /**
  * Contains all scene settings (There is no global scene setting),

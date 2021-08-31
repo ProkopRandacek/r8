@@ -2,11 +2,16 @@
 _:
 	@echo run make from repository root && false
 
+DIRS = $(shell find src/ -type d)            # all folders
 SRCS = $(shell find src/ -name \*.c -print)  # c sources
-SHDS = $(wildcard src/*.glsl)  # shader sources
-OBJS = $(sort $(SRCS:.c=.o))   # object files
-SHDH = $(addsuffix .h,$(SHDS)) # shader headers
+SHDS = $(shell find src/ -name \*.glsl)      # shader sources
+OBJS = $(sort $(SRCS:.c=.o))                 # object files
+SHDH = $(addsuffix .h,$(SHDS))               # shader headers
 DEPS = $(OBJS:.o=.d)
+
+# Include all source directories so I don't have to use relative paths in includes
+# This way I can just include the filename and it will find it.
+CFLAGS += $(addprefix -I,$(DIRS))
 
 -include $(DEPS)
 

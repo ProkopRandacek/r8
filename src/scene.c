@@ -6,10 +6,10 @@
 #include <string.h>
 
 #include "scene.h"
-#include "shapes/shapes.h"
+#include "shapes.h"
 #include "template.glsl.h"
 #include "alloc.h"
-#include "util.h"
+#include "log.h"
 
 // TODO group modifiers are transfered even for groups without a paramterer.
 // TODO child position relative to parent shape
@@ -35,11 +35,11 @@ Scene *scene_new() {
 
 	// default camera settings
 	s->cam.position = (Vector3){ 0.0f, 2.0f, 0.0f };
-	s->cam.target   = (Vector3){ 0.0f, -2.0f, 1.0f };
+	s->cam.target   = (Vector3){ 0.0f, 0.0f, 2.0f };
 	s->cam.up       = (Vector3){ 0.0f, 1.0f, 0.0f };
 	s->cam.fovy     = 65.0f;
 
-	SetCameraMode(s->cam, CAMERA_FIRST_PERSON);
+	SetCameraMode(s->cam, CAMERA_FREE);
 
 	s->tree_changed   = true;
 	s->primt_changed  = true;
@@ -156,7 +156,7 @@ void scene_compile(Scene* s) {
 
 void scene_print(Scene* s) {
 	void rec(Shape *pos, int depth) {
-		for (int i = 0; i < depth * 4; i++) printf(" ");
+		for (int i = 0; i < depth; i++) printf("    ");
 		if (pos == NULL) {
 			printf("NULL\n");
 			return;

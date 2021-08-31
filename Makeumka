@@ -8,7 +8,7 @@ LIBRARIES += $(UMKA_LIBRARY)
 umka: $(UMKA_LIBRARY)
 
 $(UMKA_LIBRARY):
-	cd $(UMKA_DIR)/ && $(MAKE) -j$(shell nproc)
+	cd $(UMKA_DIR)/ && $(MAKE) static -j$(shell nproc)
 
 deepclean::
 	cd $(UMKA_DIR)/ && $(MAKE) clean

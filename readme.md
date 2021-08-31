@@ -4,9 +4,6 @@ WIP
 
 tags: Raymarching, OpenVR, Linux, seamless portals
 
-## Current status
-Constructing a wrapper around OpenVR.
-
 ## TODO
 - VR support
 - Windows build

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 
 #include "portal.h"
-#include "../alloc.h"
+#include "alloc.h"
 
 Portal* portal_new(Vector3 pos, Vector3 dir, Vector3 up, Vector2 scl) {
 	Portal *p = xmalloc(sizeof(Portal));

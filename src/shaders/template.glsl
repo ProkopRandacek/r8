@@ -199,6 +199,14 @@ vec3 calcNormal(vec3 pos) {
 			     ) - c);
 }
 
+vec3 debugTexture(vec3 p) {
+	return mix(
+			vec3(0.1328, 0.1562, 0.1914),
+			vec3(1.0000, 0.4492, 0.0820),
+			abs(abs(step(mod(p.x, 0.5), 0.25)-step(mod(p.z, 0.5), 0.25))-step(mod(p.y, 0.5), 0.25))
+		  );
+}
+
 mat3 setCamera(in vec3 ro, in vec3 ta, float cr) {
 	vec3 cw = normalize(ta - ro);
 	vec3 cp = vec3(sin(cr), cos(cr), 0.0);
@@ -237,6 +245,7 @@ void main() {
 			clr = hit.clr.rgb;
 			break;
 		} else { // did hit a portal
+#if 0
 			int b;
 
 			if (hit.pi % 2 == 1) { b = hit.pi - 1; }
@@ -244,8 +253,9 @@ void main() {
 
 			tp(ro, rd, hit.q, getPortal(hit.pi), getPortal(b));
 			continue;
-			//clr = vec3(0, 1, 1);
-			//break;
+#endif
+			clr = debugTexture(hit.pos);
+			break;
 		}
 	}
 

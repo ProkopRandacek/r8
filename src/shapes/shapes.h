@@ -2,7 +2,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-#include "../common.h"
+#include "common.h"
 
 /** @brief type of a Primitive */
 typedef enum PrimitiveType {
