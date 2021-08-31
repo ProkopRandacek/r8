@@ -52,5 +52,6 @@ void editor_draw(Editor *e) {
 				die("invalid shape type %d", pos->type);
 		}
 	}
+	stack_destroy(s);
 }
 

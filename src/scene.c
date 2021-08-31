@@ -6,10 +6,11 @@
 #include <string.h>
 
 #include "scene.h"
-#include "shapes.h"
-#include "template.glsl.h"
 #include "alloc.h"
 #include "log.h"
+#include "shapes.h"
+#include "stack.h"
+#include "template.glsl.h"
 
 // TODO group modifiers are transfered even for groups without a paramterer.
 // TODO child position relative to parent shape
@@ -52,8 +53,7 @@ Scene *scene_new() {
 char* scene_create_sdf(Scene *s) {
 	char* sdf = xmalloc_zero(8192);
 
-	int s_pos = 0;
-	int g_pos = 0;
+	int s_pos = 0, g_pos = 0;
 	void sdf_gen(Shape *pos) {
 		char *c;
 		switch (pos->type) {
@@ -181,54 +181,64 @@ void scene_print(Scene* s) {
 }
 
 void scene_on_tree_update(Scene *s) {
-	// === Count shapes ===
-	unsigned int wrapper_count = 0, group_count = 0, prim_count = 0;
-	void count_shapes(Shape *pos) {
-		switch (pos->type) {
-			case stPRIMITIVE:
-				prim_count++;
-				break;
-			case stGROUP:
-				group_count++;
-				count_shapes(pos->g.a);
-				count_shapes(pos->g.b);
-				break;
-			case stWRAPPER:
-				wrapper_count++;
-				count_shapes(pos->w.shape);
-				break;
-			default:
-				die("invalid shape type %d", pos->type);
+	{
+		// === Count shapes ===
+		unsigned int wrapper_count = 0, group_count = 0, prim_count = 0;
+		Stack *stack = stack_new();
+		stack_push(stack, s->root);
+		while (stack->top > 0) {
+			Shape *pos = stack_pop(stack);
+			switch (pos->type) {
+				case stPRIMITIVE:
+					prim_count++;
+					break;
+				case stGROUP:
+					group_count++;
+					stack_push(stack, pos->g.a);
+					stack_push(stack, pos->g.b);
+					break;
+				case stWRAPPER:
+					wrapper_count++;
+					stack_push(stack, pos->w.shape);
+					break;
+				default:
+					die("invalid shape type %d", pos->type);
+			}
 		}
+		stack_destroy(stack);
+		s->primt_count = prim_count;
+		s->group_count = group_count;
 	}
-	count_shapes(s->root);
-	s->primt_count = prim_count;
-	s->group_count = group_count;
 
-	// === Update flat_{prims,groups} ===
-	Shape **nflat_prims  = xrealloc(s->flat_prims , sizeof(Shape*) * s->primt_count);
-	Shape **nflat_groups = xrealloc(s->flat_groups, sizeof(Shape*) * s->group_count);
-	int pi = 0, gi = 0;
-	void iter_shapes(Shape *pos) {
-		switch (pos->type) {
-			case stPRIMITIVE:
-				nflat_prims[pi++] = pos;
-				break;
-			case stGROUP:
-				nflat_groups[gi++] = pos;
-				iter_shapes(pos->g.a);
-				iter_shapes(pos->g.b);
-				break;
-			case stWRAPPER:
-				iter_shapes(pos->w.shape);
-				break;
-			default:
-				die("invalid shape type %d", pos->type);
+	{
+		// === Update flat_{prims,groups} ===
+		Shape **nflat_prims  = xrealloc(s->flat_prims , sizeof(Shape*) * s->primt_count);
+		Shape **nflat_groups = xrealloc(s->flat_groups, sizeof(Shape*) * s->group_count);
+		int pi = 0, gi = 0;
+		Stack *stack = stack_new();
+		stack_push(stack, s->root);
+		while (stack->top > 0) {
+			Shape *pos = stack_pop(stack);
+			switch (pos->type) {
+				case stPRIMITIVE:
+					nflat_prims[pi++] = pos;
+					break;
+				case stGROUP:
+					nflat_groups[gi++] = pos;
+					stack_push(stack, pos->g.a);
+					stack_push(stack, pos->g.b);
+					break;
+				case stWRAPPER:
+					stack_push(stack, pos->w.shape);
+					break;
+				default:
+					die("invalid shape type %d", pos->type);
+			}
 		}
+		stack_destroy(stack);
+		s->flat_prims  = nflat_prims;
+		s->flat_groups = nflat_groups;
 	}
-	iter_shapes(s->root);
-	s->flat_prims  = nflat_prims;
-	s->flat_groups = nflat_groups;
 
 	s->tree_changed  = true;
 	s->primt_changed = true;
@@ -308,11 +318,11 @@ void scene_tick(Scene* s) {
 		xfree(valid_portals);
 
 		/*for (unsigned int i = 0; i < j; i++) {
-			for (unsigned int k = 0; k < PORTAL_SIZE; k++) {
-				printf("%.2f ", portals[i * PORTAL_SIZE + k]);
-			}
-			printf("\n");
-		}*/
+		  for (unsigned int k = 0; k < PORTAL_SIZE; k++) {
+		  printf("%.2f ", portals[i * PORTAL_SIZE + k]);
+		  }
+		  printf("\n");
+		  }*/
 
 		SetShaderValueV(s->shader, s->portals_loc, portals, SHADER_UNIFORM_VEC3, j * 4);
 		xfree(portals);
@@ -322,23 +332,26 @@ void scene_tick(Scene* s) {
 }
 
 void scene_destroy(Scene* s) {
-	void free_shapes(Shape *pos) {
+	Stack *stack = stack_new();
+	stack_push(stack, s->root);
+	while (stack->top > 0) {
+		Shape *pos = stack_pop(stack);
 		switch (pos->type) {
 			case stPRIMITIVE:
 				break;
 			case stGROUP:
-				free_shapes(pos->g.a);
-				free_shapes(pos->g.b);
+				stack_push(stack, pos->g.a);
+				stack_push(stack, pos->g.b);
 				break;
 			case stWRAPPER:
-				free_shapes(pos->w.shape);
+				stack_push(stack, pos->w.shape);
 				break;
 			default:
 				die("invalid shape type %d", pos->type);
 		}
 		xfree(pos);
 	}
-	free_shapes(s->root); // TODO: maybe use the cached arrays?
+	stack_destroy(stack);
 	UnloadShader(s->shader);
 	xfree(s->flat_prims);
 	xfree(s->flat_groups);
