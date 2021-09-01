@@ -9,7 +9,7 @@
 #include "log.h"
 #include "stack.h"
 
-int main() {
+int main(void) {
 	msg("START");
 
 	InitWindow(800, 800, "r8");

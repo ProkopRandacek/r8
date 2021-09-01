@@ -50,62 +50,6 @@ Scene *scene_new() {
 	return s;
 }
 
-char* scene_create_sdf(Scene *s) {
-	char* sdf = xmalloc_zero(8192);
-
-	int s_pos = 0, g_pos = 0;
-	void sdf_gen(Shape *pos) {
-		char *c;
-		switch (pos->type) {
-			case stPRIMITIVE:
-				switch (pos->p.type) {
-					case ptSPHERE:
-						asprintf(&c, "clrd(sC(%d),d2Sphere(pos,sP(%d),sR1(%d)))", s_pos, s_pos, s_pos);
-						break;
-					case ptCUBE:
-						asprintf(&c, "clrd(sC(%d),d2Cube(pos,sP(%d),sS(%d)))", s_pos, s_pos, s_pos);
-						break;
-					case ptTORUS:
-					case ptCTORUS:
-					case ptCYL:
-					case ptCCONE:
-						die("primitive type %d not implemented", pos->p.type);
-						break;
-				}
-				s_pos++;
-				strcat(sdf, c);
-				xfree(c);
-				break;
-			case stGROUP:
-				switch (pos->g.type) {
-					case gtUNION:       asprintf(&c, "u(");           break;
-					case gtDIFF:        asprintf(&c, "d(");           break;
-					case gtINTERS:      asprintf(&c, "i(");           break;
-					case gtBLEND:       asprintf(&c, "b(gK(%d),", g_pos); break;
-					case gtAVERAGE:     asprintf(&c, "a(gK(%d),", g_pos); break;
-							    //case gtAPPROXIMATE: asprintf(&c, "x(");           break;
-					case gtAPPROXIMATE: die("group type approximate not implemented");
-				}
-				g_pos++;
-				strcat(sdf, c);
-				xfree(c);
-
-				sdf_gen(pos->g.a);
-				strcat(sdf, ",");
-				sdf_gen(pos->g.b);
-				strcat(sdf, ")");
-				break;
-			case stWRAPPER:
-				die("wrappers are not implemented");
-				break;
-		}
-	}
-
-	sdf_gen(s->root);
-
-	return xrealloc(sdf, strlen(sdf) + 1);
-}
-
 void scene_compile(Scene* s) {
 	char* shader_code = xmalloc_zero(template_glsl_len + 1024);
 	char* inserts[7] = {0};
@@ -154,30 +98,31 @@ void scene_compile(Scene* s) {
 	SetShaderValue(s->shader, s->res_loc, res, SHADER_UNIFORM_VEC2);
 }
 
-void scene_print(Scene* s) {
-	void rec(Shape *pos, int depth) {
-		for (int i = 0; i < depth; i++) printf("    ");
-		if (pos == NULL) {
-			printf("NULL\n");
-			return;
-		}
-		switch (pos->type) {
-			case stPRIMITIVE:
-				printf("primt\n");
-				break;
-			case stGROUP:
-				printf("group\n");
-				rec(pos->g.a, depth + 1);
-				rec(pos->g.b, depth + 1);
-				break;
-			case stWRAPPER:
-				printf("wrapp\n");
-				rec(pos->w.shape, depth + 1);
-				break;
-		}
+// Internal only, use scene_print(Scene* s)
+void scene_print_rec(Shape *pos, int depth) {
+	for (int i = 0; i < depth; i++) printf("    ");
+	if (pos == NULL) {
+		printf("NULL\n");
+		return;
 	}
+	switch (pos->type) {
+		case stPRIMITIVE:
+			printf("primt\n");
+			break;
+		case stGROUP:
+			printf("group\n");
+			scene_print_rec(pos->g.a, depth + 1);
+			scene_print_rec(pos->g.b, depth + 1);
+			break;
+		case stWRAPPER:
+			printf("wrapp\n");
+			scene_print_rec(pos->w.shape, depth + 1);
+			break;
+	}
+}
 
-	rec(s->root, 0);
+void scene_print(Scene* s) {
+	scene_print_rec(s->root, 0);
 }
 
 void scene_on_tree_update(Scene *s) {
@@ -225,8 +170,8 @@ void scene_on_tree_update(Scene *s) {
 					break;
 				case stGROUP:
 					nflat_groups[gi++] = pos;
-					stack_push(stack, pos->g.a);
 					stack_push(stack, pos->g.b);
+					stack_push(stack, pos->g.a);
 					break;
 				case stWRAPPER:
 					stack_push(stack, pos->w.shape);
@@ -317,12 +262,14 @@ void scene_tick(Scene* s) {
 		float *portals = portal_write_bulk(valid_portals, j);
 		xfree(valid_portals);
 
-		/*for (unsigned int i = 0; i < j; i++) {
-		  for (unsigned int k = 0; k < PORTAL_SIZE; k++) {
-		  printf("%.2f ", portals[i * PORTAL_SIZE + k]);
-		  }
-		  printf("\n");
-		  }*/
+#if 0
+		for (unsigned int i = 0; i < j; i++) {
+			for (unsigned int k = 0; k < PORTAL_SIZE; k++) {
+				printf("%.2f ", portals[i * PORTAL_SIZE + k]);
+			}
+			printf("\n");
+		}
+#endif
 
 		SetShaderValueV(s->shader, s->portals_loc, portals, SHADER_UNIFORM_VEC3, j * 4);
 		xfree(portals);

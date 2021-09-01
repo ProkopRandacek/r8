@@ -21,12 +21,12 @@ You can generate it yourself with `make docs`.
 ```sh
 git clone --recursive --depth 1 --shallow-submodules https://github.com/ProkopRandacek/r8.git
 cd r8
-make run CC=gcc -j$(nproc)
+make run -j$(nproc)
 ```
-Compile with `gcc`. The code seems to have issues with `clang` (TODO) and `tcc` doesn't support the `-M` flags. I didn't test any others.
+Works with `gcc` and `clang`. `tcc` doesn't support the `-M` flags. I didn't test any others.
 
 ### Build deps
-- `gcc` -
+- `gcc`/`clang` -
 - `make` -
 - `sed` - coverts glsl code into a header
 - `cmake` - openvr compile

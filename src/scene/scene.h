@@ -54,6 +54,8 @@ void scene_destroy(Scene* s); //!< destructor
 void scene_print     (Scene* s); //!< print the scene to stdout
 void scene_tick      (Scene* s); //!< sends data to gpu (called each tick)
 
+char* scene_create_sdf(Scene *s); //!< internal
+
 /**
  * @brief gets called whenever the inner shape tree is modified
  *

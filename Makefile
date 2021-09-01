@@ -2,17 +2,15 @@
 
 TARGET = r8
 
-CFLAGS += -O3 -pipe -std=gnu11 -g -DR8_DEBUG -DR8_VR
+CFLAGS += -O3 -pipe -std=gnu11 -g -DR8_DEBUG
 LDLIBS += -lm -ldl -lpthread
 
 override WARNS += \
-	-Wall -Wextra -Wunused-parameter -Wshadow -Wundef -Wunreachable-code \
-	-Wno-misleading-indentation -Wenum-conversion -Waggregate-return \
-	-Wswitch-enum -Wenum-compare -Wswitch -Wswitch-enum \
-	-Wsuggest-attribute=pure -Wsuggest-attribute=const -Wsuggest-attribute=noreturn \
-	-Walloc-zero -Wduplicated-branches -Wduplicated-cond \
-	-Wno-free-nonheap-object -Wunused-macros -Wdangling-else \
-	-Wstrict-prototypes -Wmissing-field-initializers -Wno-multichar
+	-Wall -Wextra -Wunused-parameter -Wundef -Wunreachable-code \
+	-Wno-misleading-indentation -Wenum-conversion -Wswitch-enum \
+	-Wenum-compare -Wswitch -Wswitch-enum -Wno-free-nonheap-object \
+	-Wunused-macros -Wdangling-else -Wstrict-prototypes \
+	-Wmissing-field-initializers -Wno-multichar
 
 FFLAGS = -fmerge-all-constants -funroll-loops
 
