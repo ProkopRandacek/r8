@@ -16,16 +16,10 @@ void *xmalloc(size_t size) {
 void *xmalloc_zero(size_t size) {
 	void *x = xmalloc(size);
 	memset(x, 0, size);
-	//bzero(x, size);
 	return x;
 }
 
 void xfree(void *ptr) {
-	/*
-	 * Maybe it is a little waste of resources to make this a function instead
-	 * of a macro, but xmalloc() is not used for anything critical anyway,
-	 * so let's prefer simplicity.
-	 */
 	free(ptr);
 }
 
