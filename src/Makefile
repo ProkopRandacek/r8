@@ -1,24 +1,26 @@
 # included from ../Makefile
-_:
-	@echo run make from repository root && false
 
-DIRS = $(shell find src/ -type d)            # all folders
-SRCS = $(shell find src/ -name \*.c -print)  # c sources
-SHDS = $(shell find src/ -name \*.glsl)      # shader sources
-OBJS = $(sort $(SRCS:.c=.o))                 # object files
-SHDH = $(addsuffix .h,$(SHDS))               # shader headers
-DEPS = $(OBJS:.o=.d)
+DIRS = $(shell find src/ -type d)        # all folders
+SRCS = $(shell find src/ -name \*.c)     # c sources
+SHDS = $(shell find src/ -name \*.glsl)  # shader sources
+ASTS = $(shell find src/ -name \*.asset) # asset sources
+SHDH = $(addsuffix .h,$(SHDS))           # shader headers
+ASTH = $(addsuffix .h,$(ASTS))           # asset headers
+OBJS = $(sort $(SRCS:.c=.o))             # object files
+DEPS = $(sort $(SRCS:.c=.d))             # makefile dependency files
 
 # Include all source directories so I don't have to use relative paths in includes
 # This way I can just include the filename and it will find it.
 CFLAGS += $(addprefix -I,$(DIRS))
 
--include $(DEPS)
-
-%.o: %.c $(SHDH)
+src/%.o: src/%.c $(SHDH) $(ASTH)
 	@echo CC $@
 	@$(CC) $(CFLAGS) -MM -MG -MF $(patsubst %.o,%.d,$@) -c $<
 	@$(CC) $(CFLAGS) -o $@ -c $<
+
+%.asset.h: %.asset $(BIEM)
+	@echo EM $@
+	$(BIEM) $< $(notdir $<) $@
 
 %.glsl.h: %.glsl
 	@echo EM $@
@@ -30,7 +32,7 @@ CFLAGS += $(addprefix -I,$(DIRS))
 	@echo ";" >> $@
 	@echo "#endif" >> $@
 
-$(TARGET): $(LIBRARIES) $(SHDH) $(OBJS)
+$(TARGET): $(LIBRARIES) $(OBJS)
 	@echo LD $@
 	@$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)
 
@@ -38,4 +40,6 @@ clean::
 	$(RM) $(OBJS)
 	$(RM) $(SHDH)
 	$(RM) $(DEPS)
+	$(RM) $(ASTH)
 
+-include $(DEPS)

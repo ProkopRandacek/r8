@@ -11,6 +11,7 @@ compile_commands.json
 **/.ccls-cache/
 
 **/*.glsl.h
+**/*.asset.h
 **/*.o
 **/*.d
 **/tags
