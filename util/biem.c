@@ -45,7 +45,7 @@ int main(int argc, char* argv[]) {
 	fprintf(fo, "\n};\n");
 
 	// char array size
-	fprintf(fo, "const int %s_size = %d;\n", basename, size);
+	fprintf(fo, "const int %s_size = %ld;\n", basename, size);
 
 	// header end
 	fprintf(fo, "#endif");

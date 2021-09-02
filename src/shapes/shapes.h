@@ -64,6 +64,9 @@ typedef struct Group {
 	struct Shape *a, *b; //!< The two inner shapes
 	GroupType type;      //!< The type of this group
 	float k;             //!< group modificator (for approximations, blend and average)
+
+	// Editor properties
+	bool collapsed;
 } Group;
 
 /**
@@ -81,6 +84,10 @@ typedef struct Shape {
 		Primitive p; //!< The Primitive inside this Shape (if type is stPRIMITIVE)
 	};
 	ShapeType type; //!< The type of this shape.
+
+	// Editor properties
+	bool selected;
+	char* name;
 } Shape;
 
 #include "cube.h"

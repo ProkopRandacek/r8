@@ -20,7 +20,7 @@ src/%.o: src/%.c $(SHDH) $(ASTH)
 
 %.asset.h: %.asset $(BIEM)
 	@echo EM $@
-	$(BIEM) $< $(notdir $<) $@
+	@$(BIEM) $< $(notdir $<) $@
 
 %.glsl.h: %.glsl
 	@echo EM $@

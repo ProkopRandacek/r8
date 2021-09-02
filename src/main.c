@@ -1,3 +1,10 @@
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wswitch-enum"
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+#pragma GCC diagnostic ignored "-Wunused-function"
+#include <raygui.h>
+#pragma GCC diagnostic pop
+
 #include <raylib.h>
 #include <stdio.h>
 
@@ -9,6 +16,11 @@
 #include "log.h"
 #include "stack.h"
 
+#include "inconsolata.ttf.asset.h"
+
+//!< The default font used by R8.
+Font def_font;
+
 int main(void) {
 	msg("START");
 
@@ -17,6 +29,10 @@ int main(void) {
 	SetTargetFPS(60);
 
 	Scene *s = scene_new();
+
+	def_font = LoadFontFromMemory(".ttf", inconsolata_ttf_asset_bytes, inconsolata_ttf_asset_size, 32, NULL, 95);
+
+	GuiSetFont(def_font);
 
 	Shape *cube = cube_new(
 			(Vector3){-0.5f, 1.0f, 2.0f},
