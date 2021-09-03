@@ -3,7 +3,7 @@
 
 TARGET = r8
 
-CFLAGS += -O0 -pipe -std=gnu11 -g -DR8_DEBUG
+CFLAGS += -O3 -pipe -std=gnu11
 LDLIBS += -lm -ldl -lpthread
 
 override WARNS += \
@@ -27,7 +27,7 @@ all: $(TARGET)
 
 .ONESHELL : docs
 docs:
-	f="docmain.md"
+	f="docs/docmain.md"
 	h="$(shell git rev-parse HEAD)"
 	r="https://github.com/ProkopRandacek/r8"
 	$(RM) $$f

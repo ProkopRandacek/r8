@@ -3,7 +3,7 @@ log
 r8
 r8.exe
 doxydocs
-docmain.md
+docs/docmain.md
 shader.glsl
 libraylib.a
 

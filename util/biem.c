@@ -1,4 +1,3 @@
-// gcc binary_embed.c -o biem
 // embeds a binary file into a header file char array
 #include <stdio.h>
 #include <stdlib.h>

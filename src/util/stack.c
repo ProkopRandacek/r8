@@ -8,7 +8,7 @@ Stack* stack_new() {
 	Stack *s = xmalloc(sizeof(Stack));
 
 	s->top = 0;
-	s->cap = 1;
+	s->cap = 64;
 	s->data = xmalloc(sizeof(void*) * s->cap);
 
 	return s;

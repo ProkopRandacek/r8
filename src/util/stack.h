@@ -9,7 +9,7 @@
 typedef struct Stack {
 	int top; //!< The index of the topmost element on the stack.
 	int cap; //!< How many elements can the stack currently hold without being reallocated.
-	void **data; //!< The actuall data of this stack.
+	void **data; //!< The actual data on this stack.
 } Stack;
 
 /**
