@@ -29,19 +29,19 @@ int main(void) {
 
 	GuiSetFont(def_font);
 
-	Shape *cube = cube_new(
+	Shape *cube = cube_new("cube",
 			(Vector3){-0.5f, 1.0f, 2.0f},
 			(Vector4){1.0f, 0.0f, 0.0f, 0.0f},
 			(Vector3){1.0f, 1.0f, 1.0f}
 			);
 
-	Shape *floor = cube_new(
+	Shape *floor = cube_new("floor",
 			(Vector3){0.0f, 0.5f, 0.0f},
 			(Vector4){0.0f, 1.0f, 0.0f, 0.0f},
 			(Vector3){10.0f, 0.5f, 10.0f}
 			);
 
-	Shape *sphere = sphere_new(
+	Shape *sphere = sphere_new("sphere",
 			(Vector3){0.5f, 2.0f, 2.0f},
 			(Vector4){0.0f, 0.0f, 1.0f, 0.0f},
 			1.0f
@@ -64,8 +64,8 @@ int main(void) {
 	p2->link = p1;
 	p1->link = p2;
 
-	Shape *group_a = group_new(cube, sphere, gtAVERAGE, 0.5f);
-	Shape *root = group_new(group_a, floor, gtUNION, 0.5f);
+	Shape *group_a = group_new("on_floor", cube, sphere, gtAVERAGE, 0.5f);
+	Shape *root = group_new("root", group_a, floor, gtUNION, 0.5f);
 
 	s->root = root;
 	scene_on_tree_update(s);

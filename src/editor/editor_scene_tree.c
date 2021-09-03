@@ -40,11 +40,5 @@ void editor_iterate_scene(Shape *pos, int depth, int *y) {
 
 void editor_draw_tree_node(int x, int y, Shape *s) {
 	Rectangle text_box = (Rectangle){ x * 20.0f + 20.0f, y * 20.0f, 200.0f, 200.0f};
-	char* shape_name;
-	switch (s->type) {
-		case stPRIMITIVE: shape_name = "PRIMT"; break;
-		case stGROUP    : shape_name = "GROUP"; break;
-		case stWRAPPER  : shape_name = "WRAPP"; break;
-	}
-	GuiLabel(text_box, shape_name);
+	GuiLabel(text_box, s->name);
 }

@@ -4,6 +4,8 @@
 
 #include "common.h"
 
+#define SHAPE_NAME_LEN 32
+
 /** @brief type of a Primitive */
 typedef enum PrimitiveType {
 	ptSPHERE,
@@ -66,7 +68,7 @@ typedef struct Group {
 	float k;             //!< group modificator (for approximations, blend and average)
 
 	// Editor properties
-	bool collapsed;
+	bool collapsed; //!< Is this group collapsed in the editor?
 } Group;
 
 /**
@@ -79,15 +81,15 @@ typedef struct Group {
  */
 typedef struct Shape {
 	union {
-		Group     g; //!< The Group inside this Shape (if type is stGROUP)
-		Wrapper   w; //!< The Wrapper inside this Shape (if type is stWRAPPER)
-		Primitive p; //!< The Primitive inside this Shape (if type is stPRIMITIVE)
+		Group     g; //!< The Group inside this Shape (if type is stGROUP).
+		Wrapper   w; //!< The Wrapper inside this Shape (if type is stWRAPPER).
+		Primitive p; //!< The Primitive inside this Shape (if type is stPRIMITIVE).
 	};
 	ShapeType type; //!< The type of this shape.
 
 	// Editor properties
-	bool selected;
-	char* name;
+	bool selected; //!< Is this shapes selected in the editor?
+	char name[SHAPE_NAME_LEN]; //!< The name that is shown in the editor.
 } Shape;
 
 #include "cube.h"
