@@ -12,8 +12,9 @@ $(OPENVR_LIBRARY):
 		cmake BUILD_SHARED=OFF . && \
 		$(MAKE) -j$(shell nproc)
 
+# cmake doesn't create a clean rule apparently
 deepclean::
-	cd $(OPENVR_DIR)/ && $(MAKE) clean
+	cd $(OPENVR_DIR)/ && $(RM) CMakeCache.txt cmake_install.cmake Makefile CMakeFiles -r
 
 LDLIBS += $(OPENVR_LIBRARY)
 CFLAGS += -I$(OPENVR_DIR)/headers
