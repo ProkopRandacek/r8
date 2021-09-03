@@ -1,4 +1,3 @@
-.SUFFIXES :
 .PHONY : all clean deepclean raylib docs docclean
 
 TARGET = r8
@@ -12,7 +11,7 @@ CFLAGS   += -O3 -pipe -std=c11   $(DEFS)
 CXXFLAGS += -O3 -pipe -std=c++11 $(DEFS)
 LDLIBS += -lm -ldl -lpthread
 
- WARNS ?= \
+WARNS ?= \
 	-Wall -Wextra -Wunused-parameter -Wundef -Wunreachable-code \
 	-Wno-misleading-indentation -Wenum-conversion -Wswitch-enum \
 	-Wenum-compare -Wswitch -Wswitch-enum -Wno-free-nonheap-object \
