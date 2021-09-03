@@ -3,7 +3,8 @@
 
 TARGET = r8
 
-CFLAGS += -O3 -pipe -std=gnu11
+CFLAGS   += -O3 -pipe -std=c11
+CXXFLAGS += -O3 -pipe -std=c++11
 LDLIBS += -lm -ldl -lpthread
 
  WARNS ?= \

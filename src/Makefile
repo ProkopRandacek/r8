@@ -34,7 +34,7 @@ src/%.o: src/%.c $(SHDH) $(ASTH)
 
 $(TARGET): $(LIBRARIES) $(OBJS)
 	@echo LD $@
-	@$(CC) $(CFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)
+	@$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)
 
 clean::
 	$(RM) $(OBJS)

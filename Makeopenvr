@@ -1,7 +1,7 @@
 # vim: ft=make
 
 OPENVR_DIR     ?= ./openvr
-OPENVR_LIBRARY ?= $(OPENVR_DIR)/bin/linux64/libopenvr_api.so
+OPENVR_LIBRARY ?= $(OPENVR_DIR)/bin/linux64/libopenvr_api.a
 
 LIBRARIES += $(OPENVR_LIBRARY)
 
@@ -9,7 +9,7 @@ openvr: $(OPENVR_LIBRARY)
 
 $(OPENVR_LIBRARY):
 	cd $(OPENVR_DIR)/ && \
-		cmake . && \
+		cmake BUILD_SHARED=OFF . && \
 		$(MAKE) -j$(shell nproc)
 
 deepclean::
