@@ -2,8 +2,6 @@
 
 WIP
 
-tags: Raymarching, OpenVR, Linux, seamless portals
-
 ## TODO
 - Editor
 - Scripts

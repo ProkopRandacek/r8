@@ -2,6 +2,7 @@
 
 #include <raylib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "common.h"
 
@@ -16,7 +17,14 @@
 //!< The default font used by R8.
 Font def_font;
 
-int main(void) {
+int main(int argc, char* argv[]) {
+	if (argc == 2 && (!strcmp(argv[1], "--version") || !strcmp(argv[1], "-v"))) {
+		puts("R8 " R8_VERSION " (" R8_COMMIT_HASH ")");
+		exit(0);
+	} else if (argc > 1) {
+		die("usage: r8 [-v|--version]");
+	}
+
 	msg("START");
 
 	InitWindow(800, 800, "r8");

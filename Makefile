@@ -3,8 +3,13 @@
 
 TARGET = r8
 
-CFLAGS   += -O3 -pipe -std=c11
-CXXFLAGS += -O3 -pipe -std=c++11
+VERSION     ?= v0.0.0
+COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
+
+DEFS = -DR8_VERSION=\"$(VERSION)\" -DR8_COMMIT_HASH=\"$(COMMIT_HASH)\"
+
+CFLAGS   += -O3 -pipe -std=c11   $(DEFS)
+CXXFLAGS += -O3 -pipe -std=c++11 $(DEFS)
 LDLIBS += -lm -ldl -lpthread
 
  WARNS ?= \
