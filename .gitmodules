@@ -6,7 +6,7 @@
 	url = https://github.com/raysan5/raygui.git
 [submodule "openvr"]
 	path = openvr
-	url = https://github.com/ValveSoftware/openvr.git
+	url = https://github.com/ProkopRandacek/openvr.git
 [submodule "umka-lang"]
 	path = umka-lang
 	url = https://github.com/vtereshkov/umka-lang.git
