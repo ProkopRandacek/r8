@@ -5,12 +5,11 @@ WIP
 tags: Raymarching, OpenVR, Linux, seamless portals
 
 ## TODO
-- VR support
-- Windows build
-- Remove gcc dependent code (nested functions)
-- Fork OpenVR and add `.gitignore`
-- Scripts
 - Editor
+- Scripts
+- Windows build
+- VR support
+- Fork OpenVR and add `.gitignore`
 - SDF optimizations, approximations, ...
 
 ## Docs
@@ -23,7 +22,8 @@ git clone --recursive --depth 1 --shallow-submodules https://github.com/ProkopRa
 cd r8
 make run -j$(nproc)
 ```
-Works with `gcc` and `clang`. `tcc` doesn't support the `-M` flags. I didn't test any others.
+Works with `gcc` and `clang`. `tcc` doesn't support the `-M` flags that is required to build.
+I didn't test any others.
 
 ### Build deps
 - `gcc`/`clang` -
@@ -31,6 +31,8 @@ Works with `gcc` and `clang`. `tcc` doesn't support the `-M` flags. I didn't tes
 - `sed` - coverts glsl code into a header
 - `cmake` - openvr compile
 - `doxygen` - if you want to generate docs
+
+(`yay -S sed cmake make gcc doxygen --needed`)
 
 ## Building from source for Windows
 Fuck
