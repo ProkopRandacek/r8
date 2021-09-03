@@ -10,9 +10,12 @@ extern Shape* selected_shape;
 extern Vector2 editor_layout;
 
 void editor_draw_properties() {
-	float w = GetScreenWidth();
-	float h = GetScreenHeight();
-	Rectangle box = (Rectangle){0.0f, editor_layout.y + UNIT, editor_layout.x + UNIT, h - editor_layout.y};
+	Rectangle box = (Rectangle){
+		0.0f,
+			editor_layout.y + UNIT,
+			editor_layout.x + UNIT,
+			GetScreenHeight() - editor_layout.y
+	};
 
 	GuiPanel(box);
 
@@ -21,3 +24,4 @@ void editor_draw_properties() {
 		GuiLabel(text, selected_shape->name);
 	}
 }
+

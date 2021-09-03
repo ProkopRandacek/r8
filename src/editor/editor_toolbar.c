@@ -10,8 +10,6 @@ bool r8_open = false;
 bool scene_open = false;
 bool about_open = false;
 
-static bool build_info_message_box = false;
-
 void editor_draw_toolbar(void) {
 	Rectangle toolbar_bg = (Rectangle){ 0.0f, 0.0f, GetScreenWidth(), UNIT };
 	GuiPanel(toolbar_bg);
