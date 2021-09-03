@@ -82,32 +82,11 @@ void editor_draw_toolbar(void) {
 
 		rec = (Rectangle){ r8_width + scene_width, UNIT, about_width, UNIT };
 		GuiPanel(rec);
-		clicked = GuiLabelButton(rec, "Build info");
-		if (clicked) {
-			build_info_message_box = true;
-			about_open = false;
-		}
-
-		rec.y += UNIT;
-		GuiPanel(rec);
 		clicked = GuiLabelButton(rec, "Github link");
 
 		rec.y += UNIT;
 		GuiPanel(rec);
 		clicked = GuiLabelButton(rec, "Licenses");
-	}
-
-	if (build_info_message_box) {
-		float box_width = 350.0f;
-		float box_height = 100.0f;
-		Rectangle box = (Rectangle){
-			(GetScreenWidth() - box_width) / 2.0f,
-				(GetScreenHeight() - box_height) / 2.0f,
-				box_width,
-				box_height
-		};
-		int i = GuiMessageBox(box, "Build info", "R8 " R8_VERSION " (" R8_COMMIT_HASH ")", "OK");
-		if (i != -1) build_info_message_box = false;
 	}
 }
 
