@@ -6,7 +6,7 @@ TARGET = r8
 CFLAGS += -O3 -pipe -std=gnu11
 LDLIBS += -lm -ldl -lpthread
 
-override WARNS += \
+ WARNS ?= \
 	-Wall -Wextra -Wunused-parameter -Wundef -Wunreachable-code \
 	-Wno-misleading-indentation -Wenum-conversion -Wswitch-enum \
 	-Wenum-compare -Wswitch -Wswitch-enum -Wno-free-nonheap-object \
