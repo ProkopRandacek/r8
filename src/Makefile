@@ -1,9 +1,13 @@
 # included from ../Makefile
+__:
+	@echo run make from repo root
 
-DIRS = $(shell find src/ -type d)        # all folders
-SRCS = $(shell find src/ -name \*.c)     # c sources
-SHDS = $(shell find src/ -name \*.glsl)  # shader sources
-ASTS = $(shell find src/ -name \*.asset) # asset sources
+S ?= .
+
+DIRS = $(shell find $(S)/ -type d)        # all folders
+SRCS = $(shell find $(S)/ -name \*.c)     # c sources
+SHDS = $(shell find $(S)/ -name \*.glsl)  # shader sources
+ASTS = $(shell find $(S)/ -name \*.asset) # asset sources
 SHDH = $(addsuffix .h,$(SHDS))           # shader headers
 ASTH = $(addsuffix .h,$(ASTS))           # asset headers
 OBJS = $(sort $(SRCS:.c=.o))             # object files
