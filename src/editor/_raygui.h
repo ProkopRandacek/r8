@@ -1,3 +1,4 @@
+// vim: ft=c
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 #pragma GCC diagnostic ignored "-Wunused-parameter"

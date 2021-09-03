@@ -1,4 +1,3 @@
-// vim: ft=c
 // This file holds the raygui implementation
 // Other files that want to use raygui include the `_raygui.h` file
 // which only includes raygui as a header
