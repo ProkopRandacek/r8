@@ -2,6 +2,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include <raylib.h>
+#include <stdbool.h>
+
 #include "common.h"
 #include "shapes.h"
 
@@ -22,7 +25,7 @@ typedef struct Scene {
 	Portal **portals; //!< array of Portal pointers
 
 	// Camera
-	Camera cam;
+	Camera3D cam;
 
 	// Internal shape stuff
 	bool tree_changed;         //!< internal - did the tree hiearchy change since last frame?

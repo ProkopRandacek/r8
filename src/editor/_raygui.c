@@ -7,6 +7,7 @@
 #define RAYGUI_CALLOC(n,sz) xmalloc_zero((n)*(sz))
 #define RAYGUI_FREE(p)      xfree(p)
 #define RAYGUI_IMPLEMENTATION
+#define RAYGUI_SUPPORT_RICONS
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 #pragma GCC diagnostic ignored "-Wunused-parameter"

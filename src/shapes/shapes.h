@@ -2,6 +2,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
+#include <stdbool.h>
 #include "common.h"
 
 #define SHAPE_NAME_LEN 32
@@ -54,6 +55,9 @@ typedef struct Shape Shape;
 typedef struct Wrapper {
 	struct Shape *shape; //!< The inner shape
 	//char* glslMod; // TODO idk
+
+	// Editor properties
+	bool collapsed; //!< Is this wrapper collapsed in the editor?
 } Wrapper;
 
 /**

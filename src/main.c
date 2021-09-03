@@ -14,6 +14,8 @@
 
 #include "inconsolata.ttf.asset.h"
 
+void raylib_log(__attribute__((unused))int level, __attribute__((unused))const char* text, __attribute__((unused))va_list args) {}
+
 //!< The default font used by R8.
 Font def_font;
 
@@ -25,10 +27,12 @@ int main(int argc, char* argv[]) {
 		die("usage: r8 [-v|--version]");
 	}
 
-	msg("START");
+	msg("start");
 
-	InitWindow(800, 800, "r8");
+	SetTraceLogCallback(raylib_log);
+
 	SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+	InitWindow(800, 800, "r8");
 	SetTargetFPS(60);
 
 	Scene *s = scene_new();
@@ -75,6 +79,8 @@ int main(int argc, char* argv[]) {
 	Shape *group_a = group_new("on_floor", cube, sphere, gtAVERAGE, 0.5f);
 	Shape *root = group_new("root", group_a, floor, gtUNION, 0.5f);
 
+	group_a->g.collapsed = true;
+
 	s->root = root;
 	scene_on_tree_update(s);
 
@@ -105,7 +111,7 @@ int main(int argc, char* argv[]) {
 
 			editor_draw(editor);
 
-			DrawFPS(10, 10);
+			//DrawFPS(10, 10);
 		} EndDrawing();
 	}
 

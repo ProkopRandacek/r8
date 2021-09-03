@@ -10,6 +10,9 @@
 #define FORMAT_CHECK(x,y,z) __attribute__((format(x,y,z)))
 #define LIKE_MALLOC         __attribute__((malloc))
 
+#define MIN(a,b) (((a)<(b))?(a):(b))
+#define MAX(a,b) (((a)>(b))?(a):(b))
+
 /** @brief number of floats needed to represent any Primitive */
 #define PRIMT_SIZE 12
 

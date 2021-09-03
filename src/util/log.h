@@ -2,6 +2,7 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include <stdarg.h>
 #include "common.h"
 
 /**
