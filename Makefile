@@ -9,8 +9,9 @@ S = src
 
 DEFS = -DR8_VERSION=\"$(VERSION)\" -DR8_COMMIT_HASH=\"$(COMMIT_HASH)\"
 
-CFLAGS   += -O3 -pipe -std=c11   $(DEFS)
-CXXFLAGS += -O3 -pipe -std=c++11 $(DEFS)
+COMMON    = -O3 -pipe $(DEFS)
+CFLAGS   += $(COMMON) -std=c11
+CXXFLAGS += $(COMMON) -std=c++11
 LDLIBS   += -lm -ldl -lpthread
 
 WARNS ?= \

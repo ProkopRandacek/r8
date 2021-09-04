@@ -7,14 +7,13 @@ WIP
 - Scripts
 - Windows build
 - VR support
-- Fork OpenVR and add `.gitignore`
 - SDF optimizations, approximations, ...
 
 ## Docs
 Generated doxygen website is [available online](https://rdck.dev/r8doc/).  
 You can generate it yourself with `make docs`.
 
-## Building from source for Linux
+## Building on Linux for Linux
 ```sh
 git clone --recursive --depth 1 --shallow-submodules https://github.com/ProkopRandacek/r8.git
 cd r8
@@ -32,11 +31,7 @@ I didn't test any others.
 
 (`yay -S sed cmake make gcc doxygen --needed`)
 
-## Building from source for Windows
-Fuck
-
-### Build deps
-Fuuuck
+## Building on Linux for Windows
 
 ## Submodules
 R8 uses:
