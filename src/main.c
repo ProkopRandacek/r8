@@ -79,12 +79,10 @@ int main(int argc, char* argv[]) {
 	p2->link = p1;
 	p1->link = p2;
 
-	Shape *group_a = group_new("on_floor", sphere, cube, gtAVERAGE, 0.5f);
+	Shape *group_a = group_new("on_floor", sphere, cube, gtUNION, 0.5f);
 	Shape *root = group_new("root", group_a, floor, gtUNION, 0.5f);
-
-	group_a->g.collapsed = true;
-
 	s->root = root;
+
 	scene_on_tree_update(s);
 
 	s->portals[0] = p1;
@@ -100,10 +98,12 @@ int main(int argc, char* argv[]) {
 	while (!WindowShouldClose() && !r8_should_close) {
 		scene_tick(s);
 
+#if 0
 		time += GetFrameTime();
 		s->root->g.a->g.k = sinf(time) * 0.5f + 0.5f;
 		s->group_changed = true;
 
+#endif
 		s->portals[0]->pos.x = sinf(time);
 		s->portal_changed = true;
 
@@ -117,6 +117,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	scene_destroy(s);
+	editor_destroy(editor);
 	CloseWindow();
 	msg("bye");
 

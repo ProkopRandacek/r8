@@ -66,4 +66,6 @@ char* scene_create_sdf(Scene *s); //!< internal
  */
 void scene_on_tree_update(Scene *s);
 
+void scene_delete_shape(Scene* s, Shape* d);
+
 #endif

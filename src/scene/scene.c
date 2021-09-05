@@ -76,9 +76,9 @@ void scene_compile(Scene* s) {
 	for (int k = 0; k < 7; k++) xfree(inserts[k]);
 
 	UnloadShader(s->shader);
-	s->shader = LoadShaderFromMemory(0, shader_code);
+	s->shader = LoadShaderFromMemory(0, shader_code); // This leaks FIXME
 
-#ifdef R8_DEBUG
+#if 1
 	FILE *fp = fopen("shader.glsl", "w+");
 	fputs(shader_code, fp);
 	fclose(fp);
@@ -100,7 +100,7 @@ void scene_compile(Scene* s) {
 
 // Internal only, use scene_print(Scene* s)
 void scene_print_rec(Shape *pos, int depth) {
-	for (int i = 0; i < depth; i++) printf("    ");
+	for (int i = 0; i < depth; i++) printf(">>>>");
 	if (pos == NULL) {
 		printf("NULL\n");
 		return;
@@ -190,6 +190,7 @@ void scene_on_tree_update(Scene *s) {
 	s->tree_changed  = true;
 	s->primt_changed = true;
 	s->group_changed = true;
+	scene_compile(s);
 }
 
 void scene_tick(Scene* s) {
@@ -278,6 +279,70 @@ void scene_tick(Scene* s) {
 
 		s->portal_changed = false;
 	}
+}
+
+void scene_delete_shape(Scene* s, Shape* d) {
+	if (d == s->root) {
+		msg("Can't delete root shape");
+		return;
+	}
+
+	Stack *stack = stack_new();
+	stack_push(stack, s->root);
+	while (stack->top > 0) {
+		Shape *pos = stack_pop(stack);
+		if (pos == NULL) continue;
+		switch (pos->type) {
+			case stPRIMITIVE:
+				break;
+			case stGROUP:
+				if (pos->g.b == d) {
+					pos->g.b = NULL;
+					goto end;
+				}
+				if (pos->g.a == d) {
+					pos->g.a = NULL;
+					goto end;
+				}
+				stack_push(stack, pos->g.b);
+				stack_push(stack, pos->g.a);
+				break;
+			case stWRAPPER:
+				if (pos->w.shape == d) {
+					pos->w.shape = NULL;
+					goto end;
+				}
+				stack_push(stack, pos->w.shape);
+				break;
+			default:
+				die("invalid shape type %d", pos->type);
+		}
+	}
+end:
+	stack_destroy(stack);
+
+	stack = stack_new();
+	stack_push(stack, d);
+	while (stack->top > 0) {
+		Shape *pos = stack_pop(stack);
+		if (pos == NULL) continue;
+		switch (pos->type) {
+			case stPRIMITIVE:
+				break;
+			case stGROUP:
+				stack_push(stack, pos->g.a);
+				stack_push(stack, pos->g.b);
+				break;
+			case stWRAPPER:
+				stack_push(stack, pos->w.shape);
+				break;
+			default:
+				die("invalid shape type %d", pos->type);
+		}
+		xfree(pos);
+	}
+	stack_destroy(stack);
+	scene_on_tree_update(s);
 }
 
 void scene_destroy(Scene* s) {

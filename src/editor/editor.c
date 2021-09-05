@@ -35,3 +35,7 @@ void editor_draw(Editor *e) {
 	editor_draw_toolbar();
 }
 
+void editor_destroy(Editor *e) {
+	xfree(e);
+}
+

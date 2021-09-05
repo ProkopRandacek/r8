@@ -61,6 +61,8 @@ void scene_sdf_gen(Shape *pos) {
 char* scene_create_sdf(Scene *s) {
 	sdf = xmalloc_zero(8192);
 
+	s_pos = g_pos = 0;
+
 	scene_sdf_gen(s->root);
 
 	return xrealloc(sdf, strlen(sdf) + 1);

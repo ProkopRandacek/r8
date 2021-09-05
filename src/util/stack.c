@@ -34,6 +34,7 @@ void *stack_pop(Stack *s) {
 }
 
 void stack_destroy(Stack *s) {
+	xfree(s->data);
 	xfree(s);
 }
 

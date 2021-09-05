@@ -33,8 +33,12 @@ void editor_draw_toolbar(void);
 
 void editor_draw_properties(void);
 
-void editor_draw_scene_tree(Scene *s);
 void editor_draw_tree_node(int x, int y, Shape *s);
+void iterate_scene(Shape *pos, int depth, int *y);
+
+void editor_draw_scene_tree(Scene *s);
+
+void editor_destroy(Editor *e);
 
 #endif
 

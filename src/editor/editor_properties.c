@@ -73,6 +73,12 @@ void editor_draw_properties() {
 							       );
 							GuiLabel(text_box, str);
 							break;
+						case ptTORUS:
+						case ptCTORUS:
+						case ptCYL:
+						case ptCCONE:
+						default:
+							die("Trying to view properties of unknown shape type");
 					}
 					break;
 				case stGROUP:
