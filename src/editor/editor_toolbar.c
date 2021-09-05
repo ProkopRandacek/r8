@@ -3,12 +3,13 @@
 #include <stdio.h>
 
 #include "editor.h"
-#include "alloc.h"
 #include "log.h"
 
 bool r8_open = false;
 bool scene_open = false;
 bool about_open = false;
+
+extern bool r8_should_close;
 
 void editor_draw_toolbar(void) {
 	Rectangle toolbar_bg = (Rectangle){ 0.0f, 0.0f, GetScreenWidth(), UNIT };
@@ -28,13 +29,13 @@ void editor_draw_toolbar(void) {
 
 		rec = (Rectangle){ 0.0f, UNIT, r8_width, UNIT };
 		GuiPanel(rec);
-		clicked = GuiLabelButton(rec, "#159#Quit");
-		if (clicked) CloseWindow();
+		clicked = GuiLabelButton(rec, "#7#Compile");
+		if (clicked) msg("Compile placeholder!");
 
 		rec.y += UNIT;
 		GuiPanel(rec);
-		clicked = GuiLabelButton(rec, "#7#Compile");
-		if (clicked) printf("Compile placeholder!\n");
+		clicked = GuiLabelButton(rec, "#159#Quit");
+		if (clicked) r8_should_close = true;
 	}
 
 	const float scene_width = 200.0f;
@@ -80,11 +81,11 @@ void editor_draw_toolbar(void) {
 
 		rec = (Rectangle){ r8_width + scene_width, UNIT, about_width, UNIT };
 		GuiPanel(rec);
-		clicked = GuiLabelButton(rec, "Github link");
+		clicked = GuiLabelButton(rec, "#200#Github link");
 
 		rec.y += UNIT;
 		GuiPanel(rec);
-		clicked = GuiLabelButton(rec, "Licenses");
+		clicked = GuiLabelButton(rec, "#15#Licenses");
 	}
 }
 

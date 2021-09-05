@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include <stdio.h>
 
 #include "stack.h"
@@ -37,9 +38,9 @@ void stack_destroy(Stack *s) {
 }
 
 void stack_print(Stack *s) {
-	printf("stack top at %d, cap %d\n", s->top, s->cap);
+	msg("stack top at %d, cap %d\n", s->top, s->cap);
 	for (int i = 0; i < s->top; i++)
-		printf("%d: %p\n", i, s->data[i]);
+		msg("%d: %p\n", i, s->data[i]);
 }
 
 void stack_resize(Stack *s, int new_size) {

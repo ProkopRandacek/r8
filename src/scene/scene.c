@@ -133,6 +133,7 @@ void scene_on_tree_update(Scene *s) {
 		stack_push(stack, s->root);
 		while (stack->top > 0) {
 			Shape *pos = stack_pop(stack);
+			if (pos == NULL) continue;
 			switch (pos->type) {
 				case stPRIMITIVE:
 					prim_count++;
@@ -164,6 +165,7 @@ void scene_on_tree_update(Scene *s) {
 		stack_push(stack, s->root);
 		while (stack->top > 0) {
 			Shape *pos = stack_pop(stack);
+			if (pos == NULL) continue;
 			switch (pos->type) {
 				case stPRIMITIVE:
 					nflat_prims[pi++] = pos;
@@ -283,6 +285,7 @@ void scene_destroy(Scene* s) {
 	stack_push(stack, s->root);
 	while (stack->top > 0) {
 		Shape *pos = stack_pop(stack);
+		if (pos == NULL) continue;
 		switch (pos->type) {
 			case stPRIMITIVE:
 				break;

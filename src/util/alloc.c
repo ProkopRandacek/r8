@@ -1,5 +1,6 @@
 // taken from the libucw
 // http://www.ucw.cz/gitweb/?p=libucw.git;f=ucw/alloc.c;hb=HEAD
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 

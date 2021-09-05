@@ -92,7 +92,6 @@ typedef struct Shape {
 	ShapeType type; //!< The type of this shape.
 
 	// Editor properties
-	bool selected; //!< Is this shapes selected in the editor?
 	char name[SHAPE_NAME_LEN]; //!< The name that is shown in the editor.
 } Shape;
 

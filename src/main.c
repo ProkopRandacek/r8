@@ -3,6 +3,7 @@
 #include <raylib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "common.h"
 
@@ -19,9 +20,11 @@ void raylib_log(__attribute__((unused))int level, __attribute__((unused))const c
 //!< The default font used by R8.
 Font def_font;
 
+bool r8_should_close = false;
+
 int main(int argc, char* argv[]) {
 	if (argc == 2 && (!strcmp(argv[1], "--version") || !strcmp(argv[1], "-v"))) {
-		puts("R8 " R8_VERSION " (" R8_COMMIT_HASH ")");
+		puts("R8 " R8_VERSION " (" R8_COMMIT_HASH ")\nCompiled at " __DATE__ " " __TIME__);
 		exit(0);
 	} else if (argc > 1) {
 		die("usage: r8 [-v|--version]");
@@ -76,7 +79,7 @@ int main(int argc, char* argv[]) {
 	p2->link = p1;
 	p1->link = p2;
 
-	Shape *group_a = group_new("on_floor", cube, sphere, gtAVERAGE, 0.5f);
+	Shape *group_a = group_new("on_floor", sphere, cube, gtAVERAGE, 0.5f);
 	Shape *root = group_new("root", group_a, floor, gtUNION, 0.5f);
 
 	group_a->g.collapsed = true;
@@ -94,7 +97,7 @@ int main(int argc, char* argv[]) {
 
 	Editor *editor = editor_new(s);
 
-	while (!WindowShouldClose()) {
+	while (!WindowShouldClose() && !r8_should_close) {
 		scene_tick(s);
 
 		time += GetFrameTime();
@@ -110,8 +113,6 @@ int main(int argc, char* argv[]) {
 			} EndShaderMode();
 
 			editor_draw(editor);
-
-			//DrawFPS(10, 10);
 		} EndDrawing();
 	}
 

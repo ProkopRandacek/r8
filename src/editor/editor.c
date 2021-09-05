@@ -30,15 +30,6 @@ void editor_draw(Editor *e) {
 	}
 	resize_was_active = resize_active;
 
-	const char version[] = "R8 " R8_VERSION " (" R8_COMMIT_HASH ")";
-	Rectangle ver_box = (Rectangle){
-		GetScreenWidth() - UNIT * 10.5f,
-		GetScreenHeight() - GuiGetStyle(DEFAULT, TEXT_SIZE),
-		UNIT * 10,
-		GuiGetStyle(DEFAULT, TEXT_SIZE)
-	};
-	GuiLabel(ver_box, version);
-
 	editor_draw_toolbar();
 }
 

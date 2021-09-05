@@ -35,10 +35,10 @@ I didn't test any others.
 
 ## Submodules
 R8 uses:
-- [raylib](https://www.raylib.com/) - math and opengl abstraction
+- [raylib](https://github.com/raysan5/raylib) - math and opengl abstraction
+- [raygui](https://github.com/raysan5/raygui) - GUI
 - [umka-lang](https://github.com/vtereshkov/umka-lang) - scripting language
 - [openvr](https://github.com/ValveSoftware/openvr) - VR support
 
 All are built and linked by make.
-
 

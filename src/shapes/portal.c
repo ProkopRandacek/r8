@@ -1,4 +1,3 @@
-#include <stdlib.h>
 
 #include "portal.h"
 #include "alloc.h"

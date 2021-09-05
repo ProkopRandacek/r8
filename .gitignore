@@ -16,4 +16,7 @@ compile_commands.json
 **/*.d
 **/tags
 .idea
+.cache
+ricons.cgi
+rguiicons
 

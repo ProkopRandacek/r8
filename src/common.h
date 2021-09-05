@@ -27,7 +27,5 @@
  * */
 #define MAX_PORTALS_PER_SCENE 64
 
-
-
 #endif
 

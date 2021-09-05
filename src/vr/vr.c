@@ -20,7 +20,7 @@ void init_vr() {
 	uint32_t vrtoken;
 	vrtoken = VR_InitInternal(&e, EVRApplicationType_VRApplication_Scene);
 	if (!vrtoken) {
-		printf("Error calling VR_InitInternal: %d (%s)\n", e, VR_GetVRInitErrorAsEnglishDescription(e));
+		msg("Error calling VR_InitInternal: %d (%s)\n", e, VR_GetVRInitErrorAsEnglishDescription(e));
 		die("Failed to start OpenVR");
 	}
 

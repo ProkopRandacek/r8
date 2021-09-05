@@ -8,6 +8,7 @@
 #define RAYGUI_FREE(p)      xfree(p)
 #define RAYGUI_IMPLEMENTATION
 #define RAYGUI_SUPPORT_RICONS
+//#define RAYGUI_SUPPORT_CUSTOM_RICONS
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wswitch-enum"
 #pragma GCC diagnostic ignored "-Wunused-parameter"
