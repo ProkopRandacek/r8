@@ -9,6 +9,7 @@ Shape *group_new(char* name, Shape *a, Shape *b, GroupType gt, float k) {
 
 	strncpy(s->name, name, SHAPE_NAME_LEN - 1);
 	s->name[SHAPE_NAME_LEN - 1] = '\0'; // Make sure that the string is zero terminated.
+	s->visible = true;
 
 	s->g.collapsed = false;
 

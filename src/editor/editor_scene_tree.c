@@ -117,20 +117,26 @@ void editor_draw_tree_node(int x, int y, Shape *s) {
 	}
 
 	// Delete icon
-	if (s != NULL) {
-		Rectangle del_box = (Rectangle){
-			(x + 1) * UNIT,
-				y * UNIT + box.y + scroll.y,
-				UNIT, UNIT
-		};
+	if (s != NULL && x != 0) { // hacky way to detect root shape (depth == 0)
+		Rectangle del_box = (Rectangle){ 0, y * UNIT + box.y + scroll.y, UNIT, UNIT };
 		if (!(r8_open || about_open || scene_open)) {
-			bool clicked = GuiLabelButton(del_box, "D");
+			bool clicked = GuiButton(del_box, "#143#");
 			if (clicked) {
 				if (s == selected_shape) selected_shape = NULL;
 				to_del = s;
 			}
 		} else {
 			GuiLabel(del_box, "D");
+		}
+	}
+
+	// Visible icon
+	if (s != NULL) {
+		Rectangle del_box = (Rectangle){ UNIT, y * UNIT + box.y + scroll.y, UNIT, UNIT };
+		bool clicked = GuiButton(del_box, s->visible ? "#44#" : "#45#");
+		if (clicked) {
+			s->visible = !s->visible;
+			update_scene = true;
 		}
 	}
 
@@ -142,16 +148,11 @@ void editor_draw_tree_node(int x, int y, Shape *s) {
 				UNIT,
 				UNIT
 		};
-		if (!(r8_open || about_open || scene_open)) {
-			bool arrow_clicked = GuiLabelButton(arrow_box, s->g.collapsed ? ">" : "v"); // the ricon hitboxes are broken
-			//bool arrow_clicked = GuiLabelButton(arrow_box, s->g.collapsed ? "#119#" : "#120#");
-			if (arrow_clicked) {
-				if (s->type == stGROUP) s->g.collapsed = !s->g.collapsed;
-				else if (s->type == stWRAPPER) msg("wrapper collapse placeholder");
-			}
-		} else {
-			GuiLabel(arrow_box, s->g.collapsed ? ">" : "v"); // the ricon hitboxes are broken
-			//GuiLabel(arrow_box, s->g.collapsed ? "#119#" : "#120#");
+
+		bool arrow_clicked = GuiButton(arrow_box, s->g.collapsed ? "#119#" : "#120#");
+		if (arrow_clicked) {
+			if (s->type == stGROUP) s->g.collapsed = !s->g.collapsed;
+			else if (s->type == stWRAPPER) msg("wrapper collapse placeholder");
 		}
 	}
 

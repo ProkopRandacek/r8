@@ -13,7 +13,7 @@ static char* sdf;
 
 void scene_sdf_gen(Shape *pos) {
 	char *c;
-	if (pos == NULL) {
+	if (pos == NULL || !pos->visible) {
 		strcat(sdf, "clrd(vec4(1,0,1,0),999999.9)");
 	} else {
 		switch (pos->type) {

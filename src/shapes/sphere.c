@@ -9,6 +9,7 @@ Shape* sphere_new(const char* name, Vector3 pos, Vector4 clr, float r) {
 
 	strncpy(s->name, name, SHAPE_NAME_LEN - 1);
 	s->name[SHAPE_NAME_LEN - 1] = '\0'; // Make sure that the string is zero terminated.
+	s->visible = true;
 
 	s->p.type = ptSPHERE;
 

@@ -92,6 +92,7 @@ typedef struct Shape {
 
 	// Editor properties
 	char name[SHAPE_NAME_LEN]; //!< The name that is shown in the editor.
+	bool visible;
 } Shape;
 
 #include "group.h"
