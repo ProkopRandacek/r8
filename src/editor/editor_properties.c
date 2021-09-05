@@ -4,11 +4,17 @@
 
 #include "editor.h"
 #include "alloc.h"
+#include "log.h"
 
 extern Shape* selected_shape;
 extern Vector2 editor_layout;
 
 Vector2 scroll;
+
+const char* group_type_spelling[] = { "union", "diff", "inters", "blend", "average" };
+const char* shape_type_spelling[] = { "sphere", "cube", "torus", "ctorus", "cyl", "ccone" };
+
+int last_height = 0;
 
 void editor_draw_properties() {
 	Rectangle box = (Rectangle){
@@ -18,31 +24,60 @@ void editor_draw_properties() {
 			GetScreenHeight() - editor_layout.y - UNIT
 	};
 
-	Rectangle content = (Rectangle){ 0.0f, 0.0f, editor_layout.x + 0.5f * UNIT, 21 * UNIT };
+	Rectangle content = (Rectangle){ 0.0f, 0.0f, editor_layout.x + 0.5f * UNIT, last_height };
 
 	Rectangle view = GuiScrollPanel(box, content, &scroll);
 
-
 	BeginScissorMode(view.x, view.y, view.width, view.height); {
 		if (selected_shape != NULL) {
-			Rectangle text = (Rectangle){ box.x, box.y + scroll.y, box.width, UNIT };
+			Rectangle text_box = (Rectangle){ box.x, box.y + scroll.y, box.width, UNIT };
+			char str[64];
 
-			for (int i = 0; i < 20; i++) {
-				text.y += UNIT;
-				char str[10];
-				sprintf(str, "%d", i);
-				GuiLabel(text, str);
+			sprintf(str, "name: %s", selected_shape->name);
+			GuiLabel(text_box, str);
+
+			switch (selected_shape->type) {
+				case stPRIMITIVE:
+					text_box.y += UNIT;
+					sprintf(str, "type: %s", shape_type_spelling[selected_shape->p.type]);
+					GuiLabel(text_box, str);
+
+					text_box.y += UNIT;
+					sprintf(str, "pos : %.2f, %.2f, %.2f",
+							selected_shape->p.d[0],
+							selected_shape->p.d[1],
+							selected_shape->p.d[2]
+					       );
+					GuiLabel(text_box, str);
+
+					text_box.y += UNIT;
+					sprintf(str, "clr : %.2f, %.2f, %.2f, %.2f",
+							selected_shape->p.d[3],
+							selected_shape->p.d[4],
+							selected_shape->p.d[5],
+							selected_shape->p.d[6]
+					       );
+					GuiLabel(text_box, str);
+					break;
+				case stGROUP:
+					text_box.y += UNIT;
+					sprintf(str, "type: %s", group_type_spelling[selected_shape->g.type]);
+					GuiLabel(text_box, str);
+
+					text_box.y += UNIT;
+					sprintf(str, "k   : %.2f", selected_shape->g.k);
+					GuiLabel(text_box, str);
+					break;
+				case stWRAPPER:
+					text_box.y += UNIT;
+					GuiLabel(text_box, "wrapper wip");
+					break;
+				default:
+					die("Trying to view properties of unknown shape type");
 			}
+			last_height = text_box.y - (box.y + scroll.y) + UNIT;
 		}
 
-		const char version[] = "R8 " R8_VERSION " (" R8_COMMIT_HASH ")";
-		Rectangle ver_box = (Rectangle){
-			GetScreenWidth() - UNIT * 10.5f,
-				GetScreenHeight() - GuiGetStyle(DEFAULT, TEXT_SIZE),
-				UNIT * 10,
-				GuiGetStyle(DEFAULT, TEXT_SIZE)
-		};
-		GuiLabel(ver_box, version);
 	} EndScissorMode();
 }
 

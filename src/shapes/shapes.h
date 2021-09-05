@@ -24,7 +24,6 @@ typedef enum GroupType {
 	gtINTERS,     //!< Resulting Shape exists on the intersection of the two sub-shapes.
 	gtBLEND,      //!< Smooth gtUNION. Smoothness set by Group's k value.
 	gtAVERAGE,    //!< Average out the two distance fields.
-	gtAPPROXIMATE //!< Only calculates the second distance field if the first one resulted in a value less than k.
 } GroupType;
 
 /** @brief type of a Shape */

@@ -42,8 +42,6 @@ void scene_sdf_gen(Shape *pos) {
 					case gtINTERS:      asprintf(&c, "i(");               break;
 					case gtBLEND:       asprintf(&c, "b(gK(%d),", g_pos); break;
 					case gtAVERAGE:     asprintf(&c, "a(gK(%d),", g_pos); break;
-							    //case gtAPPROXIMATE: asprintf(&c, "x(");               break;
-					case gtAPPROXIMATE: die("group type approximate not implemented");
 				}
 				g_pos++;
 				strcat(sdf, c);

@@ -21,7 +21,7 @@ static int tree_height = 0;
 
 void editor_draw_scene_tree(Scene *s) {
 	box               = (Rectangle){ 0, 2 * UNIT, editor_layout.x + UNIT, editor_layout.y - UNIT };
-	Rectangle content = (Rectangle){ 0, 0, editor_layout.x + 0.5 * UNIT, (tree_height + 1) * UNIT};
+	Rectangle content = (Rectangle){ 0, 0, editor_layout.x + 0.5 * UNIT, MAX((tree_height + 1) * UNIT, editor_layout.y - UNIT * 1.1f)};
 
 	Rectangle title = (Rectangle){ UNIT, UNIT, box.width - UNIT, UNIT };
 	GuiPanel(title);
@@ -37,6 +37,14 @@ void editor_draw_scene_tree(Scene *s) {
 		int y = 0;
 		tree_height = 0;
 		iterate_scene(s->root, 0, &y);
+
+		Rectangle ver_box = (Rectangle){
+			GetScreenWidth() - UNIT * 12,
+				GetScreenHeight() - GuiGetStyle(DEFAULT, TEXT_SIZE),
+				UNIT * 10,
+				GuiGetStyle(DEFAULT, TEXT_SIZE)
+		};
+		GuiLabel(ver_box, "R8 " R8_VERSION " (" R8_COMMIT_HASH ")");
 	} EndScissorMode();
 }
 
