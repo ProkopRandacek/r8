@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "sphere.h"
+#include "shapes.h"
 #include "alloc.h"
 
 Shape* sphere_new(const char* name, Vector3 pos, Vector4 clr, float r) {

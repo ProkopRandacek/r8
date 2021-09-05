@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "cube.h"
+#include "shapes.h"
 #include "alloc.h"
 
 Shape* cube_new(const char* name, Vector3 pos, Vector4 clr, Vector3 scl) {

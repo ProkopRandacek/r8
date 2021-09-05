@@ -4,8 +4,6 @@
 
 #include "shapes.h"
 
-/** @brief Sphere Shape constructor */
-Shape* sphere_new(const char* name, Vector3 pos, Vector4 clr, float r) LIKE_MALLOC;
 
 #endif
 

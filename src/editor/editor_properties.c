@@ -58,6 +58,22 @@ void editor_draw_properties() {
 							selected_shape->p.d[6]
 					       );
 					GuiLabel(text_box, str);
+					switch (selected_shape->p.type) {
+						case ptSPHERE:
+							text_box.y += UNIT;
+							sprintf(str, "rad : %.2f", prim_get_rad1(&selected_shape->p));
+							GuiLabel(text_box, str);
+							break;
+						case ptCUBE:
+							text_box.y += UNIT;
+							sprintf(str, "scl : %.2f, %.2f, %.2f",
+									selected_shape->p.d[7],
+									selected_shape->p.d[8],
+									selected_shape->p.d[9]
+							       );
+							GuiLabel(text_box, str);
+							break;
+					}
 					break;
 				case stGROUP:
 					text_box.y += UNIT;
