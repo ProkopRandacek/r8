@@ -5,8 +5,6 @@
 #include "common.h"
 #include "scene.h"
 
-#define UNIT 30.0f
-
 /**
  * @brief Simple struct to hold editor information
  */

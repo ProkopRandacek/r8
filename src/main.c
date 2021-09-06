@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 
 	Scene *s = scene_new();
 
-	def_font = LoadFontFromMemory(".ttf", inconsolata_ttf_asset_bytes, inconsolata_ttf_asset_size, 32, NULL, 95);
+	def_font = LoadFontFromMemory(".ttf", inconsolata_ttf_asset_bytes, inconsolata_ttf_asset_size, 20, NULL, 95);
 
 	GuiSetFont(def_font);
 
@@ -102,7 +102,6 @@ int main(int argc, char* argv[]) {
 		time += GetFrameTime();
 		s->root->g.a->g.k = sinf(time) * 0.5f + 0.5f;
 		s->group_changed = true;
-
 #endif
 		s->portals[0]->pos.x = sinf(time);
 		s->portal_changed = true;

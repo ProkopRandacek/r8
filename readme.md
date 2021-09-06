@@ -32,6 +32,7 @@ I didn't test any others.
 (`yay -S sed cmake make gcc doxygen --needed`)
 
 ## Building on Linux for Windows
+todo
 
 ## Submodules
 R8 uses:
