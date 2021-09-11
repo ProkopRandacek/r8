@@ -1,11 +1,12 @@
-notes
+docs/docmain.md
+doxydocs
+libraylib.a
 log
+notes
+obj/
 r8
 r8.exe
-doxydocs
-docs/docmain.md
 shader.glsl
-libraylib.a
 
 compile_commands.json
 **/.ccls-cache/
