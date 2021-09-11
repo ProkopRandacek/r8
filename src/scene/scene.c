@@ -63,7 +63,7 @@ void scene_compile(Scene* s) {
 	inserts[6] = scene_create_sdf(s);
 
 	int i = 0;
-	for (unsigned int j = 0; j < template_glsl_len; j++) {
+	for (unsigned int j = 0; j < template_glsl_len; j++)
 		if (template_glsl[j] == '@') {
 			strcat(shader_code, inserts[i]);
 			i++;
@@ -71,12 +71,12 @@ void scene_compile(Scene* s) {
 			char tmp[2] = {template_glsl[j], '\0'};
 			strcat(shader_code, tmp);
 		}
-	}
 
+	//for (int k = 0; k < 7; k++) printf("%s\n", inserts[k]);
 	for (int k = 0; k < 7; k++) xfree(inserts[k]);
 
 	UnloadShader(s->shader);
-	s->shader = LoadShaderFromMemory(0, shader_code); // This leaks FIXME
+	s->shader = LoadShaderFromMemory(NULL, shader_code); // This leaks FIXME
 
 #if 1
 	FILE *fp = fopen("shader.glsl", "w+");
@@ -100,7 +100,7 @@ void scene_compile(Scene* s) {
 
 // Internal only, use scene_print(Scene* s)
 void scene_print_rec(Shape *pos, int depth) {
-	for (int i = 0; i < depth; i++) printf(">>>>");
+	for (int i = 0; i < depth; i++) printf(">");
 	if (pos == NULL) {
 		printf("NULL\n");
 		return;
@@ -213,6 +213,7 @@ void scene_tick(Scene* s) {
 	if (s->primt_changed) {
 		float primts[s->primt_count * PRIMT_SIZE];
 		for (unsigned int i = 0; i < s->primt_count; i++) {
+			//printf("shape %d %p: ", i, s->flat_prims[i]);
 			for (unsigned int j = 0; j < PRIMT_SIZE; j++) {
 				primts[i * PRIMT_SIZE + j] = s->flat_prims[i]->p.d[j];
 				//printf("%.2f ", s->flat_prims[i]->p.d[j]);
@@ -228,8 +229,8 @@ void scene_tick(Scene* s) {
 	if (s->group_changed) {
 		float groups[s->group_count];
 		for (unsigned int i = 0; i < s->group_count; i++) {
-			//printf("%p ", s->flat_groups[i]);
 			groups[i] = s->flat_groups[i]->g.k;
+			//printf("%.2f ", s->flat_groups[i]->g.k);
 		}
 		//printf("\n");
 

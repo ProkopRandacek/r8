@@ -1,4 +1,4 @@
-_:
+_::
 	@echo run make from repo root
 
 BIEM = ./util/biem

@@ -29,9 +29,8 @@
 
 #define gK(i) groups[i]
 
-uniform vec3 portals[PORTAL_SIZE * PORTAL_NUM];
-uniform float prims[PRIM_SIZE * PRIM_NUM];
-uniform float groups[GROUP_NUM];
+#define SKY vec4(0.2, 0.3, 0.6, 0.0)
+
 uniform vec2 resolution;
 uniform vec3 viewEye;
 uniform vec3 viewCenter;
@@ -40,8 +39,11 @@ uniform vec3 viewCenter;
 
 in vec2 fragTexCoord;
 in vec4 fragColor;
-
 out vec4 finalColor;
+
+uniform vec3 portals[PORTAL_SIZE * PORTAL_NUM];
+uniform float prims[PRIM_SIZE * PRIM_NUM];
+uniform float groups[GROUP_NUM];
 
 float d2Sphere(vec3 pos,vec3 sp,float r){return length(pos-sp)-r;}
 float d2Cube(vec3 pos,vec3 sp,vec3 b){vec3 p=pos-sp;vec3 q=abs(p)-b;return length(max(q,0.0))+min(max(q.x,max(q.y,q.z)),0.0);}
@@ -174,8 +176,8 @@ rayHit rayMarch(vec3 ro, vec3 rd) {
 		pos = ro + t * rd;
 
 		clrd c = sdf(pos);
-		//portd p = portd(1, 9999999.9, vec3(0));
-		portd p = portalsSDF(pos);
+		portd p = portd(1, 9999999.9, vec3(0));
+		//portd p = portalsSDF(pos);
 
 		if (c.d < p.d) {
 			t += c.d;
@@ -186,7 +188,7 @@ rayHit rayMarch(vec3 ro, vec3 rd) {
 		}
 		if (t > MAX_DIST) break; // too far from camera
 	}
-	return rayHit(vec4(0, 0.2, 0.4, 0.0), pos, MAX_DIST, -2, vec3(0));
+	return rayHit(SKY, pos, MAX_DIST, -2, vec3(0));
 }
 
 vec3 calcNormal(vec3 pos) {

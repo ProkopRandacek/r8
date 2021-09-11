@@ -1,5 +1,5 @@
 # included from ../Makefile
-__:
+_::
 	@echo run make from repo root
 
 S ?= .

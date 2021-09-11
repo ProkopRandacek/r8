@@ -13,30 +13,44 @@ typedef struct Editor {
 	 * @brief The Scene that is being edited by this editor
 	 */
 	Scene *scene;
+
+	/**
+	 * @brief UI unit constant. Change to resize editor UI elements
+	 */
+	float unit;
+
+	/**
+	 * @brief describes the UI panels sizes
+	 *
+	 * It is the position of the resize button in the window.
+	 * Panels use this to calculate their positions and sizes.
+	 */
+	Vector2 editor_layout;
+
+	/**
+	 * @brief Shape that is currently selected in the editor.
+	 */
+	Shape* selected_shape;
 } Editor;
 
 /**
- * @brief Construct a new editor instance
+ * @brief Creates a new Editor instance.
  */
 Editor *editor_new(Scene *s) LIKE_MALLOC;
 
 /**
- * @brief Draws gui components of this editor
- *
- * Called each frame
+ * @brief Deletes Editor instance.
+ */
+void editor_destroy(Editor *e);
+
+/**
+ * @brief Renders all Editor UI elements.
  */
 void editor_draw(Editor *e);
 
-void editor_draw_toolbar(void);
-
-void editor_draw_properties(void);
-
-void editor_draw_tree_node(int x, int y, Shape *s);
-void iterate_scene(Shape *pos, int depth, int *y);
-
-void editor_draw_scene_tree(Scene *s);
-
-void editor_destroy(Editor *e);
+void editor_draw_toolbar(Editor *e);
+void editor_draw_properties(Editor *e);
+void editor_draw_scene_tree(Editor *e);
 
 #endif
 

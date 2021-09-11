@@ -65,6 +65,8 @@ char* scene_create_sdf(Scene *s) {
 
 	scene_sdf_gen(s->root);
 
+	//printf("Created sdf: %s\n", sdf);
+
 	return xrealloc(sdf, strlen(sdf) + 1);
 }
 

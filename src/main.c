@@ -20,7 +20,7 @@ void raylib_log(__attribute__((unused))int level, __attribute__((unused))const c
 //!< The default font used by R8.
 Font def_font;
 
-bool r8_should_close = false;
+bool r8_shoul_close = false;
 
 int main(int argc, char* argv[]) {
 	if (argc == 2 && (!strcmp(argv[1], "--version") || !strcmp(argv[1], "-v"))) {
@@ -83,32 +83,29 @@ int main(int argc, char* argv[]) {
 	Shape *root = group_new("root", group_a, floor, gtUNION, 0.5f);
 	s->root = root;
 
-	scene_on_tree_update(s);
-
 	s->portals[0] = p1;
 	s->portals[1] = p2;
 	s->portal_count = 2;
 
-	scene_compile(s);
+	scene_on_tree_update(s);
 
 	float time = 0.0f;
 
 	Editor *editor = editor_new(s);
 
-	while (!WindowShouldClose() && !r8_should_close) {
+	while (!WindowShouldClose() && !r8_shoul_close) {
 		scene_tick(s);
-
 #if 0
 		time += GetFrameTime();
 		s->root->g.a->g.k = sinf(time) * 0.5f + 0.5f;
 		s->group_changed = true;
-#endif
 		s->portals[0]->pos.x = sinf(time);
 		s->portal_changed = true;
+#endif
 
 		BeginDrawing(); {
 			BeginShaderMode(s->shader); {
-				DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), WHITE);
+				DrawRectangle(0, 0, GetScreenWidth(), GetScreenHeight(), (Color){0.2 * 255, 0.3 * 255, 0.6 * 255, 255});
 			} EndShaderMode();
 
 			editor_draw(editor);
