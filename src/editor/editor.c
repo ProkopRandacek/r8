@@ -1,11 +1,19 @@
-#include "_raygui.h"
 #include <raylib.h>
+#include <rlgl.h>
+#include <stdio.h>
 
 #include "editor.h"
 #include "alloc.h"
 #include "log.h"
 
-bool resize_was_active = false;
+/**
+ * Scene updates are done at the end of a frame if anybody set this flag.
+ *
+ * (Shape created, deleted, edited, ...)
+ */
+bool update_scene;
+
+extern Font def_font; // from r8.c
 
 Editor *editor_new(Scene *s) {
 	Editor *e = xmalloc_zero(sizeof(Editor));
@@ -17,22 +25,48 @@ Editor *editor_new(Scene *s) {
 	return e;
 }
 
-void editor_draw(Editor *e) {
-	editor_draw_scene_tree(e);
-	editor_draw_properties(e);
+void editor_draw(mu_Context* ctx, Editor *e) {
+	mu_begin(ctx);
 
-	// Resize button
-	Rectangle resize = (Rectangle){ e->editor_layout.x, e->editor_layout.y, e->unit, e->unit };
-	bool resize_active = GuiToggle(resize, resize_was_active ? "#67#" : "#51#", resize_was_active);
-	if (resize_active) {
-		float w = GetScreenWidth();
-		float h = GetScreenHeight();
-		e->editor_layout.x = MAX(MIN(w - e->unit, (float)GetMouseX() - e->unit / 2), e->unit * 6.5f);
-		e->editor_layout.y = MAX(MIN(h - e->unit, (float)GetMouseY() - e->unit / 2), e->unit * 0);
+	e->selected_shape = e->scene->root->g.b;
+
+	if (e->selected_shape != NULL)
+		editor_properties(ctx, e);
+
+	mu_end(ctx);
+
+	mu_Command *cmd = NULL;
+	while (mu_next_command(ctx, &cmd)) {
+		switch (cmd->type) {
+			case MU_COMMAND_TEXT:
+				{
+					Vector2 pos = (Vector2){cmd->text.pos.x, cmd->text.pos.y};
+					Color clr = (Color){cmd->text.color.r, cmd->text.color.g, cmd->text.color.b, cmd->text.color.a};
+					DrawTextEx(def_font, cmd->text.str, pos, 20, 0, clr);
+					break;
+				}
+			case MU_COMMAND_RECT:
+				{
+					Rectangle r = (Rectangle){cmd->rect.rect.x, cmd->rect.rect.y, cmd->rect.rect.w, cmd->rect.rect.h};
+					Color clr = (Color){cmd->rect.color.r, cmd->rect.color.g, cmd->rect.color.b, cmd->rect.color.a};
+					DrawRectangleRec(r, clr);
+					break;
+				}
+			case MU_COMMAND_ICON: //r_draw_icon(cmd->icon.id, cmd->icon.rect, cmd->icon.color); break;
+				{
+					Rectangle r = (Rectangle){cmd->icon.rect.x, cmd->icon.rect.y, cmd->icon.rect.w, cmd->icon.rect.h};
+					Color clr = (Color){cmd->icon.color.r, cmd->icon.color.g, cmd->icon.color.b, cmd->icon.color.a};
+					DrawRectangleRec(r, clr);
+					break;
+				}
+			case MU_COMMAND_CLIP:
+				{
+					// Should I end the scissor mode somewhere?
+					BeginScissorMode(cmd->clip.rect.x, cmd->clip.rect.y, cmd->clip.rect.w, cmd->clip.rect.h);
+					break;
+				}
+		}
 	}
-	resize_was_active = resize_active;
-
-	editor_draw_toolbar(e);
 }
 
 void editor_destroy(Editor *e) {

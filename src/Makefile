@@ -18,12 +18,12 @@ CFLAGS += $(addprefix -I,$(DIRS))
 
 $(ASTH): %.asset.h: %.asset $(BIEM)
 	@mkdir -p -- $(dir $@)
-	@echo EM $@
+	@echo -e "EM\t$(notdir $@)"
 	@$(BIEM) $< $(notdir $<) $@
 
 $(SHDH): %.glsl.h: %.glsl
 	@mkdir -p -- $(dir $@)
-	@echo EM $@
+	@echo -e "EM\t$(notdir $@)"
 	@echo "#ifndef $(notdir $(basename $^))_H" >  $@
 	@echo "#define $(notdir $(basename $^))_H" >> $@
 	@echo "const unsigned int $(notdir $(basename $^))_glsl_len = $(shell wc -c $^ | awk '{print $$1}');" >> $@
@@ -34,13 +34,13 @@ $(SHDH): %.glsl.h: %.glsl
 
 $(OBJS): obj/%.o: $(S)/%.c $(ASTH) $(SHDH)
 	@mkdir -p -- $(dir $@)
-	@echo CC $@
+	@echo -e "CC\t$(notdir $@)"
 	@$(CC) $(CFLAGS) -MM -MG -MF $(patsubst %.o,%.d,$@) -c $<
 	@$(CC) $(CFLAGS) -o $@ -c $<
 
 $(TARGET): $(LIBRARIES) $(OBJS)
 	@mkdir -p -- $(dir $@)
-	@echo LD $@
+	@echo -e "LD\t$(notdir $@)"
 	@$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)
 
 clean::

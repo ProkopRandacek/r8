@@ -37,9 +37,9 @@ todo
 ## Submodules
 R8 uses:
 - [raylib](https://github.com/raysan5/raylib) - math and opengl abstraction
-- [raygui](https://github.com/raysan5/raygui) - GUI
 - [umka-lang](https://github.com/vtereshkov/umka-lang) - scripting language
-- [openvr](https://github.com/ValveSoftware/openvr) - VR support
+- [microui](https://github.com/ProkopRandacek/microui) (forked) - GUI
+- [openvr](https://github.com/ProkopRandacek/openvr) (forked) - VR support
 
 All are built and linked by make.
 

@@ -2,8 +2,9 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include "common.h"
+#include <microui.h>
 #include "scene.h"
+#include "common.h"
 
 /**
  * @brief Simple struct to hold editor information
@@ -46,11 +47,9 @@ void editor_destroy(Editor *e);
 /**
  * @brief Renders all Editor UI elements.
  */
-void editor_draw(Editor *e);
+void editor_draw(mu_Context* ctx, Editor *e);
 
-void editor_draw_toolbar(Editor *e);
-void editor_draw_properties(Editor *e);
-void editor_draw_scene_tree(Editor *e);
+void editor_properties(mu_Context *ctx, Editor *e);
 
 #endif
 

@@ -4,7 +4,7 @@ _::
 BIEM = ./util/biem
 
 $(BIEM): util/biem.c
-	@echo CC $@
+	@echo -e "CC\t$@"
 	@$(CC) -Ofast -s $< -o $@
 
 clean::

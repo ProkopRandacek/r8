@@ -7,9 +7,9 @@ COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
 
 S = src
 
-DEFS = -DR8_VERSION=\"$(VERSION)\" -DR8_COMMIT_HASH=\"$(COMMIT_HASH)\"
+DEFS = -DR8_VERSION=\"$(VERSION)\" -DR8_COMMIT_HASH=\"$(COMMIT_HASH)\" -DR8_EDITOR
 
-COMMON    = -O3 -pipe $(DEFS)
+COMMON    = -O3 -pipe $(DEFS) -g
 CFLAGS   += $(COMMON) -std=c11
 CXXFLAGS += $(COMMON) -std=c++11
 LDLIBS   += -lm -ldl -lpthread
@@ -55,10 +55,7 @@ docclean:
 clean::
 	$(RM) $(TARGET)
 
-include Makeraylib
-include Makeraygui
-include Makeumka
-include Makeopenvr
+include Makedeps
 
 include util/Makefile
 include src/Makefile

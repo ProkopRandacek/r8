@@ -1,9 +1,6 @@
 [submodule "raylib"]
 	path = raylib
 	url = https://github.com/raysan5/raylib.git
-[submodule "raygui"]
-	path = raygui
-	url = https://github.com/raysan5/raygui.git
 [submodule "openvr"]
 	path = openvr
 	url = https://github.com/ProkopRandacek/openvr.git
@@ -13,3 +10,6 @@
 [submodule "doxygen-awesome-css"]
 	path = doxygen-awesome-css
 	url = https://github.com/jothepro/doxygen-awesome-css.git
+[submodule "microui"]
+	path = microui
+	url = https://github.com/ProkopRandacek/microui.git
