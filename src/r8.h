@@ -1,5 +1,5 @@
 #ifndef R8_H
-#define R8_h
+#define R8_H
 
 #if defined(R8_EDITOR) && defined(R8_RUNTIME)
 #error "You can't compile editor and runtime together"

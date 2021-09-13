@@ -28,10 +28,11 @@ Editor *editor_new(Scene *s) {
 void editor_draw(mu_Context* ctx, Editor *e) {
 	mu_begin(ctx);
 
-	e->selected_shape = e->scene->root->g.b;
 
 	if (e->selected_shape != NULL)
 		editor_properties(ctx, e);
+
+	e->selected_shape = e->scene->root->g.b;
 
 	mu_end(ctx);
 

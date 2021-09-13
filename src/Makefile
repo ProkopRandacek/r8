@@ -44,9 +44,8 @@ $(TARGET): $(LIBRARIES) $(OBJS)
 	@$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)
 
 clean::
-	$(RM) $(OBJS)
-	$(RM) $(SHDH)
-	$(RM) $(DEPS)
-	$(RM) $(ASTH)
+	$(RM) -- $(SHDH)
+	$(RM) -- $(ASTH)
+	$(RM) -r -- obj/
 
 -include $(DEPS)
