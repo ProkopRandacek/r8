@@ -50,6 +50,7 @@ void editor_destroy(Editor *e);
 void editor_draw(mu_Context* ctx, Editor *e);
 
 void editor_properties(mu_Context *ctx, Editor *e);
+void editor_tree(mu_Context* ctx, Editor* e);
 
 #endif
 

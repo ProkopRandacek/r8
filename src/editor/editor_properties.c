@@ -10,7 +10,6 @@ void editor_properties(mu_Context *ctx, Editor* e) {
 	if (e->selected_shape != last_shape) {
 		shape_changed = true;
 		last_shape = e->selected_shape;
-		printf("changed\n");
 	}
 
 	/* do window */
@@ -61,9 +60,9 @@ void editor_properties(mu_Context *ctx, Editor* e) {
 					}
 					int status = 0;
 					mu_layout_row(ctx, 2, (int[]) { 60, -1 }, 0);
-					mu_label(ctx, "X"); status |= mu_textbox(ctx, x_buf, 16); // textboxes return flags
-					mu_label(ctx, "Y"); status |= mu_textbox(ctx, y_buf, 16); // changed and submit
-					mu_label(ctx, "Z"); status |= mu_textbox(ctx, z_buf, 16); // submit needs passing the enter input which is not done yet
+					mu_label(ctx, "X"); status |= mu_textbox(ctx, x_buf, 16);
+					mu_label(ctx, "Y"); status |= mu_textbox(ctx, y_buf, 16);
+					mu_label(ctx, "Z"); status |= mu_textbox(ctx, z_buf, 16);
 					mu_layout_end_column(ctx);
 
 					if (status & MU_RES_CHANGE) {
