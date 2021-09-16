@@ -1,6 +1,6 @@
 #include <string.h>
 
-#include "cube.h"
+#include "group.h"
 #include "alloc.h"
 
 Shape *group_new(char* name, Shape *a, Shape *b, GroupType gt, float k) {
@@ -20,3 +20,4 @@ Shape *group_new(char* name, Shape *a, Shape *b, GroupType gt, float k) {
 
 	return s;
 }
+

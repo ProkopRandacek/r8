@@ -104,9 +104,11 @@ Shape* sphere_new(const char* name, Vector3 pos, Vector4 clr, float r) LIKE_MALL
 /** @brief Cube Shape constructor */
 Shape* cube_new(const char* name, Vector3 pos, Vector4 clr, Vector3 scl) LIKE_MALLOC;
 
+// these are not yet used for anything
 Vector3 prim_get_pos(Primitive *p);
 Vector4 prim_get_clr(Primitive *p);
 float prim_get_rad1(Primitive *p);
 float prim_get_rad2(Primitive *p);
 
 #endif
+

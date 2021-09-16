@@ -49,3 +49,4 @@ void stack_resize(Stack *s, int new_size) {
 	s->data = new;
 	s->cap = new_size;
 }
+

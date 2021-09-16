@@ -28,3 +28,4 @@ float* portal_write_bulk(Portal **p, int count) {
 
 	return arr;
 }
+

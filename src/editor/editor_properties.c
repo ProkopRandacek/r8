@@ -84,3 +84,4 @@ void editor_properties(mu_Context *ctx, Editor* e) {
 		mu_end_window(ctx);
 	}
 }
+

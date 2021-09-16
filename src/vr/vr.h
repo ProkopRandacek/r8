@@ -29,3 +29,4 @@ void *get_openvr_func_table(const char *interfacename);
 void init_vr(void);
 
 #endif
+

@@ -36,6 +36,7 @@ void editor_iter(mu_Context* ctx, Editor* e, Shape* pos) {
 }
 
 void editor_draw_node(mu_Context* ctx, Editor* e, Shape* s) {
-	//if (mu_button(ctx, "Selected"))
-		//e->selected_shape = s;
+	if (mu_button(ctx, "Selected"))
+		e->selected_shape = s;
 }
+

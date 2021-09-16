@@ -7,7 +7,7 @@
 #include "common.h"
 
 /**
- * @brief Simple struct to hold editor information
+ * @brief Simple struct to hold editor state
  */
 typedef struct Editor {
 	/**
@@ -49,7 +49,16 @@ void editor_destroy(Editor *e);
  */
 void editor_draw(mu_Context* ctx, Editor *e);
 
+/**
+ * @brief Renders the properties window.
+ * Used by editor_draw()
+ */
 void editor_properties(mu_Context *ctx, Editor *e);
+
+/**
+ * @brief Renders the scene tree window.
+ * Used by editor_draw()
+ */
 void editor_tree(mu_Context* ctx, Editor* e);
 
 #endif

@@ -24,3 +24,4 @@ float prim_get_rad1(Primitive *p) {
 float prim_get_rad2(Primitive *p) {
 	return p->d[11];
 }
+

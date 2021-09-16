@@ -48,3 +48,4 @@ void *stack_pop(Stack *s);
 void stack_resize(Stack *s, int new_size);
 
 #endif
+

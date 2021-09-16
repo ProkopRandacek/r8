@@ -11,7 +11,7 @@ DEFS = -DR8_VERSION=\"$(VERSION)\" -DR8_COMMIT_HASH=\"$(COMMIT_HASH)\" -DR8_EDIT
 
 COMMON    = -O3 -pipe $(DEFS) -g
 CFLAGS   += $(COMMON) -std=c11
-CXXFLAGS += $(COMMON) -std=c++11
+CXXFLAGS += $(COMMON) -std=c++11 # we need to link with the openvr cpp source
 LDLIBS   += -lm -ldl -lpthread
 
 WARNS ?= \
