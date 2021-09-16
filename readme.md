@@ -19,7 +19,7 @@ git clone --recursive --depth 1 --shallow-submodules https://github.com/ProkopRa
 cd r8
 make run -j$(nproc)
 ```
-Works with `gcc` and `clang`. `tcc` doesn't support the `-M` flags that is required to build.
+Works with `gcc`, `clang` and `tcc`.
 I didn't test any others.
 
 ### Build deps

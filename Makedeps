@@ -10,10 +10,10 @@ UMKA_LIBRARY ?= $(UMKA_DIR)/build/libumka.a
 LIBRARIES += $(UMKA_LIBRARY)
 
 $(UMKA_LIBRARY):
-	cd $(UMKA_DIR)/ && $(MAKE) static -j$(shell nproc)
+	@cd $(UMKA_DIR)/ && $(MAKE) static -j$(shell nproc)
 
 deepclean::
-	cd $(UMKA_DIR)/ && $(MAKE) clean
+	@cd $(UMKA_DIR)/ && $(MAKE) clean
 
 LDLIBS += $(UMKA_LIBRARY)
 CFLAGS += -I$(UMKA_DIR)/build/include
@@ -28,7 +28,7 @@ RAYLIB_LIBRARY ?= $(RAYLIB_DIR)/libraylib.a
 LIBRARIES += $(RAYLIB_LIBRARY)
 
 $(RAYLIB_LIBRARY):
-	cd $(RAYLIB_DIR)/src && $(MAKE) \
+	@cd $(RAYLIB_DIR)/src && $(MAKE) \
 		PLATFORM=PLATFORM_DESKTOP   \
 		RAYLIB_LIBTYPE=STATIC       \
 		HOST_PLATFORM_OS=LINUX      \
@@ -40,7 +40,7 @@ $(RAYLIB_LIBRARY):
 # I ignore the raylib build because it spams warnings that I don't care about
 
 deepclean::
-	cd $(RAYLIB_DIR)/src && $(MAKE) clean
+	@cd $(RAYLIB_DIR)/src && $(MAKE) clean
 
 LDLIBS += $(RAYLIB_LIBRARY)
 CFLAGS += -I$(RAYLIB_DIR)/src/
@@ -55,13 +55,13 @@ OPENVR_LIBRARY ?= $(OPENVR_DIR)/bin/linux64/libopenvr_api.a
 LIBRARIES += $(OPENVR_LIBRARY)
 
 $(OPENVR_LIBRARY):
-	cd $(OPENVR_DIR)/ && \
+	@cd $(OPENVR_DIR)/ && \
 		cmake BUILD_SHARED=OFF . && \
 		$(MAKE) -j$(shell nproc)
 
 # cmake doesn't create a clean rule apparently
 deepclean::
-	cd $(OPENVR_DIR)/ && $(RM) CMakeCache.txt cmake_install.cmake Makefile CMakeFiles -r
+	@cd $(OPENVR_DIR)/ && $(RM) CMakeCache.txt cmake_install.cmake Makefile CMakeFiles -r
 
 LDLIBS += $(OPENVR_LIBRARY)
 CFLAGS += -I$(OPENVR_DIR)/headers
@@ -76,10 +76,10 @@ MICROUI_LIBRARY ?= $(MICROUI_DIR)/microui.a
 LIBRARIES += $(MICROUI_LIBRARY)
 
 $(MICROUI_LIBRARY):
-	cd $(MICROUI_DIR)/ && $(MAKE) -j$(shell nproc)
+	@cd $(MICROUI_DIR)/ && $(MAKE) -j$(shell nproc) -s
 
 deepclean::
-	cd $(MICROUI_DIR)/ && $(MAKE) clean
+	@cd $(MICROUI_DIR)/ && $(MAKE) clean
 
 LDLIBS += $(MICROUI_LIBRARY)
 CFLAGS += -I$(MICROUI_DIR)/src

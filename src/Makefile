@@ -4,10 +4,10 @@ _::
 
 S ?= .
 
-DIRS = $(shell find $(S)/ -type d)        # all folders
-SRCS = $(shell find $(S)/ -name \*.c)     # c sources
-SHDS = $(shell find $(S)/ -name \*.glsl)  # shader sources
-ASTS = $(shell find $(S)/ -name \*.asset) # asset sources
+DIRS += $(shell find $(S)/ -type d)        # all folders
+SRCS += $(shell find $(S)/ -name \*.c)     # c sources
+SHDS += $(shell find $(S)/ -name \*.glsl)  # shader sources
+ASTS += $(shell find $(S)/ -name \*.asset) # asset sources
 SHDH = $(addsuffix .h,$(SHDS))            # shader headers
 ASTH = $(addsuffix .h,$(ASTS))            # asset headers
 OBJS = $(sort $(SRCS:$(S)/%.c=obj/%.o))   # object files
@@ -32,11 +32,10 @@ $(SHDH): %.glsl.h: %.glsl
 	@echo ";" >> $@
 	@echo "#endif" >> $@
 
-$(OBJS): obj/%.o: $(S)/%.c $(ASTH) $(SHDH)
+$(OBJS): obj/%.o: src/%.c $(ASTH) $(SHDH)
 	@mkdir -p -- $(dir $@)
 	@echo -e "CC\t$(notdir $@)"
-	@$(CC) $(CFLAGS) -MM -MG -MF $(patsubst %.o,%.d,$@) -c $<
-	@$(CC) $(CFLAGS) -o $@ -c $<
+	@$(CC) $(CFLAGS) -MD -o $@ -c $<
 
 $(TARGET): $(LIBRARIES) $(OBJS)
 	@mkdir -p -- $(dir $@)

@@ -23,8 +23,8 @@ WARNS ?= \
 
 FFLAGS = -fmerge-all-constants -funroll-loops
 
-ifeq ($(word 2, $(shell $(CC) --version)), "(GCC)") # are we using gcc?
-	FFLAGS += -fanalyzer # clang doesn't support -fanalyzer flag
+ifeq ($(word 2, $(shell $(CC) --version 2> /dev/null)), "(GCC)") # are we using gcc?
+	FFLAGS += -fanalyzer # gcc specific flags
 endif
 
 CFLAGS += $(WARNS) $(FFLAGS)

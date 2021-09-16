@@ -21,6 +21,7 @@ void editor_iter(mu_Context* ctx, Editor* e, Shape* pos) {
 
 		switch (pos->type) {
 			case stPRIMITIVE:
+				e->selected_shape = pos;
 				break;
 			case stGROUP:
 				editor_iter(ctx, e, pos->g.a);
@@ -35,6 +36,6 @@ void editor_iter(mu_Context* ctx, Editor* e, Shape* pos) {
 }
 
 void editor_draw_node(mu_Context* ctx, Editor* e, Shape* s) {
-	if (mu_button(ctx, "Selected"))
-		e->selected_shape = s;
+	//if (mu_button(ctx, "Selected"))
+		//e->selected_shape = s;
 }
