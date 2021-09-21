@@ -2,37 +2,22 @@
 _::
 	@echo run make from repo root
 
-S ?= .
-
-DIRS += $(shell find $(S)/ -type d)        # all folders
-SRCS += $(shell find $(S)/ -name \*.c)     # c sources
-SHDS += $(shell find $(S)/ -name \*.glsl)  # shader sources
-ASTS += $(shell find $(S)/ -name \*.asset) # asset sources
-SHDH = $(addsuffix .h,$(SHDS))            # shader headers
-ASTH = $(addsuffix .h,$(ASTS))            # asset headers
-OBJS = $(sort $(SRCS:$(S)/%.c=obj/%.o))   # object files
-DEPS = $(sort $(SRCS:$(S)/%.c=obj/%.d))   # makefile dependency files
+DIRS = $(shell find src/ -type d)                # all folders
+SRCS = $(shell find src/ -type f -name \*.c)     # c sources
+ASTS = $(shell find src/ -type f -name \*.asset) # asset sources
+ASTH = $(addsuffix .h,$(ASTS))                   # asset headers
+OBJS = $(sort $(SRCS:src/%.c=obj/%.o))           # object files
+DEPS = $(sort $(SRCS:src/%.c=obj/%.d))           # makefile dependency files
 
 # Include all source directories so I don't have to use relative paths in includes
 CFLAGS += $(addprefix -I,$(DIRS))
 
-$(ASTH): %.asset.h: %.asset $(BIEM)
+$(ASTH): src/%.asset.h: src/%.asset $(BIEM)
 	@mkdir -p -- $(dir $@)
 	@echo -e "EM\t$(notdir $@)"
 	@$(BIEM) $< $(notdir $<) $@
 
-$(SHDH): %.glsl.h: %.glsl
-	@mkdir -p -- $(dir $@)
-	@echo -e "EM\t$(notdir $@)"
-	@echo "#ifndef $(notdir $(basename $^))_H" >  $@
-	@echo "#define $(notdir $(basename $^))_H" >> $@
-	@echo "const unsigned int $(notdir $(basename $^))_glsl_len = $(shell wc -c $^ | awk '{print $$1}');" >> $@
-	@echo -n "const char* $(notdir $(basename $^))_glsl = " >> $@
-	@sed 's/^/"/; s/$$/\\n"/' $< >> $@
-	@echo ";" >> $@
-	@echo "#endif" >> $@
-
-$(OBJS): obj/%.o: src/%.c $(ASTH) $(SHDH)
+$(OBJS): obj/%.o: src/%.c $(ASTH)
 	@mkdir -p -- $(dir $@)
 	@echo -e "CC\t$(notdir $@)"
 	@$(CC) $(CFLAGS) -MD -o $@ -c $<
@@ -48,3 +33,4 @@ clean::
 	$(RM) -r -- obj/
 
 -include $(DEPS)
+

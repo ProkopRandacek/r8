@@ -8,5 +8,5 @@ $(BIEM): util/biem.c
 	@$(CC) -Ofast -s $< -o $@
 
 clean::
-	$(RM) $(BIEM)
+	$(RM) -- $(BIEM)
 

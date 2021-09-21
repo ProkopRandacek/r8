@@ -10,7 +10,7 @@
 #include "log.h"
 #include "shapes.h"
 #include "stack.h"
-#include "template.glsl.h"
+#include "template.glsl.asset.h"
 
 // TODO group modifiers are transfered even for groups without a paramterer.
 // TODO child position relative to parent shape
@@ -51,7 +51,7 @@ Scene *scene_new() {
 }
 
 void scene_compile(Scene* s) {
-	char* shader_code = xmalloc_zero(template_glsl_len + 1024);
+	char* shader_code = xmalloc_zero(template_glsl_asset_size + 1024);
 	char* inserts[7] = {0};
 
 	asprintf(&(inserts[0]), "%.9f", s->eps       );
@@ -63,12 +63,12 @@ void scene_compile(Scene* s) {
 	inserts[6] = scene_create_sdf(s);
 
 	int i = 0;
-	for (unsigned int j = 0; j < template_glsl_len; j++)
-		if (template_glsl[j] == '@') {
+	for (unsigned int j = 0; j < template_glsl_asset_size; j++)
+		if (template_glsl_asset_bytes[j] == '@') {
 			strcat(shader_code, inserts[i]);
 			i++;
 		} else {
-			char tmp[2] = {template_glsl[j], '\0'};
+			char tmp[2] = {template_glsl_asset_bytes[j], '\0'};
 			strcat(shader_code, tmp);
 		}
 

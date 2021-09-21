@@ -1,33 +1,23 @@
-.PHONY : all clean deepclean raylib docs docclean
+.PHONY : run all clean deepclean raylib docs docclean
 
-TARGET = r8
+TARGET ?= r8
 
 VERSION     ?= v0.0.0
 COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
 
-S = src
+DEFS  = -DR8_VERSION=\"$(VERSION)\" -DR8_COMMIT_HASH=\"$(COMMIT_HASH)\" -DR8_EDITOR
 
-DEFS = -DR8_VERSION=\"$(VERSION)\" -DR8_COMMIT_HASH=\"$(COMMIT_HASH)\" -DR8_EDITOR
-
-COMMON    = -O3 -pipe $(DEFS) -g
-CFLAGS   += $(COMMON) -std=c11
-CXXFLAGS += $(COMMON) -std=c++11 # we need to link with the openvr cpp source
-LDLIBS   += -lm -ldl -lpthread
-
-WARNS ?= \
+WARNS = \
 	-Wall -Wextra -Wunused-parameter -Wundef -Wunreachable-code \
 	-Wno-misleading-indentation -Wenum-conversion -Wswitch-enum \
 	-Wenum-compare -Wswitch -Wswitch-enum -Wno-free-nonheap-object \
 	-Wunused-macros -Wdangling-else -Wstrict-prototypes \
-	-Wmissing-field-initializers -Wno-multichar
+	-Wmissing-field-initializers -Wno-multichar -Warray-bounds
 
-FFLAGS = -fmerge-all-constants -funroll-loops
-
-ifeq ($(word 2, $(shell $(CC) --version 2> /dev/null)), "(GCC)") # are we using gcc?
-	FFLAGS += -fanalyzer # gcc specific flags
-endif
-
-CFLAGS += $(WARNS) $(FFLAGS)
+COMMON   = -O3 $(DEFS) $(WARNS) -g
+CFLAGS   = $(COMMON) -std=c11
+CXXFLAGS = $(COMMON) -std=c++11 # we need to link with the openvr cpp source
+LDLIBS   = -lm -ldl -lpthread
 
 LIBRARIES =
 
@@ -50,14 +40,13 @@ run: $(TARGET)
 deepclean:: clean docclean
 
 docclean:
-	$(RM) docmain.md doxydocs/ -r
+	$(RM) -- docmain.md doxydocs/ -r
 
 clean::
-	$(RM) $(TARGET)
+	$(RM) -- $(TARGET)
 
 include Makedeps
 
 include util/Makefile
 include src/Makefile
-#include Makecross
 

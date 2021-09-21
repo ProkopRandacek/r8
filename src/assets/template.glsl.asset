@@ -1,4 +1,5 @@
 #version 330
+// vim: ft=glsl
 
 #define EPS @
 #define MAX_DIST @
