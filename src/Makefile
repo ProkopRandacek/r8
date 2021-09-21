@@ -22,7 +22,7 @@ $(OBJS): obj/%.o: src/%.c $(ASTH)
 	@echo -e "CC\t$(notdir $@)"
 	@$(CC) $(CFLAGS) -MD -o $@ -c $<
 
-$(TARGET): $(LIBRARIES) $(OBJS)
+$(TARGET): $(LIBS) $(OBJS)
 	@mkdir -p -- $(dir $@)
 	@echo -e "LD\t$(notdir $@)"
 	@$(CXX) $(CXXFLAGS) -o $@ $(OBJS) $(LDLIBS) $(LDFLAGS)

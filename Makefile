@@ -5,7 +5,7 @@ TARGET ?= r8
 VERSION     ?= v0.0.0
 COMMIT_HASH ?= $(shell git rev-parse --short HEAD)
 
-DEFS  = -DR8_VERSION=\"$(VERSION)\" -DR8_COMMIT_HASH=\"$(COMMIT_HASH)\" -DR8_EDITOR
+DEFS = -DR8_VERSION=\"$(VERSION)\" -DR8_COMMIT_HASH=\"$(COMMIT_HASH)\" -DR8_EDITOR
 
 WARNS = \
 	-Wall -Wextra -Wunused-parameter -Wundef -Wunreachable-code \
@@ -19,7 +19,7 @@ CFLAGS   = $(COMMON) -std=c11
 CXXFLAGS = $(COMMON) -std=c++11 # we need to link with the openvr cpp source
 LDLIBS   = -lm -ldl -lpthread
 
-LIBRARIES =
+LIBS =
 
 all: $(TARGET)
 
@@ -35,7 +35,7 @@ docs:
 	doxygen
 
 run: $(TARGET)
-	./r8
+	./$(TARGET)
 
 deepclean:: clean docclean
 
@@ -45,8 +45,7 @@ docclean:
 clean::
 	$(RM) -- $(TARGET)
 
-include Makedeps
-
+include deps/Makefile
 include util/Makefile
 include src/Makefile
 

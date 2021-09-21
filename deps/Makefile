@@ -4,10 +4,10 @@
 # === UMKA === #
 ################
 
-UMKA_DIR     ?= ./umka-lang
+UMKA_DIR     ?= deps/umka-lang
 UMKA_LIBRARY ?= $(UMKA_DIR)/build/libumka.a
 
-LIBRARIES += $(UMKA_LIBRARY)
+LIBS += $(UMKA_LIBRARY)
 
 $(UMKA_LIBRARY):
 	@cd $(UMKA_DIR)/ && $(MAKE) static -j$(shell nproc)
@@ -22,10 +22,10 @@ CFLAGS += -I$(UMKA_DIR)/build/include
 # === RAYLIB === #
 ##################
 
-RAYLIB_DIR     ?= ./raylib
+RAYLIB_DIR     ?= deps/raylib
 RAYLIB_LIBRARY ?= $(RAYLIB_DIR)/libraylib.a
 
-LIBRARIES += $(RAYLIB_LIBRARY)
+LIBS += $(RAYLIB_LIBRARY)
 
 $(RAYLIB_LIBRARY):
 	@cd $(RAYLIB_DIR)/src && $(MAKE) \
@@ -49,10 +49,10 @@ CFLAGS += -I$(RAYLIB_DIR)/src/
 # === OPENVR === #
 ##################
 
-OPENVR_DIR     ?= ./openvr
+OPENVR_DIR     ?= deps/openvr
 OPENVR_LIBRARY ?= $(OPENVR_DIR)/bin/linux64/libopenvr_api.a
 
-LIBRARIES += $(OPENVR_LIBRARY)
+LIBS += $(OPENVR_LIBRARY)
 
 $(OPENVR_LIBRARY):
 	@cd $(OPENVR_DIR)/ && \
@@ -70,10 +70,10 @@ CFLAGS += -I$(OPENVR_DIR)/headers
 # === MICROUI === #
 ###################
 
-MICROUI_DIR     ?= ./microui
+MICROUI_DIR     ?= deps/microui
 MICROUI_LIBRARY ?= $(MICROUI_DIR)/microui.a
 
-LIBRARIES += $(MICROUI_LIBRARY)
+LIBS += $(MICROUI_LIBRARY)
 
 $(MICROUI_LIBRARY):
 	@cd $(MICROUI_DIR)/ && $(MAKE) -j$(shell nproc) -s
